@@ -11,3 +11,5 @@ apps/chrome-extension/dist/
 apps/chrome-extension/.cache/
 apps/chrome-extension/.parcel-cache/
 apps/chrome-extension/.vite/
+
+docs/internal/
