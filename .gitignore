@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+.vscode/
+.DS_Store
+.env
+*.log
+
+# Chrome extension build artifacts (we will build into dist)
+apps/chrome-extension/dist/
+apps/chrome-extension/.cache/
+apps/chrome-extension/.parcel-cache/
+apps/chrome-extension/.vite/
