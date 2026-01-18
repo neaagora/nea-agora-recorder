@@ -9,5 +9,9 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.33",
+    "typescript": "^5.9.3"
   }
 }
