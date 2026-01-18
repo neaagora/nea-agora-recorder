@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Nea Agora Recorder",
+  "version": "0.0.1",
+  "description": "Local recorder for AI agent service behavior (MVP).",
+  "action": {
+    "default_title": "Nea Agora Recorder"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://chatgpt.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
