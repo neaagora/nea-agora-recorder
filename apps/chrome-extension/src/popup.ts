@@ -14,23 +14,49 @@
     if (!countEl || !listEl) return;
 
     if (!events.length) {
-      countEl.textContent = "Recorded events: 0";
+      countEl.textContent = "Sessions: 0 | Events: 0";
       listEl.innerHTML = "<li>No events recorded yet.</li>";
       return;
     }
 
-    const sorted = [...events].sort(
-      (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    const bySession = new Map<string, EventRecord[]>();
+    for (const ev of events) {
+      const bucket = bySession.get(ev.sessionId);
+      if (bucket) {
+        bucket.push(ev);
+      } else {
+        bySession.set(ev.sessionId, [ev]);
+      }
+    }
+
+    const sessionSummaries = Array.from(bySession.entries()).map(
+      ([sessionId, sessionEvents]) => ({
+        sessionId,
+        sessionEvents: [...sessionEvents].sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        ),
+        latestTime: Math.max(
+          ...sessionEvents.map((ev) => new Date(ev.timestamp).getTime())
+        ),
+      })
     );
 
-    countEl.textContent = `Recorded events: ${sorted.length}`;
+    sessionSummaries.sort((a, b) => b.latestTime - a.latestTime);
+
+    countEl.textContent = `Sessions: ${sessionSummaries.length} | Events: ${events.length}`;
     listEl.innerHTML = "";
 
-    for (const ev of sorted) {
-      const li = document.createElement("li");
-      li.textContent = `${ev.timestamp} -- ${ev.site} -- ${ev.type} -- ${ev.sessionId}`;
-      listEl.appendChild(li);
+    for (const session of sessionSummaries) {
+      const heading = document.createElement("li");
+      heading.textContent = `Session ${session.sessionId} (${session.sessionEvents.length} events)`;
+      listEl.appendChild(heading);
+
+      for (const ev of session.sessionEvents) {
+        const li = document.createElement("li");
+        li.textContent = `${ev.timestamp} -- ${ev.type}`;
+        listEl.appendChild(li);
+      }
     }
   }
 
