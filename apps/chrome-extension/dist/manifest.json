@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "description": "Local recorder for AI agent service behavior (MVP).",
   "action": {
-    "default_title": "Nea Agora Recorder"
+    "default_title": "Nea Agora Recorder",
+    "default_popup": "popup.html"
   },
   "permissions": [
     "storage"
