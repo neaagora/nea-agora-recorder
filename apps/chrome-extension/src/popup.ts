@@ -4,6 +4,7 @@
     site: string;
     url: string;
     timestamp: string;
+    sessionId: string;
   };
 
   function renderEvents(events: EventRecord[]) {
@@ -28,7 +29,7 @@
 
     for (const ev of sorted) {
       const li = document.createElement("li");
-      li.textContent = `${ev.timestamp} – ${ev.site} – ${ev.type}`;
+      li.textContent = `${ev.timestamp} -- ${ev.site} -- ${ev.type} -- ${ev.sessionId}`;
       listEl.appendChild(li);
     }
   }
