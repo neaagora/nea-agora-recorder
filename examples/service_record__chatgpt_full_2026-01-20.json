@@ -1,0 +1,245 @@
+{
+  "recordType": "agent_service_record",
+  "version": "0.1.0",
+  "subject": {
+    "agent": "chatgpt.com",
+    "surface": "chat"
+  },
+  "observer": {
+    "tool": "nea-agora-recorder",
+    "environment": "chrome-extension",
+    "localOnly": true
+  },
+  "generatedAt": "2026-01-20T12:45:04.099Z",
+  "agentLabel": "chatgpt.com",
+  "sessions": [
+    {
+      "sessionId": "chatgpt.com-1768913089778",
+      "startedAt": "2026-01-20T12:44:49.778Z",
+      "endedAt": "2026-01-20T12:44:49.778Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "krbbp85j44mkml6uhv",
+          "timestamp": "2026-01-20T12:44:49.778Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "success",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768912816872",
+      "startedAt": "2026-01-20T12:40:16.872Z",
+      "endedAt": "2026-01-20T12:40:16.872Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "dzl4yoitv3rmkml6uhv",
+          "timestamp": "2026-01-20T12:40:16.872Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "escalated_to_human",
+        "neededHumanOverride": true,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768912613661",
+      "startedAt": "2026-01-20T12:36:53.661Z",
+      "endedAt": "2026-01-20T12:36:53.661Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "c7asvtf2mgmkml6uhv",
+          "timestamp": "2026-01-20T12:36:53.661Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "success",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768905975985",
+      "startedAt": "2026-01-20T10:46:15.985Z",
+      "endedAt": "2026-01-20T10:46:15.985Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "g5vnbqb3jgrmkml6uhv",
+          "timestamp": "2026-01-20T10:46:15.985Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "abandoned",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768852583317",
+      "startedAt": "2026-01-19T19:56:23.317Z",
+      "endedAt": "2026-01-19T19:56:23.317Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "meor8zowpcomkml6uhv",
+          "timestamp": "2026-01-19T19:56:23.317Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "abandoned",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-696e32ff-a3d8-832d-966e-42f010a505ee",
+      "startedAt": "2026-01-19T14:53:44.449Z",
+      "endedAt": "2026-01-19T15:00:20.851Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "wc8cq96vo3omkml6uhv",
+          "timestamp": "2026-01-19T14:53:44.449Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "27fd9kif8f5mkml6uhv",
+          "timestamp": "2026-01-19T15:00:20.851Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "success",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 396402
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768832526977",
+      "startedAt": "2026-01-19T14:22:06.977Z",
+      "endedAt": "2026-01-19T14:22:06.977Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "84fnie9k49cmkml6uhv",
+          "timestamp": "2026-01-19T14:22:06.977Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "abandoned",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768832485334",
+      "startedAt": "2026-01-19T14:21:25.333Z",
+      "endedAt": "2026-01-19T14:21:25.333Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "fanfin5lvs7mkml6uhv",
+          "timestamp": "2026-01-19T14:21:25.333Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "escalated_to_human",
+        "neededHumanOverride": true,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768829449689",
+      "startedAt": "2026-01-19T13:30:49.689Z",
+      "endedAt": "2026-01-19T13:30:49.689Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "33412o49y7emkml6uhv",
+          "timestamp": "2026-01-19T13:30:49.689Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "abandoned",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt.com-1768829425882",
+      "startedAt": "2026-01-19T13:30:25.882Z",
+      "endedAt": "2026-01-19T13:30:25.882Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "fe7h3o4bmmkmkml6uhv",
+          "timestamp": "2026-01-19T13:30:25.882Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "summary": {
+        "outcome": "abandoned",
+        "neededHumanOverride": false,
+        "retries": 0,
+        "approxDurationMs": 0
+      }
+    }
+  ]
+}
