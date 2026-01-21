@@ -15,17 +15,19 @@
 
   type OutcomeType =
     | "success"
-    | "partial"
-    | "failed"
     | "abandoned"
-    | "escalated_to_human";
+    | "escalated_to_human"
+    | null;
+
+  type PlatformId = "chatgpt" | "claude" | "gemini" | "unknown";
 
   type InteractionEventKind =
     | "user_prompt"
     | "model_response"
     | "user_edit"
     | "user_override"
-    | "session_end";
+    | "session_end"
+    | "session_start";
 
   interface InteractionEventMetadata {
     site: "chatgpt" | "other";
@@ -41,14 +43,55 @@
   }
 
   interface SessionSummary {
-    outcome: OutcomeType;
-    neededHumanOverride: boolean;
-    retries: number;
+    // HUMAN-ANCHORED STATE (ground truth)
+    outcome: "success" | "abandoned" | "escalated_to_human" | null;
+    neededHumanOverride: boolean | null;
+
+    // CONVERSATION STRUCTURE (auto-tracked, v0.2+)
+    messageCount: number;
+    userMessageCount: number;
+    llmMessageCount: number;
+
+    // BEHAVIORAL FRICTION SIGNALS (auto-tracked, v0.2+)
+    retryCount: number;
+    iterativeRefinement: boolean;
+
+    // OUTPUT USAGE (auto-tracked, v0.2+)
+    copiedOutput: boolean;
+    copiedCodeBlock: boolean;
+    copiedTextLength: number;
+    timeToFirstCopySec: number | null;
+
+    // VERIFICATION BEHAVIOR (auto-tracked, v0.2+)
+    switchedToSearch: boolean;
+    switchedToDocs: boolean;
+    timeToVerificationSec: number | null;
+
+    // SESSION LIFECYCLE (auto-tracked, v0.2+)
+    sessionEndedNaturally: boolean;
+    tabClosedImmediately: boolean;
+    idleTimeBeforeCloseSec: number;
+    returnedToSession: boolean;
+    autoAbandonedCandidate?: boolean;
+
+    // CONTENT SHAPE (non-semantic, auto-detected, v0.2+)
+    containsCodeBlocks: boolean;
+    containsLongFormText: boolean;
+    questionAnswerPattern: boolean;
+
+    // TIMING
     approxDurationMs: number;
+
+    // INTERNAL / EXISTING FIELDS
+    retries: number; // kept for backward compatibility for now
+
+    // OPTIONAL HUMAN NOTE (existing)
+    note?: string;
   }
 
   interface InteractionSession {
     sessionId: string;
+    platform: PlatformId;
     startedAt: string;
     endedAt?: string;
     toolLabel: string; // e.g. "ChatGPT in Chrome"
@@ -114,9 +157,9 @@
     sessionSummaries.sort((a, b) => b.latestTime - a.latestTime);
 
     const builtSessions = buildSessions(events, sessionFlags);
-    const outcomeBySessionId = new Map<string, string>();
+    const outcomeBySessionId = new Map<string, OutcomeType | null>();
     for (const s of builtSessions) {
-      outcomeBySessionId.set(s.sessionId, s.summary?.outcome ?? "unknown");
+      outcomeBySessionId.set(s.sessionId, s.summary?.outcome ?? null);
     }
 
     countEl.textContent = `Sessions: ${sessionSummaries.length} | Events: ${events.length}`;
@@ -127,13 +170,19 @@
       const liHeader = document.createElement("li");
 
       const headerText = document.createElement("span");
-      const outcome = outcomeBySessionId.get(sessionId) ?? "unknown";
+      const outcome = outcomeBySessionId.get(sessionId) ?? null;
       headerText.textContent = `Session ${sessionId} (${session.sessionEvents.length} events)`;
       headerText.style.wordBreak = "break-all";
       headerText.style.fontSize = "0.9em";
 
       const badge = document.createElement("span");
-      badge.textContent = `Outcome: ${outcome}`;
+      const outcomeLabel =
+        outcome === null
+          ? "Outcome: Unreviewed"
+          : outcome === "escalated_to_human"
+          ? "Outcome: Escalated to human"
+          : `Outcome: ${outcome}`;
+      badge.textContent = outcomeLabel;
       badge.style.marginLeft = "8px";
       badge.style.padding = "2px 6px";
       badge.style.border = "1px solid #ccc";
@@ -180,6 +229,7 @@
               "-> humanOverrideRequired=",
               checkbox.checked
             );
+            renderEvents(events, sessionFlags);
           }
         );
       });
@@ -246,14 +296,21 @@
         id: cryptoRandomId(),
         timestamp: ev.timestamp,
         // For v0, treat each page_visit as a user_prompt event
-        kind: "user_prompt",
+        kind: ev.type === "user_prompt" ? "user_prompt" : "session_start",
         metadata: {
           site: "chatgpt",
         },
       }));
 
+      const firstEvent = interactionEvents[0];
+      let platform: PlatformId = "unknown";
+      if (firstEvent?.metadata?.site === "chatgpt") {
+        platform = "chatgpt";
+      }
+
       const session: InteractionSession = {
         sessionId,
+        platform,
         startedAt: startTs.toISOString(),
         endedAt: endTs.toISOString(),
         toolLabel: "ChatGPT in Chrome",
@@ -280,7 +337,8 @@
   function summarizeSession(
     session: InteractionSession,
     endTime: Date,
-    humanOverride: boolean
+    humanOverride: boolean,
+    note?: string
   ): SessionSummary {
     const events = session.events;
 
@@ -292,30 +350,111 @@
       : endTime.getTime();
 
     const duration = Math.max(0, lastTs - firstTs);
+
+    // Conversation structure from events
+    const messageCount = events.filter(
+      (e) => e.kind !== "session_start"
+    ).length;
+    const userMessageCount = events.filter(
+      (e) =>
+        e.kind !== "session_start" &&
+        (e.kind === "user_prompt" || e.kind === "user_edit")
+    ).length;
+    const llmMessageCount = events.filter(
+      (e) => e.kind === "model_response"
+    ).length;
+
+    // Retry / friction
     const retries = events.filter((e) => e.kind === "user_edit").length;
+    const retryCount = retries;
+    const iterativeRefinement = retryCount > 1;
+
+    // HUMAN-ANCHORED OUTCOME
+    let outcome: OutcomeType | null = null;
+    let neededHumanOverride: boolean | null = null;
+
+    if (humanOverride) {
+      neededHumanOverride = true;
+      outcome = "escalated_to_human";
+    }
+
+    // OUTPUT USAGE (placeholder for now)
+    const copiedOutput = false;
+    const copiedCodeBlock = false;
+    const copiedTextLength = 0;
+    const timeToFirstCopySec: number | null = null;
+
+    // VERIFICATION BEHAVIOR (placeholder for now)
+    const switchedToSearch = false;
+    const switchedToDocs = false;
+    const timeToVerificationSec: number | null = null;
+
+    // SESSION LIFECYCLE (best-effort defaults for now)
+    const sessionEndedNaturally = true;
+    const tabClosedImmediately = false;
+    const idleTimeBeforeCloseSec = 0;
+    const returnedToSession = false;
 
     const now = Date.now();
     const ageMs = now - lastTs;
-
-    let outcome: OutcomeType = "success";
-
-    if (humanOverride) {
-      outcome = "escalated_to_human";
-    } else if (
+    const isAutoAbandonedCandidate =
       ageMs > STALE_SESSION_THRESHOLD_MS &&
-      events.length <= 2 && // very short session
-      duration <= ABANDONED_MAX_DURATION_MS
-    ) {
-      outcome = "abandoned";
-    }
+      events.length <= 2 &&
+      duration <= ABANDONED_MAX_DURATION_MS;
+
+    // CONTENT SHAPE (placeholders)
+    const containsCodeBlocks = false;
+    const containsLongFormText = false;
+    const questionAnswerPattern = false;
 
     return {
+      // Anchors
       outcome,
-      neededHumanOverride: humanOverride,
-      retries,
+      neededHumanOverride,
+
+      // Conversation structure
+      messageCount,
+      userMessageCount,
+      llmMessageCount,
+
+      // Friction signals
+      retryCount,
+      iterativeRefinement,
+
+      // Output usage
+      copiedOutput,
+      copiedCodeBlock,
+      copiedTextLength,
+      timeToFirstCopySec,
+
+      // Verification behavior
+      switchedToSearch,
+      switchedToDocs,
+      timeToVerificationSec,
+
+      // Lifecycle
+      sessionEndedNaturally,
+      tabClosedImmediately,
+      idleTimeBeforeCloseSec,
+      returnedToSession,
+      autoAbandonedCandidate: isAutoAbandonedCandidate,
+
+      // Content shape (non-semantic)
+      containsCodeBlocks,
+      containsLongFormText,
+      questionAnswerPattern,
+
+      // Timing
       approxDurationMs: duration,
+
+      // Existing field kept for now
+      retries,
+
+      // Optional human note
+      note,
     };
   }
+
 
   function generateServiceRecord(
     events: EventRecord[],
