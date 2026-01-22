@@ -12,6 +12,16 @@ function runDevSimulation() {
         kind: "model_response",
         metadata: { site: "chatgpt", latencyMs: 1200 }
     });
+    session = (0, index_1.appendEvent)(session, {
+        kind: "copy_output",
+        metadata: {
+            site: "chatgpt",
+            messageId: "message-1",
+            charCount: 120,
+            isCodeLike: true,
+            languageHint: "typescript"
+        }
+    });
     // User decides the answer is wrong and types their own
     session = (0, index_1.appendEvent)(session, {
         kind: "user_override",

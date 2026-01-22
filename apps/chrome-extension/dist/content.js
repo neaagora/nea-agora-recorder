@@ -14,12 +14,12 @@
         currentSessionId = `chatgpt-tab-${Math.random().toString(36).slice(2)}`;
         return currentSessionId;
     }
-    function recordEvent(type) {
+    function recordEvent(type, metadata, sessionIdOverride) {
         try {
             // If the extension context is invalid, bail out early
             if (!chrome?.runtime?.id) {
                 if (typeof console !== "undefined" && console && typeof console.warn === "function") {
-                    console.warn("[Nea Agora Recorder] recordEvent skipped: extension context invalidated");
+                    console.debug("[Nea Agora Recorder] recordEvent skipped: extension context invalidated");
                 }
                 return;
             }
@@ -28,7 +28,8 @@
                 site: "chatgpt",
                 url: window.location.href,
                 timestamp: new Date().toISOString(),
-                sessionId: deriveSessionId(),
+                sessionId: sessionIdOverride ?? deriveSessionId(),
+                metadata,
             };
             // Safe debug log – this will not crash the script
             if (typeof console !== "undefined" && console && typeof console.log === "function") {
@@ -52,8 +53,134 @@
             }
         }
     }
+    function isChatGptHost() {
+        const host = window.location.hostname;
+        return host === "chatgpt.com" || host.endsWith(".chatgpt.com") || host === "chat.openai.com";
+    }
+    function isChatGptConversationPage() {
+        // For v0.3, treat any ChatGPT host as eligible.
+        // Session scoping is handled by deriveSessionId() per tab.
+        return isChatGptHost();
+    }
+    function getSelectionContainer(selection) {
+        const anchor = selection.anchorNode;
+        if (!anchor)
+            return null;
+        if (anchor.nodeType === Node.ELEMENT_NODE) {
+            return anchor;
+        }
+        return anchor.parentElement;
+    }
+    function findAssistantMessageElement(container) {
+        if (!container)
+            return null;
+        const direct = container.closest('[data-message-author-role="assistant"]');
+        if (direct)
+            return direct;
+        const turn = container.closest('article[data-testid^="conversation-turn"], div[data-testid^="conversation-turn"]');
+        if (turn && turn.querySelector('[data-message-author-role="assistant"]')) {
+            return turn;
+        }
+        return null;
+    }
+    function resolveMessageId(messageEl) {
+        if (!messageEl)
+            return undefined;
+        const idCarrier = messageEl.closest("[data-message-id]");
+        const carrierId = idCarrier?.getAttribute("data-message-id") ?? undefined;
+        if (carrierId)
+            return carrierId;
+        const directId = messageEl.getAttribute("data-message-id") ??
+            messageEl.getAttribute("data-id") ??
+            undefined;
+        if (directId)
+            return directId;
+        const testId = messageEl.getAttribute("data-testid");
+        if (testId && testId.startsWith("conversation-turn-")) {
+            return testId;
+        }
+        return undefined;
+    }
+    function extractLanguageHint(container) {
+        if (!container)
+            return undefined;
+        const languageAttr = container.getAttribute("data-language") ??
+            container.getAttribute("data-code-language");
+        if (languageAttr)
+            return languageAttr.trim().toLowerCase();
+        const classMatch = Array.from(container.classList).find((cls) => cls.startsWith("language-"));
+        if (classMatch) {
+            return classMatch.replace("language-", "").trim().toLowerCase();
+        }
+        return undefined;
+    }
+    function looksLikeCodeText(text) {
+        if (!text.includes("\n"))
+            return false;
+        const lines = text
+            .split("\n")
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0);
+        if (lines.length === 0)
+            return false;
+        let codeLikeLines = 0;
+        for (const line of lines) {
+            const wordCount = line.split(/\s+/).filter(Boolean).length;
+            const hasSymbols = /[;{}()=]/.test(line);
+            if (hasSymbols && wordCount <= 4) {
+                codeLikeLines += 1;
+            }
+        }
+        return codeLikeLines / lines.length >= 0.3;
+    }
+    function emitCopyEvent(metadata, attemptsLeft = 1) {
+        if (!isChatGptConversationPage())
+            return;
+        // v0.2 already guarantees a stable per-tab sessionId via deriveSessionId.
+        const sessionId = deriveSessionId();
+        if (!sessionId) {
+            if (attemptsLeft > 0) {
+                setTimeout(() => emitCopyEvent(metadata, attemptsLeft - 1), 500);
+            }
+            return;
+        }
+        recordEvent("copy_output", metadata, sessionId);
+    }
+    function handleCopyEvent() {
+        if (!isChatGptConversationPage())
+            return;
+        const selection = window.getSelection();
+        if (!selection)
+            return;
+        const text = selection.toString();
+        if (!text || text.trim().length === 0)
+            return;
+        const container = getSelectionContainer(selection);
+        if (!container)
+            return;
+        if (container.closest("textarea, [contenteditable='true']")) {
+            return;
+        }
+        const assistantMessageEl = findAssistantMessageElement(container);
+        const chatArea = container.closest("main, [role='main']");
+        if (!assistantMessageEl && !chatArea)
+            return;
+        const messageId = resolveMessageId(assistantMessageEl);
+        const codeContainer = container.closest("pre, code, [data-language], [data-code-language]");
+        const languageHint = extractLanguageHint(codeContainer ? codeContainer : null);
+        const isCodeLike = Boolean(codeContainer) || looksLikeCodeText(text);
+        const metadata = {
+            site: "chatgpt",
+            messageId,
+            charCount: text.length,
+            isCodeLike,
+            languageHint,
+        };
+        emitCopyEvent(metadata);
+    }
     recordEvent("page_visit");
     bindGlobalPromptListeners();
+    document.addEventListener("copy", handleCopyEvent, true);
     const boundForms = new WeakSet();
     const boundButtons = new WeakSet();
     function bindPromptSendListeners(root) {
