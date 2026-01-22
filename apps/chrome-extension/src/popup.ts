@@ -1,10 +1,19 @@
 (() => {
+  type CopyEventMetadata = {
+    site: "chatgpt" | "other";
+    messageId?: string;
+    charCount: number;
+    isCodeLike: boolean;
+    languageHint?: string;
+  };
+
   type EventRecord = {
-    type: string;
-    site: string;
+    type: "page_visit" | "user_prompt" | "copy_output";
+    site: "chatgpt";
     url: string;
     timestamp: string;
     sessionId: string;
+    metadata?: CopyEventMetadata;
   };
 
   type SessionFlags = {
@@ -27,13 +36,16 @@
     | "user_edit"
     | "user_override"
     | "session_end"
-    | "session_start";
+    | "session_start"
+    | "copy_output";
 
-  interface InteractionEventMetadata {
+  interface BaseInteractionEventMetadata {
     site: "chatgpt" | "other";
     conversationId?: string;
     latencyMs?: number;
   }
+
+  type InteractionEventMetadata = BaseInteractionEventMetadata | CopyEventMetadata;
 
   interface InteractionEvent {
     id: string;
@@ -81,6 +93,12 @@
 
     // TIMING
     approxDurationMs: number;
+
+    // v0.3 copy tracking
+    copyEventsTotal: number;
+    copyEventsCode: number;
+    copyEventsNonCode: number;
+    copiedMessageIds?: string[];
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -292,15 +310,16 @@
         ? new Date(sorted[sorted.length - 1].timestamp)
         : startTs;
 
-      const interactionEvents: InteractionEvent[] = sorted.map((ev) => ({
-        id: cryptoRandomId(),
-        timestamp: ev.timestamp,
-        // For v0, treat each page_visit as a user_prompt event
-        kind: ev.type === "user_prompt" ? "user_prompt" : "session_start",
-        metadata: {
-          site: "chatgpt",
-        },
-      }));
+      const interactionEvents: InteractionEvent[] = sorted.map((ev) => {
+        const metadata = ev.metadata ?? { site: "chatgpt" };
+        return {
+          id: cryptoRandomId(),
+          timestamp: ev.timestamp,
+          // For v0, treat each page_visit as a user_prompt event
+          kind: ev.type === "user_prompt" ? "user_prompt" : ev.type === "copy_output" ? "copy_output" : "session_start",
+          metadata,
+        };
+      });
 
       const firstEvent = interactionEvents[0];
       let platform: PlatformId = "unknown";
@@ -402,6 +421,28 @@
       events.length <= 2 &&
       duration <= ABANDONED_MAX_DURATION_MS;
 
+    const copyEvents = events.filter((e) => e.kind === "copy_output");
+    let copyEventsTotal = 0;
+    let copyEventsCode = 0;
+    let copyEventsNonCode = 0;
+    const copiedMessageIdsSet = new Set<string>();
+
+    for (const ev of copyEvents) {
+      copyEventsTotal += 1;
+      const metadata = ev.metadata as CopyEventMetadata | undefined;
+      if (metadata?.isCodeLike) {
+        copyEventsCode += 1;
+      } else {
+        copyEventsNonCode += 1;
+      }
+      if (metadata?.messageId) {
+        copiedMessageIdsSet.add(metadata.messageId);
+      }
+    }
+
+    const copiedMessageIds =
+      copiedMessageIdsSet.size > 0 ? Array.from(copiedMessageIdsSet) : undefined;
+
     // CONTENT SHAPE (placeholders)
     const containsCodeBlocks = false;
     const containsLongFormText = false;
@@ -446,6 +487,12 @@
 
       // Timing
       approxDurationMs: duration,
+
+      // v0.3 copy tracking
+      copyEventsTotal,
+      copyEventsCode,
+      copyEventsNonCode,
+      copiedMessageIds,
 
       // Existing field kept for now
       retries,

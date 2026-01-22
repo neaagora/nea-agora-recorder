@@ -12,7 +12,8 @@ export type InteractionEventKind =
   | "model_response"
   | "user_edit"
   | "user_override"
-  | "session_end";
+  | "session_end"
+  | "copy_output";
 
 export interface InteractionEventMetadata {
   site: "chatgpt" | "claude" | "gemini" | "other";
@@ -20,18 +21,37 @@ export interface InteractionEventMetadata {
   latencyMs?: number;
 }
 
-export interface InteractionEvent {
+export interface CopyEventMetadata {
+  site: "chatgpt" | "other";
+  messageId?: string;
+  charCount: number;
+  isCodeLike: boolean;
+  languageHint?: string;
+}
+
+export interface BaseInteractionEvent {
   id: string;
   timestamp: string; // ISO 8601
   kind: InteractionEventKind;
   metadata?: InteractionEventMetadata;
 }
 
+export interface CopyInteractionEvent extends BaseInteractionEvent {
+  kind: "copy_output";
+  metadata: CopyEventMetadata;
+}
+
+export type InteractionEvent = BaseInteractionEvent | CopyInteractionEvent;
+
 export interface SessionSummary {
   outcome: OutcomeType;
   neededHumanOverride: boolean;
   retries: number;
   approxDurationMs: number;
+  copyEventsTotal: number;
+  copyEventsCode: number;
+  copyEventsNonCode: number;
+  copiedMessageIds?: string[];
 }
 
 export interface InteractionSession {
@@ -144,6 +164,27 @@ function summarizeSession(
 
   const hasOverride = events.some(e => e.kind === "user_override");
   const retries = events.filter(e => e.kind === "user_edit").length;
+  let copyEventsTotal = 0;
+  let copyEventsCode = 0;
+  let copyEventsNonCode = 0;
+  const copiedMessageIdsSet = new Set<string>();
+
+  for (const ev of events) {
+    if (ev.kind !== "copy_output") continue;
+    copyEventsTotal += 1;
+    const metadata = (ev as CopyInteractionEvent).metadata;
+    if (metadata?.isCodeLike) {
+      copyEventsCode += 1;
+    } else {
+      copyEventsNonCode += 1;
+    }
+    if (metadata?.messageId) {
+      copiedMessageIdsSet.add(metadata.messageId);
+    }
+  }
+
+  const copiedMessageIds =
+    copiedMessageIdsSet.size > 0 ? Array.from(copiedMessageIdsSet) : undefined;
 
   // Very naive outcome for v0
   let outcome: OutcomeType = "success";
@@ -153,7 +194,9 @@ function summarizeSession(
   }
 
   const hasFailureMarker = events.some(
-    e => e.kind === "session_end" && e.metadata?.latencyMs === -1
+    e =>
+      e.kind === "session_end" &&
+      (e.metadata as InteractionEventMetadata | undefined)?.latencyMs === -1
   );
 
   if (hasFailureMarker && !hasOverride) {
@@ -164,7 +207,11 @@ function summarizeSession(
     outcome,
     neededHumanOverride: hasOverride,
     retries,
-    approxDurationMs: duration
+    approxDurationMs: duration,
+    copyEventsTotal,
+    copyEventsCode,
+    copyEventsNonCode,
+    copiedMessageIds
   };
 }
 

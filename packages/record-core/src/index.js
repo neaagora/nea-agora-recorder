@@ -80,6 +80,27 @@ function summarizeSession(session, endTime) {
     var duration = Math.max(0, lastTs - firstTs);
     var hasOverride = events.some(function (e) { return e.kind === "user_override"; });
     var retries = events.filter(function (e) { return e.kind === "user_edit"; }).length;
+    var copyEventsTotal = 0;
+    var copyEventsCode = 0;
+    var copyEventsNonCode = 0;
+    var copiedMessageIdsSet = new Set();
+    for (var _i = 0, events_1 = events; _i < events_1.length; _i++) {
+        var ev = events_1[_i];
+        if (ev.kind !== "copy_output")
+            continue;
+        copyEventsTotal += 1;
+        var metadata = ev.metadata;
+        if (metadata === null || metadata === void 0 ? void 0 : metadata.isCodeLike) {
+            copyEventsCode += 1;
+        }
+        else {
+            copyEventsNonCode += 1;
+        }
+        if (metadata === null || metadata === void 0 ? void 0 : metadata.messageId) {
+            copiedMessageIdsSet.add(metadata.messageId);
+        }
+    }
+    var copiedMessageIds = copiedMessageIdsSet.size > 0 ? Array.from(copiedMessageIdsSet) : undefined;
     // Very naive outcome for v0
     var outcome = "success";
     if (hasOverride) {
@@ -93,7 +114,11 @@ function summarizeSession(session, endTime) {
         outcome: outcome,
         neededHumanOverride: hasOverride,
         retries: retries,
-        approxDurationMs: duration
+        approxDurationMs: duration,
+        copyEventsTotal: copyEventsTotal,
+        copyEventsCode: copyEventsCode,
+        copyEventsNonCode: copyEventsNonCode,
+        copiedMessageIds: copiedMessageIds
     };
 }
 function cryptoRandomId() {
