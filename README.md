@@ -8,6 +8,13 @@ It does **not** send data to any server.
 It does **not** compute scores or rankings.  
 It only turns raw interaction history into a structured record you control.
 
+**Patent Pending**
+
+Certain concepts and methods implemented or described in this repository are covered by one or more provisional patent applications filed by the authors.
+
+Open-source usage is permitted under the MIT license.  
+This notice is provided for disclosure purposes only and does not imply certification, endorsement, or warranty.
+
 ## Why this exists
 
 Today, LLMs and agents operate like black boxes.
@@ -51,53 +58,55 @@ Just a local artifact you can inspect, archive, or feed into your own tooling.
 Right now this is a developer-only MVP.
 
 1. Clone the repo:
-
+   
    ```bash
    git clone https://github.com/neaagora/nea-agora-recorder.git
    cd nea-agora-recorder
    ```
 
-2.  Build or prepare the extension (if needed):
+2. Build or prepare the extension (if needed):
+   
+   ```bash
+   # if you have a build step
+   npm install
+   npm run build
+   
+   # after build, the extension lives in:
+   # apps/chrome-extension/dist
+   ```
 
-    ```bash
-    # if you have a build step
-    npm install
-    npm run build
-
-    # after build, the extension lives in:
-    # apps/chrome-extension/dist
-
-    ```
-
-3.  Load it in Chrome:
-    - Open `chrome://extensions`
-    - Enable **Developer mode**
-    - Click **Load unpacked**
-    - Select `apps/chrome-extension/dist` (the folder with `manifest.json`)
+3. Load it in Chrome:
+   
+   - Open `chrome://extensions`
+   - Enable **Developer mode**
+   - Click **Load unpacked**
+   - Select `apps/chrome-extension/dist` (the folder with `manifest.json`)
 
 You should now see **Nea Agora Service Recorder** in your extensions list.
 
 ## How to use
 
-1.  Open `https://chatgpt.com/` and use ChatGPT as usual.
+1. Open `https://chatgpt.com/` and use ChatGPT as usual.
 
-2.  The extension's content script will observe your prompts and group them into sessions.
+2. The extension's content script will observe your prompts and group them into sessions.
 
-3.  Use the extension UI (popup) to:
-    -   Inspect recorded sessions.
-    -   Adjust the outcome if needed:
-        -   `"success"`
-        -   `"abandoned"`
-        -   `"escalated_to_human"`
-    -   Toggle `neededHumanOverride` when you had to manually fix something.
+3. Use the extension UI (popup) to:
+   
+   - Inspect recorded sessions.
+   - Adjust the outcome if needed:
+     - `"success"`
+     - `"abandoned"`
+     - `"escalated_to_human"`
+   - Toggle `neededHumanOverride` when you had to manually fix something.
 
-4.  Export a service record:
-    -   Click **Export** in the popup.
-    -   This downloads a JSON file with:
-        -   `recordType: "agent_service_record"`
-        -   `subject` info (which agent/surface)
-        -   `observer` info (the recorder + environment)
-        -   an array of `sessions` with outcomes and flags.
+4. Export a service record:
+   
+   - Click **Export** in the popup.
+   - This downloads a JSON file with:
+     - `recordType: "agent_service_record"`
+     - `subject` info (which agent/surface)
+     - `observer` info (the recorder + environment)
+     - an array of `sessions` with outcomes and flags.
 
 See `examples/service_record__chatgpt_sample.json` for a concrete example.
 
@@ -142,14 +151,13 @@ See `examples/service_record__chatgpt_sample.json` for a concrete example.
     }
   ]
 }
-
 ```
 
 The real sample in `examples/` contains multiple sessions, including:
 
--   `success`
--   `abandoned`
--   `escalated_to_human` with `neededHumanOverride: true`
+- `success`
+- `abandoned`
+- `escalated_to_human` with `neededHumanOverride: true`
 
 This is **not** a trust score.
 It is raw, structured history that other systems can interpret later.
@@ -157,12 +165,14 @@ It is raw, structured history that other systems can interpret later.
 ## What this is *not*
 
 This project is **not**:
--   a trust or reputation system
--   a ranking engine
--   a centralized analytics platform
--   a cloud service
+
+- a trust or reputation system
+- a ranking engine
+- a centralized analytics platform
+- a cloud service
 
 It is only:
+
 > A tool to record what happened and when a human had to intervene.
 
 Any trust scoring, aggregation, or enforcement should live in **separate** tools or services.
@@ -170,6 +180,7 @@ Any trust scoring, aggregation, or enforcement should live in **separate** tools
 ## Status
 
 Early MVP:
+
 - Chrome only
 - ChatGPT-only (`https://chatgpt.com/*`)
 - Developer-mode install
@@ -180,15 +191,16 @@ Breaking changes may happen as we learn.
 
 ## Roadmap (short)
 
--   Better session visualization
--   Import / merge multiple ServiceRecord files
--   Optional CSV export
--   Per-agent filters
--   Safer defaults around what gets recorded
+- Better session visualization
+- Import / merge multiple ServiceRecord files
+- Optional CSV export
+- Per-agent filters
+- Safer defaults around what gets recorded
 
 ## Contributing
 
 Issues and PRs are welcome. If you’re building:
+
 - trust ranking
 - enforcement
 - service-record visualization

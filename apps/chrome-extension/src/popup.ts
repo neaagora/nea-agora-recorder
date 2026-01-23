@@ -1,19 +1,29 @@
 (() => {
+  type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
+
   type CopyEventMetadata = {
     site: "chatgpt" | "other";
     messageId?: string;
     charCount: number;
     isCodeLike: boolean;
     languageHint?: string;
+    trigger?: CopyTrigger;
+  };
+
+  type FeedbackEventKind = "feedback_good" | "feedback_bad";
+
+  type FeedbackEventMetadata = {
+    site: "chatgpt" | "other";
+    messageId?: string;
   };
 
   type EventRecord = {
-    type: "page_visit" | "user_prompt" | "copy_output";
+    type: "page_visit" | "user_prompt" | "copy_output" | "feedback_good" | "feedback_bad";
     site: "chatgpt";
     url: string;
     timestamp: string;
     sessionId: string;
-    metadata?: CopyEventMetadata;
+    metadata?: CopyEventMetadata | FeedbackEventMetadata;
   };
 
   type SessionFlags = {
@@ -37,7 +47,9 @@
     | "user_override"
     | "session_end"
     | "session_start"
-    | "copy_output";
+    | "copy_output"
+    | "feedback_good"
+    | "feedback_bad";
 
   interface BaseInteractionEventMetadata {
     site: "chatgpt" | "other";
@@ -45,7 +57,10 @@
     latencyMs?: number;
   }
 
-  type InteractionEventMetadata = BaseInteractionEventMetadata | CopyEventMetadata;
+  type InteractionEventMetadata =
+    | BaseInteractionEventMetadata
+    | CopyEventMetadata
+    | FeedbackEventMetadata;
 
   interface InteractionEvent {
     id: string;
@@ -99,6 +114,9 @@
     copyEventsCode: number;
     copyEventsNonCode: number;
     copiedMessageIds?: string[];
+    feedbackGoodCount: number;
+    feedbackBadCount: number;
+    feedbackMessageIds?: string[];
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -316,7 +334,16 @@
           id: cryptoRandomId(),
           timestamp: ev.timestamp,
           // For v0, treat each page_visit as a user_prompt event
-          kind: ev.type === "user_prompt" ? "user_prompt" : ev.type === "copy_output" ? "copy_output" : "session_start",
+          kind:
+            ev.type === "user_prompt"
+              ? "user_prompt"
+              : ev.type === "copy_output"
+              ? "copy_output"
+              : ev.type === "feedback_good"
+              ? "feedback_good"
+              : ev.type === "feedback_bad"
+              ? "feedback_bad"
+              : "session_start",
           metadata,
         };
       });
@@ -397,12 +424,6 @@
       outcome = "escalated_to_human";
     }
 
-    // OUTPUT USAGE (placeholder for now)
-    const copiedOutput = false;
-    const copiedCodeBlock = false;
-    const copiedTextLength = 0;
-    const timeToFirstCopySec: number | null = null;
-
     // VERIFICATION BEHAVIOR (placeholder for now)
     const switchedToSearch = false;
     const switchedToDocs = false;
@@ -421,20 +442,73 @@
       events.length <= 2 &&
       duration <= ABANDONED_MAX_DURATION_MS;
 
-    const copyEvents = events.filter((e) => e.kind === "copy_output");
     let copyEventsTotal = 0;
     let copyEventsCode = 0;
     let copyEventsNonCode = 0;
+    let hasAnyCopy = false;
+    let hasCodeCopy = false;
+    let copiedTextLengthSum = 0;
+    let earliestCopyMs: number | null = null;
+    let earliestUserPromptMs: number | null = null;
+    let earliestSessionStartMs: number | null = null;
     const copiedMessageIdsSet = new Set<string>();
+    let feedbackGoodCount = 0;
+    let feedbackBadCount = 0;
+    const feedbackMessageIdsSet = new Set<string>();
 
-    for (const ev of copyEvents) {
+    for (const ev of events) {
+      if (ev.kind === "user_prompt") {
+        const ts = Date.parse(ev.timestamp);
+        if (Number.isFinite(ts)) {
+          earliestUserPromptMs =
+            earliestUserPromptMs === null ? ts : Math.min(earliestUserPromptMs, ts);
+        }
+      }
+
+      if (ev.kind === "session_start") {
+        const ts = Date.parse(ev.timestamp);
+        if (Number.isFinite(ts)) {
+          earliestSessionStartMs =
+          earliestSessionStartMs === null ? ts : Math.min(earliestSessionStartMs, ts);
+        }
+      }
+
+      if (ev.kind === "feedback_good" || ev.kind === "feedback_bad") {
+        if (ev.kind === "feedback_good") {
+          feedbackGoodCount += 1;
+        } else {
+          feedbackBadCount += 1;
+        }
+
+        const meta = ev.metadata as FeedbackEventMetadata | undefined;
+        if (meta?.messageId) {
+          feedbackMessageIdsSet.add(meta.messageId);
+        }
+      }
+
+      if (ev.kind !== "copy_output") {
+        continue;
+      }
+
       copyEventsTotal += 1;
+      hasAnyCopy = true;
       const metadata = ev.metadata as CopyEventMetadata | undefined;
-      if (metadata?.isCodeLike) {
+      const isCodeLike = Boolean(metadata?.isCodeLike);
+      if (isCodeLike) {
         copyEventsCode += 1;
+        hasCodeCopy = true;
       } else {
         copyEventsNonCode += 1;
       }
+
+      copiedTextLengthSum += metadata?.charCount ?? 0;
+
+      const copyTs = Date.parse(ev.timestamp);
+      if (Number.isFinite(copyTs)) {
+        earliestCopyMs =
+          earliestCopyMs === null ? copyTs : Math.min(earliestCopyMs, copyTs);
+      }
+
       if (metadata?.messageId) {
         copiedMessageIdsSet.add(metadata.messageId);
       }
@@ -442,6 +516,18 @@
 
     const copiedMessageIds =
       copiedMessageIdsSet.size > 0 ? Array.from(copiedMessageIdsSet) : undefined;
+    const feedbackMessageIds =
+      feedbackMessageIdsSet.size > 0 ? Array.from(feedbackMessageIdsSet) : undefined;
+
+    const copiedOutput = hasAnyCopy;
+    const copiedCodeBlock = hasCodeCopy;
+    const copiedTextLength = copiedTextLengthSum;
+    const anchorMs = earliestUserPromptMs ?? earliestSessionStartMs;
+    let timeToFirstCopySec: number | null = null;
+    if (earliestCopyMs !== null && anchorMs !== null) {
+      const deltaMs = earliestCopyMs - anchorMs;
+      timeToFirstCopySec = Math.max(0, Math.floor(deltaMs / 1000));
+    }
 
     // CONTENT SHAPE (placeholders)
     const containsCodeBlocks = false;
@@ -493,6 +579,9 @@
       copyEventsCode,
       copyEventsNonCode,
       copiedMessageIds,
+      feedbackGoodCount,
+      feedbackBadCount,
+      feedbackMessageIds,
 
       // Existing field kept for now
       retries,

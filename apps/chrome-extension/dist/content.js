@@ -175,12 +175,108 @@
             charCount: text.length,
             isCodeLike,
             languageHint,
+            trigger: "selection",
         };
         emitCopyEvent(metadata);
+    }
+    function handleCopyFullReplyClick(buttonEl) {
+        if (!isChatGptHost())
+            return;
+        const messageEl = findAssistantMessageElement(buttonEl);
+        if (!messageEl)
+            return;
+        const text = messageEl.innerText || "";
+        const charCount = text.length;
+        if (!charCount)
+            return;
+        const sessionId = deriveSessionId();
+        if (!sessionId)
+            return;
+        const messageId = resolveMessageId(messageEl);
+        const metadata = {
+            site: "chatgpt",
+            messageId,
+            charCount,
+            isCodeLike: false,
+            languageHint: undefined,
+            trigger: "button_full_reply",
+        };
+        recordEvent("copy_output", metadata, sessionId);
+    }
+    function handleCopyCodeClick(buttonEl) {
+        if (!isChatGptHost())
+            return;
+        const codeContainer = buttonEl.closest("pre") ??
+            buttonEl.closest("code") ??
+            buttonEl.closest("[data-language], [data-code-language]") ??
+            buttonEl.closest("div")?.querySelector("pre, code, [data-language], [data-code-language]") ??
+            null;
+        if (!codeContainer)
+            return;
+        const text = codeContainer.innerText || "";
+        const charCount = text.length;
+        if (!charCount)
+            return;
+        const sessionId = deriveSessionId();
+        if (!sessionId)
+            return;
+        const messageEl = findAssistantMessageElement(codeContainer);
+        const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
+        const languageHint = extractLanguageHint(codeContainer);
+        const metadata = {
+            site: "chatgpt",
+            messageId,
+            charCount,
+            isCodeLike: true,
+            languageHint,
+            trigger: "button_code_block",
+        };
+        recordEvent("copy_output", metadata, sessionId);
+    }
+    function handleFeedbackClick(buttonEl, kind) {
+        if (!isChatGptHost())
+            return;
+        const sessionId = deriveSessionId();
+        if (!sessionId)
+            return;
+        const messageEl = findAssistantMessageElement(buttonEl);
+        const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
+        const metadata = {
+            site: "chatgpt",
+            messageId,
+        };
+        recordEvent(kind, metadata, sessionId);
     }
     recordEvent("page_visit");
     bindGlobalPromptListeners();
     document.addEventListener("copy", handleCopyEvent, true);
+    document.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!target)
+            return;
+        if (!isChatGptHost())
+            return;
+        const fullReplyButton = target.closest("button[data-testid='copy-turn-action-button'], button[aria-label='Copy response'], button[aria-label='Copy reply']");
+        const copyCodeButton = !fullReplyButton && target.closest("button[aria-label='Copy'], button[aria-label='Copy code']");
+        if (fullReplyButton) {
+            handleCopyFullReplyClick(fullReplyButton);
+            return;
+        }
+        if (copyCodeButton) {
+            handleCopyCodeClick(copyCodeButton);
+            return;
+        }
+        const thumbsUpButton = target.closest("button[data-testid='good-response-turn-action-button'], button[aria-label='Good response'], button[aria-label='Thumbs up']");
+        const thumbsDownButton = target.closest("button[data-testid='bad-response-turn-action-button'], button[aria-label='Bad response'], button[aria-label='Thumbs down']");
+        if (thumbsUpButton) {
+            handleFeedbackClick(thumbsUpButton, "feedback_good");
+            return;
+        }
+        if (thumbsDownButton) {
+            handleFeedbackClick(thumbsDownButton, "feedback_bad");
+            return;
+        }
+    }, true);
     const boundForms = new WeakSet();
     const boundButtons = new WeakSet();
     function bindPromptSendListeners(root) {

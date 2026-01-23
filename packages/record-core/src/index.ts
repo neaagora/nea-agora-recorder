@@ -13,7 +13,9 @@ export type InteractionEventKind =
   | "user_edit"
   | "user_override"
   | "session_end"
-  | "copy_output";
+  | "copy_output"
+  | "feedback_good"
+  | "feedback_bad";
 
 export interface InteractionEventMetadata {
   site: "chatgpt" | "claude" | "gemini" | "other";
@@ -21,12 +23,25 @@ export interface InteractionEventMetadata {
   latencyMs?: number;
 }
 
+export type CopyTrigger =
+  | "selection"
+  | "button_full_reply"
+  | "button_code_block";
+
 export interface CopyEventMetadata {
   site: "chatgpt" | "other";
   messageId?: string;
   charCount: number;
   isCodeLike: boolean;
   languageHint?: string;
+  trigger?: CopyTrigger;
+}
+
+export type FeedbackEventKind = "feedback_good" | "feedback_bad";
+
+export interface FeedbackEventMetadata {
+  site: "chatgpt" | "other";
+  messageId?: string;
 }
 
 export interface BaseInteractionEvent {
@@ -41,7 +56,15 @@ export interface CopyInteractionEvent extends BaseInteractionEvent {
   metadata: CopyEventMetadata;
 }
 
-export type InteractionEvent = BaseInteractionEvent | CopyInteractionEvent;
+export interface FeedbackInteractionEvent extends BaseInteractionEvent {
+  kind: FeedbackEventKind;
+  metadata?: FeedbackEventMetadata;
+}
+
+export type InteractionEvent =
+  | BaseInteractionEvent
+  | CopyInteractionEvent
+  | FeedbackInteractionEvent;
 
 export interface SessionSummary {
   outcome: OutcomeType;
@@ -52,6 +75,13 @@ export interface SessionSummary {
   copyEventsCode: number;
   copyEventsNonCode: number;
   copiedMessageIds?: string[];
+  copiedOutput: boolean;
+  copiedCodeBlock: boolean;
+  copiedTextLength: number;
+  timeToFirstCopySec: number | null;
+  feedbackGoodCount: number;
+  feedbackBadCount: number;
+  feedbackMessageIds?: string[];
 }
 
 export interface InteractionSession {
@@ -167,16 +197,54 @@ function summarizeSession(
   let copyEventsTotal = 0;
   let copyEventsCode = 0;
   let copyEventsNonCode = 0;
+  let hasAnyCopy = false;
+  let hasCodeCopy = false;
+  let copiedTextLengthSum = 0;
+  let earliestCopyMs: number | null = null;
+  let earliestUserPromptMs: number | null = null;
   const copiedMessageIdsSet = new Set<string>();
+  let feedbackGoodCount = 0;
+  let feedbackBadCount = 0;
+  const feedbackMessageIdsSet = new Set<string>();
 
   for (const ev of events) {
+    if (ev.kind === "user_prompt") {
+      const ts = Date.parse(ev.timestamp);
+      if (Number.isFinite(ts)) {
+        earliestUserPromptMs =
+          earliestUserPromptMs === null ? ts : Math.min(earliestUserPromptMs, ts);
+      }
+    }
+
+    if (ev.kind === "feedback_good" || ev.kind === "feedback_bad") {
+      if (ev.kind === "feedback_good") {
+        feedbackGoodCount += 1;
+      } else {
+        feedbackBadCount += 1;
+      }
+
+      const meta = ev.metadata as FeedbackEventMetadata | undefined;
+      if (meta?.messageId) {
+        feedbackMessageIdsSet.add(meta.messageId);
+      }
+    }
+
     if (ev.kind !== "copy_output") continue;
     copyEventsTotal += 1;
     const metadata = (ev as CopyInteractionEvent).metadata;
-    if (metadata?.isCodeLike) {
+    hasAnyCopy = true;
+    const isCodeLike = Boolean(metadata?.isCodeLike);
+    if (isCodeLike) {
       copyEventsCode += 1;
+      hasCodeCopy = true;
     } else {
       copyEventsNonCode += 1;
+    }
+    copiedTextLengthSum += metadata?.charCount ?? 0;
+    const copyTs = Date.parse(ev.timestamp);
+    if (Number.isFinite(copyTs)) {
+      earliestCopyMs =
+        earliestCopyMs === null ? copyTs : Math.min(earliestCopyMs, copyTs);
     }
     if (metadata?.messageId) {
       copiedMessageIdsSet.add(metadata.messageId);
@@ -185,6 +253,8 @@ function summarizeSession(
 
   const copiedMessageIds =
     copiedMessageIdsSet.size > 0 ? Array.from(copiedMessageIdsSet) : undefined;
+  const feedbackMessageIds =
+    feedbackMessageIdsSet.size > 0 ? Array.from(feedbackMessageIdsSet) : undefined;
 
   // Very naive outcome for v0
   let outcome: OutcomeType = "success";
@@ -203,6 +273,18 @@ function summarizeSession(
     outcome = "failed";
   }
 
+  const copiedOutput = hasAnyCopy;
+  const copiedCodeBlock = hasCodeCopy;
+  const copiedTextLength = copiedTextLengthSum;
+  let timeToFirstCopySec: number | null = null;
+  const sessionStartMs = Date.parse(session.startedAt);
+  const anchorMs =
+    earliestUserPromptMs ?? (Number.isFinite(sessionStartMs) ? sessionStartMs : null);
+  if (earliestCopyMs !== null && anchorMs !== null) {
+    const deltaMs = earliestCopyMs - anchorMs;
+    timeToFirstCopySec = Math.max(0, Math.floor(deltaMs / 1000));
+  }
+
   return {
     outcome,
     neededHumanOverride: hasOverride,
@@ -211,7 +293,14 @@ function summarizeSession(
     copyEventsTotal,
     copyEventsCode,
     copyEventsNonCode,
-    copiedMessageIds
+    copiedMessageIds,
+    copiedOutput,
+    copiedCodeBlock,
+    copiedTextLength,
+    timeToFirstCopySec,
+    feedbackGoodCount,
+    feedbackBadCount,
+    feedbackMessageIds
   };
 }
 
