@@ -1,19 +1,29 @@
 (() => {
+  type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
+
   type CopyEventMetadata = {
     site: "chatgpt" | "other";
     messageId?: string;
     charCount: number;
     isCodeLike: boolean;
     languageHint?: string;
+    trigger?: CopyTrigger;
+  };
+
+  type FeedbackEventKind = "feedback_good" | "feedback_bad";
+
+  type FeedbackEventMetadata = {
+    site: "chatgpt" | "other";
+    messageId?: string;
   };
 
   type EventRecord = {
-    type: "page_visit" | "user_prompt" | "copy_output";
+    type: "page_visit" | "user_prompt" | "copy_output" | "feedback_good" | "feedback_bad";
     site: "chatgpt";
     url: string;
     timestamp: string;
     sessionId: string;
-    metadata?: CopyEventMetadata;
+    metadata?: CopyEventMetadata | FeedbackEventMetadata;
   };
 
   console.log("[Nea Agora Recorder] content script loaded on this page");
@@ -235,15 +245,142 @@
       charCount: text.length,
       isCodeLike,
       languageHint,
+      trigger: "selection",
     };
 
     emitCopyEvent(metadata);
   }
 
+  function handleCopyFullReplyClick(buttonEl: HTMLElement) {
+    if (!isChatGptHost()) return;
 
+    const messageEl = findAssistantMessageElement(buttonEl);
+    if (!messageEl) return;
+
+    const text = messageEl.innerText || "";
+    const charCount = text.length;
+    if (!charCount) return;
+
+    const sessionId = deriveSessionId();
+    if (!sessionId) return;
+
+    const messageId = resolveMessageId(messageEl);
+
+    const metadata: CopyEventMetadata = {
+      site: "chatgpt",
+      messageId,
+      charCount,
+      isCodeLike: false,
+      languageHint: undefined,
+      trigger: "button_full_reply",
+    };
+
+    recordEvent("copy_output", metadata, sessionId);
+  }
+
+  function handleCopyCodeClick(buttonEl: HTMLElement) {
+
+    if (!isChatGptHost()) return;
+
+    const codeContainer =
+      buttonEl.closest<HTMLElement>("pre") ??
+      buttonEl.closest<HTMLElement>("code") ??
+      buttonEl.closest<HTMLElement>("[data-language], [data-code-language]") ??
+      buttonEl.closest<HTMLElement>("div")?.querySelector<HTMLElement>(
+        "pre, code, [data-language], [data-code-language]"
+      ) ??
+      null;
+    if (!codeContainer) return;
+
+    const text = codeContainer.innerText || "";
+    const charCount = text.length;
+    if (!charCount) return;
+
+    const sessionId = deriveSessionId();
+    if (!sessionId) return;
+
+    const messageEl = findAssistantMessageElement(codeContainer);
+    const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
+    const languageHint = extractLanguageHint(codeContainer);
+
+    const metadata: CopyEventMetadata = {
+      site: "chatgpt",
+      messageId,
+      charCount,
+      isCodeLike: true,
+      languageHint,
+      trigger: "button_code_block",
+    };
+
+    recordEvent("copy_output", metadata, sessionId);
+  }
+
+  function handleFeedbackClick(buttonEl: HTMLElement, kind: FeedbackEventKind) {
+    if (!isChatGptHost()) return;
+
+    const sessionId = deriveSessionId();
+    if (!sessionId) return;
+
+    const messageEl = findAssistantMessageElement(buttonEl);
+    const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
+
+    const metadata: FeedbackEventMetadata = {
+      site: "chatgpt",
+      messageId,
+    };
+
+    recordEvent(kind, metadata, sessionId);
+  }
+  
   recordEvent("page_visit");
   bindGlobalPromptListeners();
   document.addEventListener("copy", handleCopyEvent, true);
+  document.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      if (!isChatGptHost()) return;
+
+      const fullReplyButton = target.closest<HTMLElement>(
+        "button[data-testid='copy-turn-action-button'], button[aria-label='Copy response'], button[aria-label='Copy reply']"
+      );
+
+      const copyCodeButton = !fullReplyButton && target.closest<HTMLElement>(
+        "button[aria-label='Copy'], button[aria-label='Copy code']"
+      );
+
+      
+      if (fullReplyButton) {
+        handleCopyFullReplyClick(fullReplyButton);
+        return;
+      }
+      if (copyCodeButton) {
+        handleCopyCodeClick(copyCodeButton);
+        return;
+      }
+
+      const thumbsUpButton = target.closest<HTMLElement>(
+        "button[data-testid='good-response-turn-action-button'], button[aria-label='Good response'], button[aria-label='Thumbs up']"
+      );
+
+      const thumbsDownButton = target.closest<HTMLElement>(
+        "button[data-testid='bad-response-turn-action-button'], button[aria-label='Bad response'], button[aria-label='Thumbs down']"
+      );
+
+      if (thumbsUpButton) {
+        handleFeedbackClick(thumbsUpButton, "feedback_good");
+        return;
+      }
+      
+      if (thumbsDownButton) {
+        handleFeedbackClick(thumbsDownButton, "feedback_bad");
+        return;
+      }
+    },
+    true
+  );
 
   const boundForms = new WeakSet<HTMLFormElement>();
   const boundButtons = new WeakSet<HTMLButtonElement>();

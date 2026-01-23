@@ -83,24 +83,71 @@ function summarizeSession(session, endTime) {
     var copyEventsTotal = 0;
     var copyEventsCode = 0;
     var copyEventsNonCode = 0;
+    var hasAnyCopy = false;
+    var hasCodeCopy = false;
+    var copiedTextLengthSum = 0;
+    var earliestCopyMs = null;
+    var earliestUserPromptMs = null;
     var copiedMessageIdsSet = new Set();
+    var feedbackGoodCount = 0;
+    var feedbackBadCount = 0;
+    var feedbackMessageIdsSet = new Set();
     for (var _i = 0, events_1 = events; _i < events_1.length; _i++) {
         var ev = events_1[_i];
+        if (ev.kind === "user_prompt") {
+            var ts = Date.parse(ev.timestamp);
+            if (Number.isFinite(ts)) {
+                earliestUserPromptMs =
+                    earliestUserPromptMs === null ? ts : Math.min(earliestUserPromptMs, ts);
+            }
+        }
+        if (ev.kind === "feedback_good" || ev.kind === "feedback_bad") {
+            if (ev.kind === "feedback_good") {
+                feedbackGoodCount += 1;
+            }
+            else {
+                feedbackBadCount += 1;
+            }
+            var meta = ev.metadata;
+            if (meta === null || meta === void 0 ? void 0 : meta.messageId) {
+                feedbackMessageIdsSet.add(meta.messageId);
+            }
+        }
         if (ev.kind !== "copy_output")
             continue;
         copyEventsTotal += 1;
         var metadata = ev.metadata;
-        if (metadata === null || metadata === void 0 ? void 0 : metadata.isCodeLike) {
+        hasAnyCopy = true;
+        var isCodeLike = Boolean(metadata === null || metadata === void 0 ? void 0 : metadata.isCodeLike);
+        if (isCodeLike) {
             copyEventsCode += 1;
+            hasCodeCopy = true;
         }
         else {
             copyEventsNonCode += 1;
+        }
+        copiedTextLengthSum += (metadata === null || metadata === void 0 ? void 0 : metadata.charCount) !== undefined ? metadata.charCount : 0;
+        var copyTs = Date.parse(ev.timestamp);
+        if (Number.isFinite(copyTs)) {
+            earliestCopyMs =
+                earliestCopyMs === null ? copyTs : Math.min(earliestCopyMs, copyTs);
         }
         if (metadata === null || metadata === void 0 ? void 0 : metadata.messageId) {
             copiedMessageIdsSet.add(metadata.messageId);
         }
     }
     var copiedMessageIds = copiedMessageIdsSet.size > 0 ? Array.from(copiedMessageIdsSet) : undefined;
+    var feedbackMessageIds = feedbackMessageIdsSet.size > 0 ? Array.from(feedbackMessageIdsSet) : undefined;
+    var copiedOutput = hasAnyCopy;
+    var copiedCodeBlock = hasCodeCopy;
+    var copiedTextLength = copiedTextLengthSum;
+    var timeToFirstCopySec = null;
+    var sessionStartMs = Date.parse(session.startedAt);
+    var anchorMs = earliestUserPromptMs !== null && earliestUserPromptMs !== void 0 ? earliestUserPromptMs : (Number.isFinite(sessionStartMs) ? sessionStartMs : null);
+    if (earliestCopyMs !== null && anchorMs !== null) {
+        var deltaMs = earliestCopyMs - anchorMs;
+        timeToFirstCopySec = Math.max(0, Math.floor(deltaMs / 1000));
+    }
     // Very naive outcome for v0
     var outcome = "success";
     if (hasOverride) {
@@ -118,7 +165,14 @@ function summarizeSession(session, endTime) {
         copyEventsTotal: copyEventsTotal,
         copyEventsCode: copyEventsCode,
         copyEventsNonCode: copyEventsNonCode,
-        copiedMessageIds: copiedMessageIds
+        copiedMessageIds: copiedMessageIds,
+        copiedOutput: copiedOutput,
+        copiedCodeBlock: copiedCodeBlock,
+        copiedTextLength: copiedTextLength,
+        timeToFirstCopySec: timeToFirstCopySec,
+        feedbackGoodCount: feedbackGoodCount,
+        feedbackBadCount: feedbackBadCount,
+        feedbackMessageIds: feedbackMessageIds
     };
 }
 function cryptoRandomId() {
