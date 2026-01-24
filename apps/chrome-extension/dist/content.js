@@ -1,25 +1,109 @@
 "use strict";
 (() => {
-    console.log("[Nea Agora Recorder] content script loaded on this page");
+    const DEBUG_COUNTS = false;
+    const DEBUG_RECORDER = false;
+    if (DEBUG_RECORDER) {
+        console.log("[Nea Agora Recorder] content script loaded on this page");
+    }
     let currentSessionId = null;
+    const sessionMetricsById = new Map();
+    const countedAssistantMessageIds = new Set();
+    const countedAssistantMessageEls = new WeakSet();
+    const pendingAssistantMessageEls = new WeakSet();
+    let observedMessageContainer = null;
+    const USER_PROMPT_DEDUP_MS = 500;
+    let lastUserPromptAt = 0;
+    let lastUserPromptText = "";
+    chrome.storage.local.get(["neaAgoraSessionMetrics"], (result) => {
+        const stored = result.neaAgoraSessionMetrics;
+        if (stored && typeof stored === "object") {
+            for (const [sessionId, metrics] of Object.entries(stored)) {
+                if (!metrics || typeof metrics !== "object")
+                    continue;
+                const userMessageCount = Number(metrics.userMessageCount ?? 0);
+                const llmMessageCount = Number(metrics.llmMessageCount ?? 0);
+                sessionMetricsById.set(sessionId, {
+                    userMessageCount,
+                    llmMessageCount,
+                });
+            }
+        }
+    });
     function deriveSessionId() {
         if (currentSessionId)
             return currentSessionId;
         const match = window.location.pathname.match(/\/c\/([^/]+)/);
         if (match?.[1]) {
             currentSessionId = `chatgpt-c-${match[1]}`;
+            ensureSessionMetrics(currentSessionId);
             return currentSessionId;
         }
         // fallback: stable per-tab ID
         currentSessionId = `chatgpt-tab-${Math.random().toString(36).slice(2)}`;
+        ensureSessionMetrics(currentSessionId);
         return currentSessionId;
+    }
+    function ensureSessionMetrics(sessionId) {
+        if (sessionMetricsById.has(sessionId))
+            return;
+        sessionMetricsById.set(sessionId, {
+            userMessageCount: 0,
+            llmMessageCount: 0,
+        });
+    }
+    function persistSessionMetrics() {
+        const serialized = {};
+        for (const [sessionId, metrics] of sessionMetricsById.entries()) {
+            serialized[sessionId] = {
+                userMessageCount: metrics.userMessageCount,
+                llmMessageCount: metrics.llmMessageCount,
+            };
+        }
+        chrome.storage.local.set({ neaAgoraSessionMetrics: serialized });
+    }
+    function incrementUserMessageCount(sessionId, messageText) {
+        const normalized = messageText.trim();
+        if (!normalized)
+            return;
+        // Heuristic: avoid double-counting when multiple hooks fire for the same send.
+        const now = Date.now();
+        if (now - lastUserPromptAt < USER_PROMPT_DEDUP_MS && normalized === lastUserPromptText) {
+            return;
+        }
+        lastUserPromptAt = now;
+        lastUserPromptText = normalized;
+        ensureSessionMetrics(sessionId);
+        const metrics = sessionMetricsById.get(sessionId);
+        metrics.userMessageCount += 1;
+        persistSessionMetrics();
+        if (DEBUG_RECORDER) {
+            console.debug("[Nea Agora Recorder] user message counted", {
+                sessionId,
+                userMessageCount: metrics.userMessageCount,
+            });
+        }
+    }
+    function incrementAssistantMessageCount(sessionId, messageId) {
+        ensureSessionMetrics(sessionId);
+        const metrics = sessionMetricsById.get(sessionId);
+        metrics.llmMessageCount += 1;
+        persistSessionMetrics();
+        if (DEBUG_RECORDER) {
+            console.debug("[Nea Agora Recorder] assistant message counted", {
+                sessionId,
+                messageId,
+                llmMessageCount: metrics.llmMessageCount,
+            });
+        }
     }
     function recordEvent(type, metadata, sessionIdOverride) {
         try {
             // If the extension context is invalid, bail out early
             if (!chrome?.runtime?.id) {
                 if (typeof console !== "undefined" && console && typeof console.warn === "function") {
-                    console.debug("[Nea Agora Recorder] recordEvent skipped: extension context invalidated");
+                    if (DEBUG_RECORDER) {
+                        console.debug("[Nea Agora Recorder] recordEvent skipped: extension context invalidated");
+                    }
                 }
                 return;
             }
@@ -33,7 +117,9 @@
             };
             // Safe debug log – this will not crash the script
             if (typeof console !== "undefined" && console && typeof console.log === "function") {
-                console.log("[Nea Agora Recorder] event", newEvent);
+                if (DEBUG_RECORDER) {
+                    console.log("[Nea Agora Recorder] event", newEvent);
+                }
             }
             chrome.storage.local.get(["neaAgoraRecorder"], (result) => {
                 const events = Array.isArray(result.neaAgoraRecorder)
@@ -42,7 +128,9 @@
                 const updatedEvents = [...events, newEvent];
                 chrome.storage.local.set({ neaAgoraRecorder: updatedEvents }, () => {
                     if (typeof console !== "undefined" && console && typeof console.log === "function") {
-                        console.log("[Nea Agora Recorder] stored", updatedEvents.length, "events");
+                        if (DEBUG_RECORDER) {
+                            console.log("[Nea Agora Recorder] stored", updatedEvents.length, "events");
+                        }
                     }
                 });
             });
@@ -100,6 +188,86 @@
             return testId;
         }
         return undefined;
+    }
+    function findChatInputText(element) {
+        if (!element)
+            return "";
+        if (element instanceof HTMLTextAreaElement) {
+            return element.value ?? "";
+        }
+        if (element instanceof HTMLElement && element.isContentEditable) {
+            return element.textContent ?? "";
+        }
+        const textarea = element.querySelector("textarea");
+        if (textarea instanceof HTMLTextAreaElement) {
+            return textarea.value ?? "";
+        }
+        const editable = element.querySelector("[contenteditable='true']");
+        if (editable instanceof HTMLElement) {
+            return editable.textContent ?? "";
+        }
+        return "";
+    }
+    function isFinalAssistantMessage(messageEl) {
+        // For v0.5 we keep it simple:
+        // If the assistant message element has some non-empty text, we treat it as "final".
+        const text = (messageEl.textContent ?? "").trim();
+        return text.length > 0;
+    }
+    function scheduleAssistantMessageCount(messageEl) {
+        if (pendingAssistantMessageEls.has(messageEl))
+            return;
+        pendingAssistantMessageEls.add(messageEl);
+        const messageId = resolveMessageId(messageEl);
+        if (messageId && countedAssistantMessageIds.has(messageId))
+            return;
+        if (!messageId && countedAssistantMessageEls.has(messageEl))
+            return;
+        // Heuristic: wait briefly for streaming to settle and copy button to appear.
+        setTimeout(() => {
+            pendingAssistantMessageEls.delete(messageEl);
+            if (!messageEl.isConnected)
+                return;
+            if (!isFinalAssistantMessage(messageEl))
+                return;
+            if (messageId) {
+                if (countedAssistantMessageIds.has(messageId))
+                    return;
+                countedAssistantMessageIds.add(messageId);
+            }
+            else {
+                if (countedAssistantMessageEls.has(messageEl))
+                    return;
+                countedAssistantMessageEls.add(messageEl);
+            }
+            const sessionId = deriveSessionId();
+            if (!sessionId)
+                return;
+            if (DEBUG_COUNTS) {
+                console.debug("[nea-agora] llmMessageCount++", sessionId, sessionMetricsById.get(sessionId)?.llmMessageCount);
+            }
+            incrementAssistantMessageCount(sessionId, messageId);
+        }, 700);
+    }
+    function collectAssistantMessageElements(node) {
+        if (!(node instanceof HTMLElement))
+            return [];
+        const results = [];
+        if (node.matches('[data-message-author-role="assistant"]')) {
+            results.push(node);
+        }
+        node.querySelectorAll('[data-message-author-role="assistant"]').forEach((el) => {
+            if (el instanceof HTMLElement)
+                results.push(el);
+        });
+        node.querySelectorAll('article[data-testid^="conversation-turn"], div[data-testid^="conversation-turn"]').forEach((turn) => {
+            if (!(turn instanceof HTMLElement))
+                return;
+            const assistant = turn.querySelector('[data-message-author-role="assistant"]');
+            if (assistant instanceof HTMLElement)
+                results.push(assistant);
+        });
+        return results;
     }
     function extractLanguageHint(container) {
         if (!container)
@@ -287,7 +455,14 @@
             if (!boundForms.has(form)) {
                 boundForms.add(form);
                 form.addEventListener("submit", () => {
+                    const text = findChatInputText(form);
+                    if (!text.trim())
+                        return;
+                    const sessionId = deriveSessionId();
+                    if (!sessionId)
+                        return;
                     recordEvent("user_prompt");
+                    incrementUserMessageCount(sessionId, text);
                 }, true);
             }
         }
@@ -296,7 +471,14 @@
         if (sendButton && !boundButtons.has(sendButton)) {
             boundButtons.add(sendButton);
             sendButton.addEventListener("click", () => {
+                const text = findChatInputText(root);
+                if (!text.trim())
+                    return;
+                const sessionId = deriveSessionId();
+                if (!sessionId)
+                    return;
                 recordEvent("user_prompt");
+                incrementUserMessageCount(sessionId, text);
             }, true);
         }
     }
@@ -306,7 +488,9 @@
         if (w.__neaAgoraPromptListenersBound)
             return;
         w.__neaAgoraPromptListenersBound = true;
-        console.log("[Nea Agora Recorder] binding global prompt listeners");
+        if (DEBUG_RECORDER) {
+            console.log("[Nea Agora Recorder] binding global prompt listeners");
+        }
         document.addEventListener("submit", (event) => {
             const target = event.target;
             if (!target)
@@ -317,8 +501,20 @@
             const hasChatInput = form.querySelector("textarea, [contenteditable='true']");
             if (!hasChatInput)
                 return;
-            console.log("[Nea Agora Recorder] submit from chat-like form");
+            if (DEBUG_RECORDER) {
+                console.log("[Nea Agora Recorder] submit from chat-like form");
+            }
+            const text = findChatInputText(form);
+            if (!text.trim())
+                return;
+            const sessionId = deriveSessionId();
+            if (!sessionId)
+                return;
             recordEvent("user_prompt");
+            incrementUserMessageCount(sessionId, text);
+            if (DEBUG_RECORDER) {
+                console.debug("[Nea Agora Recorder] user message detected (submit)");
+            }
         }, true);
         document.addEventListener("keydown", (event) => {
             const ke = event;
@@ -330,12 +526,14 @@
                 return;
             // Be noisy for now so we can see what /c/... is doing
             if (typeof console !== "undefined" && console && typeof console.log === "function") {
-                console.log("[Nea Agora Recorder] keydown Enter", {
-                    targetTag: target?.tagName,
-                    activeTag: active?.tagName,
-                    activeRole: active?.getAttribute("role"),
-                    isEditable: active?.isContentEditable,
-                });
+                if (DEBUG_RECORDER) {
+                    console.log("[Nea Agora Recorder] keydown Enter", {
+                        targetTag: target?.tagName,
+                        activeTag: active?.tagName,
+                        activeRole: active?.getAttribute("role"),
+                        isEditable: active?.isContentEditable,
+                    });
+                }
             }
             const isTextarea = active instanceof HTMLTextAreaElement;
             const isEditable = active.isContentEditable;
@@ -346,11 +544,64 @@
             if (!isTextLike)
                 return;
             if (typeof console !== "undefined" && console && typeof console.log === "function") {
-                console.log("[Nea Agora Recorder] Enter in chat-like input");
+                if (DEBUG_RECORDER) {
+                    console.log("[Nea Agora Recorder] Enter in chat-like input");
+                }
             }
+            const text = findChatInputText(active);
+            if (!text.trim())
+                return;
+            const sessionId = deriveSessionId();
+            if (!sessionId)
+                return;
             recordEvent("user_prompt");
+            incrementUserMessageCount(sessionId, text);
+            // console.debug("[Nea Agora Recorder] user message detected (enter)");
         }, true);
     }
+    const assistantObserver = new MutationObserver((mutations) => {
+        // console.debug("[nea-agora][llm] mutation observed", mutations);
+        if (!isChatGptConversationPage())
+            return;
+        for (const mutation of mutations) {
+            for (const node of Array.from(mutation.addedNodes)) {
+                const assistantEls = collectAssistantMessageElements(node);
+                for (const messageEl of assistantEls) {
+                    // console.debug("[nea-agora][llm] assistant node detected", messageEl);
+                    scheduleAssistantMessageCount(messageEl);
+                }
+            }
+        }
+    });
+    function attachAssistantObserverTo(container) {
+        if (observedMessageContainer === container) {
+            return;
+        }
+        if (observedMessageContainer) {
+            assistantObserver.disconnect();
+        }
+        observedMessageContainer = container;
+        assistantObserver.observe(container, {
+            childList: true,
+            subtree: true,
+        });
+        // console.debug("[nea-agora][llm] attached observer to message container");
+    }
+    function startAssistantObserver() {
+        let lastContainer = null;
+        setInterval(() => {
+            const container = document.querySelector("main");
+            if (!container) {
+                return;
+            }
+            if (container !== lastContainer) {
+                // console.debug("[nea-agora][llm] message container changed or found");
+                lastContainer = container;
+                attachAssistantObserverTo(container);
+            }
+        }, 1000);
+    }
+    startAssistantObserver();
     //const observer = new MutationObserver(() => {
     //  bindPromptSendListeners(document);
     //});
