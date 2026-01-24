@@ -17,6 +17,11 @@
     messageId?: string;
   };
 
+  type SessionMetrics = {
+    userMessageCount: number;
+    llmMessageCount: number;
+  };
+
   type EventRecord = {
     type: "page_visit" | "user_prompt" | "copy_output" | "feedback_good" | "feedback_bad";
     site: "chatgpt";
@@ -133,6 +138,7 @@
     toolLabel: string; // e.g. "ChatGPT in Chrome"
     events: InteractionEvent[];
     summary?: SessionSummary;
+    metrics?: SessionMetrics;
   }
 
   interface ServiceRecord {
@@ -155,9 +161,15 @@
   const STALE_SESSION_THRESHOLD_MS = 10 * 60 * 1000; // 10 minutes
   const ABANDONED_MAX_DURATION_MS = 30 * 1000;
 
-  function renderEvents(events: EventRecord[], sessionFlags: SessionFlags) {
+  function renderEvents(
+    events: EventRecord[],
+    sessionFlags: SessionFlags,
+    sessionMetrics?: Record<string, SessionMetrics>
+  ) {
     const countEl = document.getElementById("event-count");
     const listEl = document.getElementById("event-list");
+
+    const safeMetrics: Record<string, SessionMetrics> = sessionMetrics ?? {};
 
     if (!countEl || !listEl) return;
 
@@ -192,7 +204,7 @@
 
     sessionSummaries.sort((a, b) => b.latestTime - a.latestTime);
 
-    const builtSessions = buildSessions(events, sessionFlags);
+    const builtSessions = buildSessions(events, sessionFlags, sessionMetrics);
     const outcomeBySessionId = new Map<string, OutcomeType | null>();
     for (const s of builtSessions) {
       outcomeBySessionId.set(s.sessionId, s.summary?.outcome ?? null);
@@ -310,7 +322,8 @@
 
   function buildSessions(
     events: EventRecord[],
-    sessionFlags: SessionFlags
+    sessionFlags: SessionFlags,
+    sessionMetrics: Record<string, SessionMetrics> = {}
   ): InteractionSession[] {
     const bySession = groupEventsBySession(events);
     const sessions: InteractionSession[] = [];
@@ -354,6 +367,11 @@
         platform = "chatgpt";
       }
 
+      const metrics = sessionMetrics[sessionId] ?? {
+        userMessageCount: 0,
+        llmMessageCount: 0,
+      };
+
       const session: InteractionSession = {
         sessionId,
         platform,
@@ -361,6 +379,7 @@
         endedAt: endTs.toISOString(),
         toolLabel: "ChatGPT in Chrome",
         events: interactionEvents,
+        metrics,
       };
 
       const summary = summarizeSession(
@@ -594,9 +613,10 @@
 
   function generateServiceRecord(
     events: EventRecord[],
-    sessionFlags: SessionFlags
+    sessionFlags: SessionFlags,
+    sessionMetrics: Record<string, SessionMetrics>
   ): ServiceRecord {
-    const sessions = buildSessions(events, sessionFlags);
+    const sessions = buildSessions(events, sessionFlags, sessionMetrics);
 
     return {
       recordType: "agent_service_record",
@@ -625,7 +645,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     chrome.storage.local.get(
-      ["neaAgoraRecorder", "neaAgoraSessionFlags"],
+      ["neaAgoraRecorder", "neaAgoraSessionFlags", "neaAgoraSessionMetrics"],
       (result) => {
         const events = Array.isArray(result.neaAgoraRecorder)
           ? (result.neaAgoraRecorder as EventRecord[])
@@ -634,12 +654,15 @@
         const sessionFlags: SessionFlags =
           (result.neaAgoraSessionFlags as SessionFlags) ?? {};
 
-        renderEvents(events, sessionFlags);
+        const sessionMetrics: Record<string, SessionMetrics> =
+          (result.neaAgoraSessionMetrics as Record<string, SessionMetrics>) ?? {};
+
+        renderEvents(events, sessionFlags, sessionMetrics);
 
         const exportBtn = document.getElementById("export-service-record");
         if (exportBtn) {
           exportBtn.addEventListener("click", () => {
-            const record = generateServiceRecord(events, sessionFlags);
+            const record = generateServiceRecord(events, sessionFlags, sessionMetrics);
             const blob = new Blob([JSON.stringify(record, null, 2)], {
               type: "application/json",
             });
