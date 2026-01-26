@@ -5,7 +5,7 @@
     if (DEBUG_RECORDER) {
         console.log("[Nea Agora Recorder] content script loaded on this page");
     }
-    let currentSessionId = null;
+    const tabSessionSuffix = Math.random().toString(36).slice(2);
     const sessionMetricsById = new Map();
     const countedAssistantMessageIds = new Set();
     const countedAssistantMessageEls = new WeakSet();
@@ -29,19 +29,30 @@
             }
         }
     });
-    function deriveSessionId() {
-        if (currentSessionId)
-            return currentSessionId;
-        const match = window.location.pathname.match(/\/c\/([^/]+)/);
-        if (match?.[1]) {
-            currentSessionId = `chatgpt-c-${match[1]}`;
-            ensureSessionMetrics(currentSessionId);
-            return currentSessionId;
+    function getChatGptConversationIdFromUrl(url = location.href) {
+        try {
+            const u = new URL(url);
+            // ChatGPT conversation URLs usually look like /c/<id>
+            const parts = u.pathname.split("/");
+            const idx = parts.indexOf("c");
+            if (idx >= 0 && parts.length > idx + 1) {
+                const convId = parts[idx + 1].trim();
+                return convId || null;
+            }
+            return null;
         }
-        // fallback: stable per-tab ID
-        currentSessionId = `chatgpt-tab-${Math.random().toString(36).slice(2)}`;
-        ensureSessionMetrics(currentSessionId);
-        return currentSessionId;
+        catch {
+            return null;
+        }
+    }
+    function deriveSessionId() {
+        // Prefer conversation scoped session ids when a conversation is active.
+        const convId = getChatGptConversationIdFromUrl();
+        if (convId) {
+            return `chatgpt-c-${convId}`;
+        }
+        // Fallback: tab scoped session id
+        return `chatgpt-tab-${tabSessionSuffix}`;
     }
     function ensureSessionMetrics(sessionId) {
         if (sessionMetricsById.has(sessionId))
@@ -241,8 +252,6 @@
                 countedAssistantMessageEls.add(messageEl);
             }
             const sessionId = deriveSessionId();
-            if (!sessionId)
-                return;
             if (DEBUG_COUNTS) {
                 console.debug("[nea-agora] llmMessageCount++", sessionId, sessionMetricsById.get(sessionId)?.llmMessageCount);
             }
@@ -306,12 +315,6 @@
             return;
         // v0.2 already guarantees a stable per-tab sessionId via deriveSessionId.
         const sessionId = deriveSessionId();
-        if (!sessionId) {
-            if (attemptsLeft > 0) {
-                setTimeout(() => emitCopyEvent(metadata, attemptsLeft - 1), 500);
-            }
-            return;
-        }
         recordEvent("copy_output", metadata, sessionId);
     }
     function handleCopyEvent() {
@@ -358,8 +361,6 @@
         if (!charCount)
             return;
         const sessionId = deriveSessionId();
-        if (!sessionId)
-            return;
         const messageId = resolveMessageId(messageEl);
         const metadata = {
             site: "chatgpt",
@@ -386,8 +387,6 @@
         if (!charCount)
             return;
         const sessionId = deriveSessionId();
-        if (!sessionId)
-            return;
         const messageEl = findAssistantMessageElement(codeContainer);
         const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
         const languageHint = extractLanguageHint(codeContainer);
@@ -405,8 +404,6 @@
         if (!isChatGptHost())
             return;
         const sessionId = deriveSessionId();
-        if (!sessionId)
-            return;
         const messageEl = findAssistantMessageElement(buttonEl);
         const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
         const metadata = {
@@ -459,8 +456,6 @@
                     if (!text.trim())
                         return;
                     const sessionId = deriveSessionId();
-                    if (!sessionId)
-                        return;
                     recordEvent("user_prompt");
                     incrementUserMessageCount(sessionId, text);
                 }, true);
@@ -475,8 +470,6 @@
                 if (!text.trim())
                     return;
                 const sessionId = deriveSessionId();
-                if (!sessionId)
-                    return;
                 recordEvent("user_prompt");
                 incrementUserMessageCount(sessionId, text);
             }, true);
@@ -508,8 +501,6 @@
             if (!text.trim())
                 return;
             const sessionId = deriveSessionId();
-            if (!sessionId)
-                return;
             recordEvent("user_prompt");
             incrementUserMessageCount(sessionId, text);
             if (DEBUG_RECORDER) {
@@ -552,8 +543,6 @@
             if (!text.trim())
                 return;
             const sessionId = deriveSessionId();
-            if (!sessionId)
-                return;
             recordEvent("user_prompt");
             incrementUserMessageCount(sessionId, text);
             // console.debug("[Nea Agora Recorder] user message detected (enter)");
