@@ -416,18 +416,15 @@
 
     const duration = Math.max(0, lastTs - firstTs);
 
-    // Conversation structure from events
-    const messageCount = events.filter(
-      (e) => e.kind !== "session_start"
-    ).length;
-    const userMessageCount = events.filter(
-      (e) =>
-        e.kind !== "session_start" &&
-        (e.kind === "user_prompt" || e.kind === "user_edit")
-    ).length;
-    const llmMessageCount = events.filter(
-      (e) => e.kind === "model_response"
-    ).length;
+    const metrics = session.metrics ?? {
+      userMessageCount: 0,
+      llmMessageCount: 0,
+    };
+
+    // Conversation structure from metrics
+    const messageCount = metrics.userMessageCount + metrics.llmMessageCount;
+    const userMessageCount = metrics.userMessageCount;
+    const llmMessageCount = metrics.llmMessageCount;
 
     // Retry / friction
     const retries = events.filter((e) => e.kind === "user_edit").length;

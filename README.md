@@ -15,6 +15,14 @@ Certain concepts and methods implemented or described in this repository are cov
 Open-source usage is permitted under the MIT license.  
 This notice is provided for disclosure purposes only and does not imply certification, endorsement, or warranty.
 
+## Background
+
+This repository accompanies the article [“Inside a Real ChatGPT Service Record”](https://leocharny.substack.com/p/inside-a-real-chatgpt-service-record)
+
+It documents real service records captured while dogfooding the recorder during coding, creative, and research sessions.
+
+The goal is not evaluation or scoring, but observability: what actually happened during human-AI interaction.
+
 ## Why this exists
 
 Today, LLMs and agents operate like black boxes.
@@ -108,50 +116,11 @@ You should now see **Nea Agora Service Recorder** in your extensions list.
      - `observer` info (the recorder + environment)
      - an array of `sessions` with outcomes and flags.
 
-See `examples/service_record__chatgpt_sample.json` for a concrete example.
+See `examples\service_record__chatgpt_minimal.json` for a concrete example. These example service records are taken from real usage.
 
-## Example output (simplified)
+Some fields differ across versions (v0.4 vs v0.5), reflecting the evolution of the recorder during dogfooding.
 
-```json
-{
-  "recordType": "agent_service_record",
-  "version": "0.1.0",
-  "subject": {
-    "agent": "chatgpt.com",
-    "surface": "chat"
-  },
-  "observer": {
-    "tool": "nea-agora-recorder",
-    "environment": "chrome-extension",
-    "localOnly": true
-  },
-  "generatedAt": "2026-01-20T12:45:04.099Z",
-  "sessions": [
-    {
-      "sessionId": "chatgpt.com-1768913089778",
-      "startedAt": "2026-01-20T12:44:49.778Z",
-      "endedAt": "2026-01-20T12:44:49.778Z",
-      "toolLabel": "ChatGPT in Chrome",
-      "events": [
-        {
-          "id": "krbbp85j44mkml6uhv",
-          "timestamp": "2026-01-20T12:44:49.778Z",
-          "kind": "user_prompt",
-          "metadata": {
-            "site": "chatgpt"
-          }
-        }
-      ],
-      "summary": {
-        "outcome": "success",
-        "neededHumanOverride": false,
-        "retries": 0,
-        "approxDurationMs": 0
-      }
-    }
-  ]
-}
-```
+Discrepancies are intentional and documented in the accompanying article.
 
 The real sample in `examples/` contains multiple sessions, including:
 

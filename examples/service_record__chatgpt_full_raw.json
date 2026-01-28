@@ -1,0 +1,6280 @@
+{
+  "recordType": "agent_service_record",
+  "version": "0.1.0",
+  "subject": {
+    "agent": "chatgpt.com",
+    "surface": "chat"
+  },
+  "observer": {
+    "tool": "nea-agora-recorder",
+    "environment": "chrome-extension",
+    "localOnly": true
+  },
+  "generatedAt": "2026-01-28T13:56:45.579Z",
+  "agentLabel": "chatgpt.com",
+  "sessions": [
+    {
+      "sessionId": "chatgpt-c-6979f9e4-5a04-832c-b067-72f77c4bd3ec",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-28T12:05:56.785Z",
+      "endedAt": "2026-01-28T12:10:38.973Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "fkq6h3fwkh4mky39uvf",
+          "timestamp": "2026-01-28T12:05:56.785Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "des3tq51c49mky39uvf",
+          "timestamp": "2026-01-28T12:08:09.176Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gv5czdqpm7qmky39uvf",
+          "timestamp": "2026-01-28T12:10:38.973Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1030,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 1030,
+        "timeToFirstCopySec": 282,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 282188,
+        "copyEventsTotal": 1,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 1,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6979f423-f610-8330-9c3b-be577197d943",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-28T11:39:50.680Z",
+      "endedAt": "2026-01-28T11:49:22.913Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "oxg38sj5jymky39uvf",
+          "timestamp": "2026-01-28T11:39:50.680Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gtj840pn7hgmky39uvf",
+          "timestamp": "2026-01-28T11:49:22.913Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 1,
+        "userMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 1,
+        "userMessageCount": 0,
+        "llmMessageCount": 1,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 572233,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-7z3l4izfepa",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-28T11:27:02.503Z",
+      "endedAt": "2026-01-28T12:32:33.555Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "x51vlerhhqpmky39uvf",
+          "timestamp": "2026-01-28T11:27:02.503Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "eplx80891zkmky39uvf",
+          "timestamp": "2026-01-28T11:34:22.991Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "6njn76gpv5vmky39uvf",
+          "timestamp": "2026-01-28T12:32:33.555Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 2
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 2,
+        "userMessageCount": 2,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 3931052,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-w8vi5hk9hz",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-27T16:23:33.835Z",
+      "endedAt": "2026-01-27T16:23:33.835Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "wgnbac3dzfmky39uvf",
+          "timestamp": "2026-01-27T16:23:33.835Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 0,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-feqr8bqhxfk",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-27T12:27:20.858Z",
+      "endedAt": "2026-01-27T12:27:20.858Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "cl2igl783xmky39uvf",
+          "timestamp": "2026-01-27T12:27:20.858Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 0,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-69778ece-3e4c-832e-85b8-af9b71797c62",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T16:00:44.073Z",
+      "endedAt": "2026-01-26T16:00:44.073Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "8r0zxg8582ymky39uvf",
+          "timestamp": "2026-01-26T16:00:44.073Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 183,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 4,
+        "userMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 4,
+        "userMessageCount": 0,
+        "llmMessageCount": 4,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 183,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 0,
+        "copyEventsTotal": 1,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 1,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-69778a94-5004-8325-b4a1-f467fe0d0fb3",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T15:39:51.748Z",
+      "endedAt": "2026-01-26T15:40:00.886Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "ub6kkezlwspmky39uvf",
+          "timestamp": "2026-01-26T15:39:51.748Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "xhhen5l9wwfmky39uvf",
+          "timestamp": "2026-01-26T15:40:00.886Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 6,
+        "userMessageCount": 2
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 8,
+        "userMessageCount": 2,
+        "llmMessageCount": 6,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 9138,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-v4236km58c",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T15:39:15.197Z",
+      "endedAt": "2026-01-26T15:39:31.828Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "jjz3v208iwfmky39uvf",
+          "timestamp": "2026-01-26T15:39:15.197Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "n5ns4eje91mky39uvf",
+          "timestamp": "2026-01-26T15:39:31.828Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 1,
+        "userMessageCount": 1,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 16631,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6974b742-3d28-832d-809b-79669b6ad659",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T14:59:13.362Z",
+      "endedAt": "2026-01-28T13:52:17.447Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "2edenjvo5fnmky39uvf",
+          "timestamp": "2026-01-26T14:59:13.362Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "kv6buc2b5omky39uvf",
+          "timestamp": "2026-01-26T15:29:54.815Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 595,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "5jv5fdudrnamky39uvf",
+          "timestamp": "2026-01-26T15:38:01.541Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "66lklkcvkuxmky39uvf",
+          "timestamp": "2026-01-27T12:54:55.221Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 79,
+            "isCodeLike": false,
+            "messageId": "7efa67fd-dca9-470c-bf77-fbbc446e7ab2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "5a9rwdv3tiemky39uvf",
+          "timestamp": "2026-01-27T12:55:44.357Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 933,
+            "isCodeLike": false,
+            "messageId": "7efa67fd-dca9-470c-bf77-fbbc446e7ab2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "yito9w2wxamky39uvf",
+          "timestamp": "2026-01-27T12:57:13.683Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 633,
+            "isCodeLike": false,
+            "messageId": "7efa67fd-dca9-470c-bf77-fbbc446e7ab2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "x2fya71kejdmky39uvf",
+          "timestamp": "2026-01-27T12:57:43.040Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 6397,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-24",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "nppnjegcfgmky39uvf",
+          "timestamp": "2026-01-27T13:03:45.384Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "d5sm31nsriimky39uvf",
+          "timestamp": "2026-01-27T13:03:59.271Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 225,
+            "isCodeLike": true,
+            "messageId": "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "aoh2bbn150lmky39uvf",
+          "timestamp": "2026-01-27T13:05:29.203Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 203,
+            "isCodeLike": true,
+            "messageId": "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "gqy31sy0endmky39uvf",
+          "timestamp": "2026-01-27T13:06:00.568Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 229,
+            "isCodeLike": true,
+            "messageId": "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "okyl2jxkf5nmky39uvf",
+          "timestamp": "2026-01-27T13:06:25.263Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 165,
+            "isCodeLike": false,
+            "messageId": "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "w6n2ycij3zmky39uvf",
+          "timestamp": "2026-01-27T13:07:04.863Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 154,
+            "isCodeLike": false,
+            "messageId": "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "oubmqyyw7bbmky39uvf",
+          "timestamp": "2026-01-27T13:07:34.166Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 128,
+            "isCodeLike": false,
+            "messageId": "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "zszhzfihm5dmky39uvf",
+          "timestamp": "2026-01-27T13:10:25.549Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "44xn9ja95wwmky39uvf",
+          "timestamp": "2026-01-27T13:12:40.107Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "peodq67034mky39uvf",
+          "timestamp": "2026-01-27T13:13:09.956Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 371,
+            "isCodeLike": false,
+            "messageId": "fd1e10da-dff2-4132-a682-ddfd12b73f8b",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "jb2x7j4j3fbmky39uvf",
+          "timestamp": "2026-01-27T13:22:43.055Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "6kgi7i49amvmky39uvf",
+          "timestamp": "2026-01-27T13:26:14.405Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 14,
+            "isCodeLike": false,
+            "messageId": "9b4c6274-4eb1-456b-9d1b-91dffa1d35d3",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "pyeu9scqremky39uvf",
+          "timestamp": "2026-01-27T13:49:12.082Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "8la1btgwmwnmky39uvf",
+          "timestamp": "2026-01-27T13:54:38.592Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 245,
+            "isCodeLike": false,
+            "messageId": "ab20980d-a97a-4eb6-b3ab-7a1a32ea7748",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "wa97xflclemky39uvf",
+          "timestamp": "2026-01-27T13:55:35.823Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 194,
+            "isCodeLike": false,
+            "messageId": "ab20980d-a97a-4eb6-b3ab-7a1a32ea7748",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "dwvn8l9gknjmky39uvf",
+          "timestamp": "2026-01-27T13:56:16.729Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 47,
+            "isCodeLike": false,
+            "messageId": "ab20980d-a97a-4eb6-b3ab-7a1a32ea7748",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "wu8j0o2ulrfmky39uvf",
+          "timestamp": "2026-01-27T13:56:30.469Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 119,
+            "isCodeLike": false,
+            "messageId": "ab20980d-a97a-4eb6-b3ab-7a1a32ea7748",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "077dto4fy8u6mky39uvf",
+          "timestamp": "2026-01-27T13:58:02.318Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 37,
+            "isCodeLike": false,
+            "messageId": "9b4c6274-4eb1-456b-9d1b-91dffa1d35d3",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "vygpwpz8pzmky39uvf",
+          "timestamp": "2026-01-27T13:58:32.894Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 176,
+            "isCodeLike": true,
+            "messageId": "1de79315-2f07-45e9-9566-7a379974371a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "a83a0ksur0gmky39uvf",
+          "timestamp": "2026-01-27T13:58:45.686Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 237,
+            "isCodeLike": true,
+            "messageId": "1de79315-2f07-45e9-9566-7a379974371a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "x2wxvzhjihmky39uvf",
+          "timestamp": "2026-01-27T13:59:07.991Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 125,
+            "isCodeLike": false,
+            "messageId": "1de79315-2f07-45e9-9566-7a379974371a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ap9k3hbrve4mky39uvf",
+          "timestamp": "2026-01-27T14:00:51.420Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "5pg6v98mgx7mky39uvf",
+          "timestamp": "2026-01-27T14:01:35.531Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 309,
+            "isCodeLike": true,
+            "messageId": "2f8bc612-a1a2-400d-81ab-f8a8dd9babbd",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "b235ygz0lfhmky39uvf",
+          "timestamp": "2026-01-27T14:02:02.797Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 8,
+            "isCodeLike": false,
+            "messageId": "2f8bc612-a1a2-400d-81ab-f8a8dd9babbd",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "2xij1ulq9etmky39uvf",
+          "timestamp": "2026-01-27T14:04:46.515Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 166,
+            "isCodeLike": false,
+            "messageId": "2f8bc612-a1a2-400d-81ab-f8a8dd9babbd",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "8w5i3uovi1mky39uvf",
+          "timestamp": "2026-01-27T14:18:13.913Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 309,
+            "isCodeLike": true,
+            "messageId": "2f8bc612-a1a2-400d-81ab-f8a8dd9babbd",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "bft2kvukwg7mky39uvf",
+          "timestamp": "2026-01-27T14:18:49.772Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 345,
+            "isCodeLike": false,
+            "messageId": "2f8bc612-a1a2-400d-81ab-f8a8dd9babbd",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ra6bnta4948mky39uvf",
+          "timestamp": "2026-01-27T14:44:51.896Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 36,
+            "isCodeLike": false,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7v3f5tn668umky39uvf",
+          "timestamp": "2026-01-27T14:45:16.952Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 206,
+            "isCodeLike": false,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "gvyzvjb9drmky39uvf",
+          "timestamp": "2026-01-27T14:46:01.128Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 220,
+            "isCodeLike": false,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "b6gih16umcfmky39uvf",
+          "timestamp": "2026-01-27T14:46:37.975Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 82,
+            "isCodeLike": true,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "sexbmiuiqjnmky39uvf",
+          "timestamp": "2026-01-27T14:46:53.647Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 128,
+            "isCodeLike": false,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "b2sfc90d0s9mky39uvf",
+          "timestamp": "2026-01-27T14:49:02.674Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 42,
+            "isCodeLike": false,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "9bqsoz0h5aomky39uvf",
+          "timestamp": "2026-01-27T14:49:40.214Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 43,
+            "isCodeLike": false,
+            "messageId": "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "n17o1o9108mky39uvf",
+          "timestamp": "2026-01-27T14:56:51.620Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3k60lo0fof6mky39uvf",
+          "timestamp": "2026-01-27T14:57:45.818Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 31,
+            "isCodeLike": false,
+            "messageId": "dc189c3f-6471-475a-8ab0-a0bdc82dbafe",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "951ru0y40memky39uvf",
+          "timestamp": "2026-01-27T14:58:00.994Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 284,
+            "isCodeLike": false,
+            "messageId": "dc189c3f-6471-475a-8ab0-a0bdc82dbafe",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "sv0lbwceviqmky39uvf",
+          "timestamp": "2026-01-27T14:58:48.410Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 73,
+            "isCodeLike": false,
+            "messageId": "dc189c3f-6471-475a-8ab0-a0bdc82dbafe",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "dvuk4nzu71pmky39uvf",
+          "timestamp": "2026-01-27T15:02:54.312Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "llnkbmcr8pkmky39uvf",
+          "timestamp": "2026-01-27T15:07:12.045Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 11,
+            "isCodeLike": false,
+            "messageId": "8cf432f9-408f-4409-aed5-dcab51ea6913",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ua0s6777abmky39uvf",
+          "timestamp": "2026-01-27T15:11:15.548Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 22,
+            "isCodeLike": false,
+            "messageId": "8cf432f9-408f-4409-aed5-dcab51ea6913",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "jnmsgfb5s7rmky39uvf",
+          "timestamp": "2026-01-27T15:13:01.667Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 169,
+            "isCodeLike": false,
+            "messageId": "8cf432f9-408f-4409-aed5-dcab51ea6913",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "z4yckl2654mky39uvf",
+          "timestamp": "2026-01-27T15:14:49.140Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "tz3a0pyipgmky39uvf",
+          "timestamp": "2026-01-27T15:15:28.362Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 16,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "iwfv5298unmky39uvf",
+          "timestamp": "2026-01-27T15:15:43.778Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 80,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "8v8pqrl4mikmky39uvf",
+          "timestamp": "2026-01-27T15:16:00.505Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 26,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "vbixv73slpmky39uvf",
+          "timestamp": "2026-01-27T15:16:08.553Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 70,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "h2u1hohozlfmky39uvf",
+          "timestamp": "2026-01-27T15:16:28.353Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 32,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "pyktbeipvimky39uvf",
+          "timestamp": "2026-01-27T15:16:35.513Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 95,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "zi2kqgv90sjmky39uvf",
+          "timestamp": "2026-01-27T15:17:02.344Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1,
+            "isCodeLike": false,
+            "messageId": "800046db-d2f3-4db1-bdb5-4f97278c6069",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "4426hoopqpomky39uvf",
+          "timestamp": "2026-01-27T15:19:02.480Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "xwnpxmhrcrcmky39uvf",
+          "timestamp": "2026-01-27T15:19:41.056Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 8,
+            "isCodeLike": false,
+            "messageId": "845ee704-f5c3-446d-86ad-cf0699392451",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "o19ljk7pnsmky39uvf",
+          "timestamp": "2026-01-27T15:37:01.375Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 136,
+            "isCodeLike": false,
+            "messageId": "ad4fbdd5-98cc-4a3d-9e68-546102f49137",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "9lnjqylkvremky39uvf",
+          "timestamp": "2026-01-27T15:37:37.607Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1,
+            "isCodeLike": true,
+            "messageId": "ad4fbdd5-98cc-4a3d-9e68-546102f49137",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "u3itgooltjnmky39uvf",
+          "timestamp": "2026-01-27T15:39:05.824Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 206,
+            "isCodeLike": false,
+            "messageId": "ad4fbdd5-98cc-4a3d-9e68-546102f49137",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "tn9lsx74yscmky39uvf",
+          "timestamp": "2026-01-27T15:47:46.372Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "nac71heytimky39uvf",
+          "timestamp": "2026-01-27T15:52:13.992Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 361,
+            "isCodeLike": false,
+            "messageId": "b2ca9511-e39c-428f-9472-23c4271fdcea",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "xt1zto0y4qmky39uvf",
+          "timestamp": "2026-01-27T16:01:35.036Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 141,
+            "isCodeLike": false,
+            "messageId": "b6187878-a9ae-460d-9643-69fd6af84795",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ltjvq58b65rmky39uvf",
+          "timestamp": "2026-01-27T16:07:15.529Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "a6ojwyz365bmky39uvf",
+          "timestamp": "2026-01-27T16:08:41.384Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 15,
+            "isCodeLike": false,
+            "messageId": "fac72423-50cf-4208-95b4-cf70a17c6c77",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "3n1nfrt9tbkmky39uvf",
+          "timestamp": "2026-01-27T16:09:39.209Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "rs1l728lg6mky39uvf",
+          "timestamp": "2026-01-27T16:10:50.735Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 664,
+            "isCodeLike": false,
+            "messageId": "449c926c-35c4-47ad-ad2a-5723e2d91dc4",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "fyla4nafb2omky39uvf",
+          "timestamp": "2026-01-27T16:23:29.447Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 664,
+            "isCodeLike": false,
+            "messageId": "449c926c-35c4-47ad-ad2a-5723e2d91dc4",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "i1asyjlpppnmky39uvf",
+          "timestamp": "2026-01-27T16:27:22.135Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "2zq72aa3t72mky39uvf",
+          "timestamp": "2026-01-27T16:29:36.814Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "d1qo1e4summky39uvf",
+          "timestamp": "2026-01-27T16:34:07.373Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "i14xo118tcbmky39uvf",
+          "timestamp": "2026-01-27T16:36:12.612Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "8am52q71vqxmky39uvf",
+          "timestamp": "2026-01-27T16:36:37.235Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1670,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-72",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "u32phhqfcyamky39uvf",
+          "timestamp": "2026-01-27T16:37:27.107Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1670,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-72",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "wppwk7j3kfamky39uvf",
+          "timestamp": "2026-01-28T11:36:33.671Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "rqcbezm2avmky39uvf",
+          "timestamp": "2026-01-28T11:58:01.892Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1030,
+            "isCodeLike": false,
+            "messageId": "18a00f4a-3bc3-4e3a-aed6-d6c2fa9535b0",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "h988n74g1wtmky39uvf",
+          "timestamp": "2026-01-28T12:10:17.783Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "w6jy2rac3jmky39uvf",
+          "timestamp": "2026-01-28T12:25:22.120Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 3875,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-102",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "t5se302mxymky39uvf",
+          "timestamp": "2026-01-28T12:39:32.192Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 385,
+            "isCodeLike": false,
+            "messageId": "b9ef92a9-5bed-40ad-8532-00b3b976b9b4",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "jbwp7bdioejmky39uvf",
+          "timestamp": "2026-01-28T12:43:38.374Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 694,
+            "isCodeLike": false,
+            "messageId": "5ac2c3fc-e54e-444a-accd-e17b31c73835",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "qwk7635kcdmky39uvf",
+          "timestamp": "2026-01-28T12:44:47.567Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 86,
+            "isCodeLike": true,
+            "messageId": "5ac2c3fc-e54e-444a-accd-e17b31c73835",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "yodd4maiapnmky39uvf",
+          "timestamp": "2026-01-28T12:45:23.949Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 17,
+            "isCodeLike": true,
+            "messageId": "5ac2c3fc-e54e-444a-accd-e17b31c73835",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "c6mciok4i5imky39uvf",
+          "timestamp": "2026-01-28T12:49:54.747Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 854,
+            "isCodeLike": false,
+            "messageId": "9f90bed7-d07c-4c50-85f7-a31cb33cb83d",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ol0nn53u21qmky39uvf",
+          "timestamp": "2026-01-28T12:50:18.523Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 167,
+            "isCodeLike": false,
+            "messageId": "9f90bed7-d07c-4c50-85f7-a31cb33cb83d",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "sdzxshvx2zbmky39uvf",
+          "timestamp": "2026-01-28T12:55:27.545Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1077,
+            "isCodeLike": false,
+            "messageId": "b610e6f3-4e80-4602-beac-a4a095028978",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "9c09lco760vmky39uvf",
+          "timestamp": "2026-01-28T13:00:01.119Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "dfmnwwh9duwmky39uvf",
+          "timestamp": "2026-01-28T13:02:27.334Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 115,
+            "isCodeLike": false,
+            "messageId": "b610e6f3-4e80-4602-beac-a4a095028978",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "glwtnrvc29pmky39uvf",
+          "timestamp": "2026-01-28T13:17:21.439Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gi1isw1zb9mmky39uvf",
+          "timestamp": "2026-01-28T13:21:28.132Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "woun7fasffamky39uvf",
+          "timestamp": "2026-01-28T13:27:41.059Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "yc093pgshvdmky39uvf",
+          "timestamp": "2026-01-28T13:39:15.741Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "x8eb8lkh3emmky39uvf",
+          "timestamp": "2026-01-28T13:39:53.012Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 4715,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "lhqibmv2rlqmky39uvf",
+          "timestamp": "2026-01-28T13:43:31.113Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "vot9p7cp93mky39uvf",
+          "timestamp": "2026-01-28T13:43:57.687Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 546,
+            "isCodeLike": false,
+            "messageId": "2617203d-e7ea-48d7-b1c3-d6c79154c5a6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "rnz7lxbr9abmky39uvf",
+          "timestamp": "2026-01-28T13:45:55.441Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 94,
+            "isCodeLike": false,
+            "messageId": "2617203d-e7ea-48d7-b1c3-d6c79154c5a6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7igpl57bd9pmky39uvf",
+          "timestamp": "2026-01-28T13:46:12.936Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 94,
+            "isCodeLike": false,
+            "messageId": "9a867f38-7362-4098-b365-9cfa46f63920",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "902dnp03mmmky39uvf",
+          "timestamp": "2026-01-28T13:48:55.059Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 426,
+            "isCodeLike": true,
+            "messageId": "9a867f38-7362-4098-b365-9cfa46f63920",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "kyrfjranonmky39uvf",
+          "timestamp": "2026-01-28T13:52:17.447Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 257,
+            "isCodeLike": true,
+            "messageId": "9a867f38-7362-4098-b365-9cfa46f63920",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 113,
+        "userMessageCount": 26
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 139,
+        "userMessageCount": 26,
+        "llmMessageCount": 113,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 34078,
+        "timeToFirstCopySec": 0,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 168784085,
+        "copyEventsTotal": 73,
+        "copyEventsCode": 13,
+        "copyEventsNonCode": 60,
+        "copiedMessageIds": [
+          "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+          "7efa67fd-dca9-470c-bf77-fbbc446e7ab2",
+          "conversation-turn-24",
+          "372e4769-aa8a-4082-b0ae-ea62edea98f9",
+          "fd1e10da-dff2-4132-a682-ddfd12b73f8b",
+          "9b4c6274-4eb1-456b-9d1b-91dffa1d35d3",
+          "ab20980d-a97a-4eb6-b3ab-7a1a32ea7748",
+          "1de79315-2f07-45e9-9566-7a379974371a",
+          "2f8bc612-a1a2-400d-81ab-f8a8dd9babbd",
+          "3d3e3e13-6be4-4841-ad62-1fdb7e20d786",
+          "dc189c3f-6471-475a-8ab0-a0bdc82dbafe",
+          "8cf432f9-408f-4409-aed5-dcab51ea6913",
+          "800046db-d2f3-4db1-bdb5-4f97278c6069",
+          "845ee704-f5c3-446d-86ad-cf0699392451",
+          "ad4fbdd5-98cc-4a3d-9e68-546102f49137",
+          "b2ca9511-e39c-428f-9472-23c4271fdcea",
+          "b6187878-a9ae-460d-9643-69fd6af84795",
+          "fac72423-50cf-4208-95b4-cf70a17c6c77",
+          "449c926c-35c4-47ad-ad2a-5723e2d91dc4",
+          "conversation-turn-72",
+          "18a00f4a-3bc3-4e3a-aed6-d6c2fa9535b0",
+          "conversation-turn-102",
+          "b9ef92a9-5bed-40ad-8532-00b3b976b9b4",
+          "5ac2c3fc-e54e-444a-accd-e17b31c73835",
+          "9f90bed7-d07c-4c50-85f7-a31cb33cb83d",
+          "b610e6f3-4e80-4602-beac-a4a095028978",
+          "2617203d-e7ea-48d7-b1c3-d6c79154c5a6",
+          "9a867f38-7362-4098-b365-9cfa46f63920"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6977710e-16dc-832a-ba95-7817363c41e5",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T13:59:04.268Z",
+      "endedAt": "2026-01-27T13:30:45.610Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "un7gck4gj7mky39uvf",
+          "timestamp": "2026-01-26T13:59:04.268Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "dtqh4bmr76mky39uvf",
+          "timestamp": "2026-01-26T14:05:45.191Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "bd6endnsw2mmky39uvf",
+          "timestamp": "2026-01-26T14:10:45.510Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 25,
+            "isCodeLike": false,
+            "messageId": "4b5bd15e-4a48-4caf-b280-cb337714ac12",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "znddyavfkjomky39uvf",
+          "timestamp": "2026-01-26T14:11:21.406Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "vjkxvdo32ckmky39uvf",
+          "timestamp": "2026-01-26T14:16:40.262Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "2fbndojh3ckmky39uvf",
+          "timestamp": "2026-01-26T14:18:10.230Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "9genlk5rchmky39uvf",
+          "timestamp": "2026-01-26T14:18:45.984Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 4451,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-10",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "fhrsgnxxqpemky39uvf",
+          "timestamp": "2026-01-26T14:18:47.926Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-10",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "nn5k268helhmky39uvf",
+          "timestamp": "2026-01-26T14:36:06.418Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 67,
+            "isCodeLike": false,
+            "messageId": "b891079c-b148-4cb2-832b-46510b0918e0",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "wh2cpyb68fmky39uvf",
+          "timestamp": "2026-01-26T14:49:47.960Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 668,
+            "isCodeLike": false,
+            "messageId": "fa932e27-c534-4b74-800f-f5e5d1e02cfa",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "6m9eor5v5ywmky39uvf",
+          "timestamp": "2026-01-26T14:49:54.636Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-12",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ss8jzsxa5mdmky39uvf",
+          "timestamp": "2026-01-26T14:56:50.381Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "rgie5n9jyfmky39uvf",
+          "timestamp": "2026-01-26T15:14:22.906Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "63bamdftt4mmky39uvf",
+          "timestamp": "2026-01-26T15:15:23.447Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-16",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "rf1fgdq88jfmky39uvf",
+          "timestamp": "2026-01-26T15:15:24.162Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2239,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-16",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "q1ui90k053mky39uvf",
+          "timestamp": "2026-01-27T13:16:29.307Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "b1noop4d459mky39uvf",
+          "timestamp": "2026-01-27T13:29:54.436Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 248,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "diuut9slwcgmky39uvf",
+          "timestamp": "2026-01-27T13:30:45.610Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 45,
+            "isCodeLike": false,
+            "messageId": "11431d0f-cb05-40ae-b582-2402b074963c",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 23,
+        "userMessageCount": 6
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 29,
+        "userMessageCount": 6,
+        "llmMessageCount": 23,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 7743,
+        "timeToFirstCopySec": 300,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 84701342,
+        "copyEventsTotal": 7,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 7,
+        "copiedMessageIds": [
+          "4b5bd15e-4a48-4caf-b280-cb337714ac12",
+          "conversation-turn-10",
+          "b891079c-b148-4cb2-832b-46510b0918e0",
+          "fa932e27-c534-4b74-800f-f5e5d1e02cfa",
+          "conversation-turn-16",
+          "11431d0f-cb05-40ae-b582-2402b074963c"
+        ],
+        "feedbackGoodCount": 4,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-2",
+          "conversation-turn-10",
+          "conversation-turn-12",
+          "conversation-turn-16"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-69776bf9-7024-8325-86a7-aaa1cb7226d0",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T13:31:51.021Z",
+      "endedAt": "2026-01-26T14:35:37.641Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "w66r3v847rmky39uvf",
+          "timestamp": "2026-01-26T13:31:51.021Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "iertst7dnpmky39uvf",
+          "timestamp": "2026-01-26T13:32:52.181Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "d8gyx6kryypmky39uvf",
+          "timestamp": "2026-01-26T13:33:18.083Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-6",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "2caf603wz93mky39uvf",
+          "timestamp": "2026-01-26T13:34:13.399Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 50,
+            "isCodeLike": false,
+            "messageId": "85627c3f-f0fc-4a14-99a1-791cad6ae772",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "u60khcmy4knmky39uvf",
+          "timestamp": "2026-01-26T13:36:34.837Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 144,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "z9ju9m7g3emky39uvf",
+          "timestamp": "2026-01-26T14:19:43.148Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "j0bo0rrus5cmky39uvf",
+          "timestamp": "2026-01-26T14:35:37.641Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 5,
+        "userMessageCount": 4
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 9,
+        "userMessageCount": 4,
+        "llmMessageCount": 5,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 194,
+        "timeToFirstCopySec": 142,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 3826620,
+        "copyEventsTotal": 2,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 2,
+        "copiedMessageIds": [
+          "85627c3f-f0fc-4a14-99a1-791cad6ae772"
+        ],
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-6"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-pun1iyvrpc",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T13:28:09.717Z",
+      "endedAt": "2026-01-26T13:28:43.687Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "8ukitqawsqmky39uvf",
+          "timestamp": "2026-01-26T13:28:09.717Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "cnfffj226cmky39uvf",
+          "timestamp": "2026-01-26T13:28:43.687Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 1,
+        "userMessageCount": 1,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 33970,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-50gp7yfvn1m",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T13:04:48.827Z",
+      "endedAt": "2026-01-26T13:16:23.166Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "pgg503ocuemky39uvf",
+          "timestamp": "2026-01-26T13:04:48.827Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "5uxpf00d40omky39uvf",
+          "timestamp": "2026-01-26T13:10:57.961Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 61,
+            "isCodeLike": false,
+            "messageId": "d627bf73-d9d6-4636-9b4e-86e7f89de041",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "jbe7mql9gimky39uvf",
+          "timestamp": "2026-01-26T13:11:53.282Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "4k6i0x0ww7vmky39uvf",
+          "timestamp": "2026-01-26T13:15:01.744Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2980,
+            "isCodeLike": false,
+            "messageId": "808690c6-5aac-4424-a7ed-f3db83b98132",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "e9obqn1qromky39uvf",
+          "timestamp": "2026-01-26T13:15:43.309Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 449,
+            "isCodeLike": true,
+            "messageId": "808690c6-5aac-4424-a7ed-f3db83b98132",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "3uf1pyvidj6mky39uvf",
+          "timestamp": "2026-01-26T13:16:02.143Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 449,
+            "isCodeLike": true,
+            "messageId": "808690c6-5aac-4424-a7ed-f3db83b98132",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "mni7byolpxlmky39uvf",
+          "timestamp": "2026-01-26T13:16:15.081Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 75,
+            "isCodeLike": true,
+            "messageId": "808690c6-5aac-4424-a7ed-f3db83b98132",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "t4spednjm1mky39uvf",
+          "timestamp": "2026-01-26T13:16:23.166Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 322,
+            "isCodeLike": true,
+            "messageId": "808690c6-5aac-4424-a7ed-f3db83b98132",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 31,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 32,
+        "userMessageCount": 1,
+        "llmMessageCount": 31,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 4336,
+        "timeToFirstCopySec": 0,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 694339,
+        "copyEventsTotal": 6,
+        "copyEventsCode": 4,
+        "copyEventsNonCode": 2,
+        "copiedMessageIds": [
+          "d627bf73-d9d6-4636-9b4e-86e7f89de041",
+          "808690c6-5aac-4424-a7ed-f3db83b98132"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-u5l9n9wk6g",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-26T11:31:42.289Z",
+      "endedAt": "2026-01-26T12:31:55.977Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "juu53cztzhnmky39uvf",
+          "timestamp": "2026-01-26T11:31:42.289Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "9i31zvgi7omky39uvf",
+          "timestamp": "2026-01-26T11:59:16.174Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 70,
+            "isCodeLike": true,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "107e6olp2fzmmky39uvf",
+          "timestamp": "2026-01-26T12:04:06.485Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 30,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "jwewgsh1amkmky39uvf",
+          "timestamp": "2026-01-26T12:05:07.101Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 259,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "l9gwirghei8mky39uvf",
+          "timestamp": "2026-01-26T12:07:13.957Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 616,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "eqwyzckkpvbmky39uvf",
+          "timestamp": "2026-01-26T12:15:35.187Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 21,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "a9lswxmt4abmky39uvf",
+          "timestamp": "2026-01-26T12:25:56.249Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 30,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "yyek8315zmemky39uvf",
+          "timestamp": "2026-01-26T12:31:55.977Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 535,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 40,
+        "userMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 40,
+        "userMessageCount": 0,
+        "llmMessageCount": 40,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 1561,
+        "timeToFirstCopySec": 1653,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 3613688,
+        "copyEventsTotal": 7,
+        "copyEventsCode": 1,
+        "copyEventsNonCode": 6,
+        "copiedMessageIds": [
+          "37849fbf-80e8-41ef-9313-ecdf1906afd2"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-cw6o92yvy5s",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-25T19:57:09.376Z",
+      "endedAt": "2026-01-25T20:50:13.379Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "96jwud9lonpmky39uvf",
+          "timestamp": "2026-01-25T19:57:09.376Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "y7av59hgoecmky39uvf",
+          "timestamp": "2026-01-25T20:12:27.272Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ywxwh3h3u7amky39uvf",
+          "timestamp": "2026-01-25T20:19:31.499Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 78,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "rnnm12hatzmky39uvf",
+          "timestamp": "2026-01-25T20:28:32.574Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 79,
+            "isCodeLike": false,
+            "messageId": "e70ba66a-bb7c-4d14-b035-8d4cbd41cfd0",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "xh8sih7yh6mky39uvf",
+          "timestamp": "2026-01-25T20:31:06.060Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 25,
+            "isCodeLike": false,
+            "messageId": "e70ba66a-bb7c-4d14-b035-8d4cbd41cfd0",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "iee0pcljbpgmky39uvf",
+          "timestamp": "2026-01-25T20:31:20.813Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 39,
+            "isCodeLike": false,
+            "messageId": "e70ba66a-bb7c-4d14-b035-8d4cbd41cfd0",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "bv7vq23701hmky39uvf",
+          "timestamp": "2026-01-25T20:33:15.515Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "fc5ofc9oez9mky39uvf",
+          "timestamp": "2026-01-25T20:39:49.431Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 18,
+            "isCodeLike": false,
+            "messageId": "62c7f5e5-c366-49ff-8595-20202dab8bfd",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "itjm2omadokmky39uvf",
+          "timestamp": "2026-01-25T20:41:54.630Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "zkspyo5yepfmky39uvf",
+          "timestamp": "2026-01-25T20:43:24.054Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 19,
+            "isCodeLike": true,
+            "messageId": "f512cea1-2940-494b-b2f7-addb830f90cc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ktsdys5lvvmky39uvf",
+          "timestamp": "2026-01-25T20:50:13.379Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 83,
+        "userMessageCount": 4
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 87,
+        "userMessageCount": 4,
+        "llmMessageCount": 83,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 258,
+        "timeToFirstCopySec": 424,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 3184003,
+        "copyEventsTotal": 6,
+        "copyEventsCode": 1,
+        "copyEventsNonCode": 5,
+        "copiedMessageIds": [
+          "e70ba66a-bb7c-4d14-b035-8d4cbd41cfd0",
+          "62c7f5e5-c366-49ff-8595-20202dab8bfd",
+          "f512cea1-2940-494b-b2f7-addb830f90cc"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-p24vpv91ww",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-25T12:15:34.709Z",
+      "endedAt": "2026-01-25T15:04:38.016Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "xujvlfsib1imky39uvf",
+          "timestamp": "2026-01-25T12:15:34.709Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "lp9vvnlpyaamky39uvf",
+          "timestamp": "2026-01-25T12:19:29.598Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "pwnrlussn3gmky39uvf",
+          "timestamp": "2026-01-25T12:36:39.462Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "13p1ycfzdctmky39uvf",
+          "timestamp": "2026-01-25T12:37:27.486Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1091,
+            "isCodeLike": false,
+            "messageId": "95fbc440-fe2c-4a06-b581-f4e1a0e6105d",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "w9dawguzfkfmky39uvf",
+          "timestamp": "2026-01-25T12:48:10.217Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "nbms2krdsimky39uvf",
+          "timestamp": "2026-01-25T12:59:11.723Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "qp7106k7gamky39uvf",
+          "timestamp": "2026-01-25T13:15:23.307Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "4gt821gsxbomky39uvf",
+          "timestamp": "2026-01-25T13:16:01.915Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 783,
+            "isCodeLike": false,
+            "messageId": "867365d1-45cc-4f18-ad2d-c577339c86d3",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7pdp6s0kl4mky39uvf",
+          "timestamp": "2026-01-25T13:16:43.475Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 86,
+            "isCodeLike": false,
+            "messageId": "867365d1-45cc-4f18-ad2d-c577339c86d3",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "wjmik7nxvfamky39uvf",
+          "timestamp": "2026-01-25T13:20:47.578Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1089,
+            "isCodeLike": false,
+            "messageId": "5654ca8f-2cee-4bf1-a5e5-802c6397bc26",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "xim92824gxmky39uvf",
+          "timestamp": "2026-01-25T13:22:43.392Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gx579mjv8c5mky39uvf",
+          "timestamp": "2026-01-25T14:12:44.592Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "nlo33ksh1vmky39uvf",
+          "timestamp": "2026-01-25T14:16:05.983Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 535,
+            "isCodeLike": false,
+            "messageId": "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "15e28t01ncimky39uvf",
+          "timestamp": "2026-01-25T14:27:49.152Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 631,
+            "isCodeLike": false,
+            "messageId": "f45042b4-7b08-4d49-bff7-8257bee02037",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "31w2i06f2mlmky39uvf",
+          "timestamp": "2026-01-25T14:32:33.326Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 83,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "eeoiahsmpkmky39uvf",
+          "timestamp": "2026-01-25T14:51:35.044Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "x42ht8nn3fmky39uvf",
+          "timestamp": "2026-01-25T14:55:36.722Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "n1dsibd3igtmky39uvf",
+          "timestamp": "2026-01-25T14:56:59.386Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "px0ktdoqztnmky39uvf",
+          "timestamp": "2026-01-25T15:04:38.016Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 44,
+        "userMessageCount": 11
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 55,
+        "userMessageCount": 11,
+        "llmMessageCount": 44,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 4298,
+        "timeToFirstCopySec": 1077,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 10143307,
+        "copyEventsTotal": 7,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 7,
+        "copiedMessageIds": [
+          "95fbc440-fe2c-4a06-b581-f4e1a0e6105d",
+          "867365d1-45cc-4f18-ad2d-c577339c86d3",
+          "5654ca8f-2cee-4bf1-a5e5-802c6397bc26",
+          "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+          "f45042b4-7b08-4d49-bff7-8257bee02037"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6970da17-08c8-832b-86e8-ff2082338527",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:47:44.679Z",
+      "endedAt": "2026-01-27T14:54:47.042Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "lwa10yxumxfmky39uvf",
+          "timestamp": "2026-01-24T20:47:44.679Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "301kccfvslmky39uvf",
+          "timestamp": "2026-01-24T20:48:35.990Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "sr1l7yslermky39uvf",
+          "timestamp": "2026-01-24T20:48:57.006Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2601,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-52",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "bowyaab8vtpmky39uvf",
+          "timestamp": "2026-01-24T20:49:43.818Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-52",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "1fdhec95648mky39uvf",
+          "timestamp": "2026-01-25T20:40:06.545Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "zuuq0asyejqmky39uvf",
+          "timestamp": "2026-01-27T14:54:47.042Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 3766,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-44",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 26,
+        "userMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 26,
+        "userMessageCount": 0,
+        "llmMessageCount": 26,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 6367,
+        "timeToFirstCopySec": 21,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 238022363,
+        "copyEventsTotal": 2,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 2,
+        "copiedMessageIds": [
+          "conversation-turn-52",
+          "conversation-turn-44"
+        ],
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-52"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-xrfwunyslj",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:42:43.166Z",
+      "endedAt": "2026-01-24T20:42:57.490Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "wks5wde3u59mky39uvf",
+          "timestamp": "2026-01-24T20:42:43.166Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "l8jru29ghsmky39uvf",
+          "timestamp": "2026-01-24T20:42:57.490Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 12,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 12,
+        "timeToFirstCopySec": 14,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 14324,
+        "copyEventsTotal": 1,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 1,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6974c393-6098-8328-a595-4f0e03d27914",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:41:49.489Z",
+      "endedAt": "2026-01-24T20:44:12.282Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "unnnygxo27mky39uvf",
+          "timestamp": "2026-01-24T20:41:49.489Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "pg0yn1z98lmky39uvf",
+          "timestamp": "2026-01-24T20:44:12.282Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 3065,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-61",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 3065,
+        "timeToFirstCopySec": 142,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 142793,
+        "copyEventsTotal": 1,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 1,
+        "copiedMessageIds": [
+          "conversation-turn-61"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-igez1lax23p",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:27:17.501Z",
+      "endedAt": "2026-01-24T20:46:16.393Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "y1m3n9nwfjemky39uvf",
+          "timestamp": "2026-01-24T20:27:17.501Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "e4ght59t5wmky39uvf",
+          "timestamp": "2026-01-24T20:27:27.196Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "undpz2zt6vnmky39uvf",
+          "timestamp": "2026-01-24T20:27:37.866Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "v86mra8labmky39uvf",
+          "timestamp": "2026-01-24T20:29:16.641Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 21,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "knnbqvab6tmky39uvf",
+          "timestamp": "2026-01-24T20:29:53.186Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "oquddga4ovmky39uvf",
+          "timestamp": "2026-01-24T20:33:53.380Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1500,
+            "isCodeLike": true,
+            "messageId": "28acbe9a-9364-4b6f-98ab-015c5a9546f6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "zwgx5vu864pmky39uvf",
+          "timestamp": "2026-01-24T20:34:24.144Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 373,
+            "isCodeLike": true,
+            "messageId": "28acbe9a-9364-4b6f-98ab-015c5a9546f6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "zgfno1121wmky39uvf",
+          "timestamp": "2026-01-24T20:34:50.462Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 69,
+            "isCodeLike": true,
+            "messageId": "28acbe9a-9364-4b6f-98ab-015c5a9546f6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "hggnxxwz108mky39uvf",
+          "timestamp": "2026-01-24T20:35:08.260Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1172,
+            "isCodeLike": true,
+            "messageId": "28acbe9a-9364-4b6f-98ab-015c5a9546f6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "97eyosc81gnmky39uvf",
+          "timestamp": "2026-01-24T20:37:05.085Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 46,
+            "isCodeLike": true,
+            "languageHint": "text",
+            "messageId": "28acbe9a-9364-4b6f-98ab-015c5a9546f6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7rlazst6fh2mky39uvf",
+          "timestamp": "2026-01-24T20:38:10.492Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 12,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "dzi3ebt6qbsmky39uvf",
+          "timestamp": "2026-01-24T20:38:16.372Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "llfivl6e2immky39uvf",
+          "timestamp": "2026-01-24T20:39:15.629Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "khktx22zjjrmky39uvf",
+          "timestamp": "2026-01-24T20:40:00.915Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 4702,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-52",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "xk8gx6q78ymky39uvf",
+          "timestamp": "2026-01-24T20:46:16.393Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 33,
+        "userMessageCount": 6
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 39,
+        "userMessageCount": 6,
+        "llmMessageCount": 33,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 7895,
+        "timeToFirstCopySec": 109,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 1138892,
+        "copyEventsTotal": 8,
+        "copyEventsCode": 6,
+        "copyEventsNonCode": 2,
+        "copiedMessageIds": [
+          "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+          "28acbe9a-9364-4b6f-98ab-015c5a9546f6",
+          "conversation-turn-52"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6974baa7-daac-832b-b9ef-9fd79d6aa188",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:14:28.060Z",
+      "endedAt": "2026-01-26T15:41:51.382Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "1oh0c4zp2jomky39uvf",
+          "timestamp": "2026-01-24T20:14:28.060Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "pr3a8wy1nnamky39uvf",
+          "timestamp": "2026-01-24T20:15:16.161Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "wekuoa6eq2mky39uvf",
+          "timestamp": "2026-01-24T20:15:21.271Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-42",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gf8fs6wsntcmky39uvf",
+          "timestamp": "2026-01-24T20:22:48.541Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "vd1nam8ox2fmky39uvf",
+          "timestamp": "2026-01-24T20:23:47.340Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 29,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7c9sz6p92rbmky39uvf",
+          "timestamp": "2026-01-24T20:23:59.821Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 11,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "qucvhglr9somky39uvf",
+          "timestamp": "2026-01-24T20:24:15.436Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 21,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "17wgodm64m9mky39uvf",
+          "timestamp": "2026-01-24T20:25:54.107Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 21,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "2s8yjxrzn8dmky39uvf",
+          "timestamp": "2026-01-24T20:26:58.522Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-44",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "nyzivodbccimky39uvf",
+          "timestamp": "2026-01-26T11:54:30.441Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "d8758pqtab7mky39uvf",
+          "timestamp": "2026-01-26T12:14:31.732Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1330,
+            "isCodeLike": false,
+            "messageId": "8bad15d9-dd97-4a27-8d18-0821d6ab7d86",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "xxp6ca9xszmky39uvf",
+          "timestamp": "2026-01-26T12:15:20.163Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 849,
+            "isCodeLike": false,
+            "messageId": "8bad15d9-dd97-4a27-8d18-0821d6ab7d86",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7o9tneojb5smky39uvf",
+          "timestamp": "2026-01-26T12:22:13.499Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 4165,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "6m4e8ujdzrsmky39uvf",
+          "timestamp": "2026-01-26T12:24:12.954Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 4264,
+            "isCodeLike": true,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "tr8jerg0l2rmky39uvf",
+          "timestamp": "2026-01-26T12:26:55.217Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 235,
+            "isCodeLike": false,
+            "messageId": "8bad15d9-dd97-4a27-8d18-0821d6ab7d86",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "js6gfjc1afpmky39uvf",
+          "timestamp": "2026-01-26T12:33:16.384Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 582,
+            "isCodeLike": false,
+            "messageId": "de1836db-2b13-46ec-b3ac-cbf1cdb910a2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "93o7uky1wqvmky39uvf",
+          "timestamp": "2026-01-26T12:54:13.324Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 27,
+            "isCodeLike": false,
+            "messageId": "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "v0rtsd5p6wpmky39uvf",
+          "timestamp": "2026-01-26T14:21:34.244Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-62",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ebt1pqgkvw8mky39uvf",
+          "timestamp": "2026-01-26T14:24:04.435Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "jr0ea81dqhmmky39uvf",
+          "timestamp": "2026-01-26T14:32:33.036Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "j4xlctkrtimky39uvf",
+          "timestamp": "2026-01-26T14:32:53.488Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-66",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "b9tzsf0zol5mky39uvf",
+          "timestamp": "2026-01-26T14:52:07.395Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 303,
+            "isCodeLike": true,
+            "messageId": "152c83fb-f2a6-4fe8-9865-d44d5264b846",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "wmu6ki9n1y8mky39uvf",
+          "timestamp": "2026-01-26T14:52:37.922Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 73,
+            "isCodeLike": true,
+            "messageId": "152c83fb-f2a6-4fe8-9865-d44d5264b846",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "shle5f84rggmky39uvf",
+          "timestamp": "2026-01-26T14:53:00.294Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1113,
+            "isCodeLike": true,
+            "messageId": "152c83fb-f2a6-4fe8-9865-d44d5264b846",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "ebib1if2144mky39uvf",
+          "timestamp": "2026-01-26T14:55:03.582Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 6,
+            "isCodeLike": true,
+            "messageId": "152c83fb-f2a6-4fe8-9865-d44d5264b846",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "lep8krfqsdmky39uvf",
+          "timestamp": "2026-01-26T14:55:20.181Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 43,
+            "isCodeLike": true,
+            "languageHint": "text",
+            "messageId": "152c83fb-f2a6-4fe8-9865-d44d5264b846",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "decyx4do7uvmky39uvf",
+          "timestamp": "2026-01-26T15:01:30.718Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "arvdv15runrmky39uvf",
+          "timestamp": "2026-01-26T15:01:59.106Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2024,
+            "isCodeLike": true,
+            "messageId": "55cc422e-a660-4faa-8377-568f3e7cded2",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "0ci9g5309ebcmky39uvf",
+          "timestamp": "2026-01-26T15:20:38.706Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1694,
+            "isCodeLike": false,
+            "messageId": "8e1585d4-a9b0-4c92-b098-e825d16e82ca",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "vyvvn4sgzhgmky39uvf",
+          "timestamp": "2026-01-26T15:21:06.040Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 372,
+            "isCodeLike": true,
+            "messageId": "8e1585d4-a9b0-4c92-b098-e825d16e82ca",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "c1fd7dixojimky39uvf",
+          "timestamp": "2026-01-26T15:21:34.002Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 404,
+            "isCodeLike": true,
+            "messageId": "8e1585d4-a9b0-4c92-b098-e825d16e82ca",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "4rijna071phmky39uvf",
+          "timestamp": "2026-01-26T15:27:51.535Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "h5byolng3mkmky39uvf",
+          "timestamp": "2026-01-26T15:31:55.383Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2781,
+            "isCodeLike": false,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "nmj4s7ltzfmky39uvf",
+          "timestamp": "2026-01-26T15:32:08.347Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 192,
+            "isCodeLike": true,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "nh2qrzlujblmky39uvf",
+          "timestamp": "2026-01-26T15:32:23.191Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 79,
+            "isCodeLike": true,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "wywgtjo1jtomky39uvf",
+          "timestamp": "2026-01-26T15:32:33.189Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 55,
+            "isCodeLike": true,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "3vshin4fymfmky39uvf",
+          "timestamp": "2026-01-26T15:32:47.701Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 220,
+            "isCodeLike": true,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "t9dvor74cmky39uvf",
+          "timestamp": "2026-01-26T15:33:20.815Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 172,
+            "isCodeLike": true,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "8x44edkydlimky39uvf",
+          "timestamp": "2026-01-26T15:33:37.128Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 308,
+            "isCodeLike": true,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "o8ckp4rldssmky39uvf",
+          "timestamp": "2026-01-26T15:34:17.102Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 27,
+            "isCodeLike": false,
+            "messageId": "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "lhzyylfgaomky39uvf",
+          "timestamp": "2026-01-26T15:41:51.382Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 127,
+        "userMessageCount": 6
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 133,
+        "userMessageCount": 6,
+        "llmMessageCount": 127,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 21400,
+        "timeToFirstCopySec": 511,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 156443322,
+        "copyEventsTotal": 28,
+        "copyEventsCode": 19,
+        "copyEventsNonCode": 9,
+        "copiedMessageIds": [
+          "436ea5b0-9e9b-4ae1-805f-5a6f262c87d7",
+          "8bad15d9-dd97-4a27-8d18-0821d6ab7d86",
+          "de1836db-2b13-46ec-b3ac-cbf1cdb910a2",
+          "37849fbf-80e8-41ef-9313-ecdf1906afd2",
+          "152c83fb-f2a6-4fe8-9865-d44d5264b846",
+          "55cc422e-a660-4faa-8377-568f3e7cded2",
+          "8e1585d4-a9b0-4c92-b098-e825d16e82ca",
+          "ea3ed1fb-0da3-456d-ab7b-e68f666c9be6"
+        ],
+        "feedbackGoodCount": 4,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-42",
+          "conversation-turn-44",
+          "conversation-turn-62",
+          "conversation-turn-66"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-oggpe7v5sd",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:14:00.428Z",
+      "endedAt": "2026-01-24T20:14:35.865Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "dnaokd41hhfmky39uvf",
+          "timestamp": "2026-01-24T20:14:00.428Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "iwdffcr23xmky39uvf",
+          "timestamp": "2026-01-24T20:14:11.978Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "s007wo5c65mky39uvf",
+          "timestamp": "2026-01-24T20:14:35.865Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 1,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 2,
+        "userMessageCount": 1,
+        "llmMessageCount": 1,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 35437,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-y4jzg6b4g9o",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T20:13:37.600Z",
+      "endedAt": "2026-01-24T20:13:53.226Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "vm8b6fofaunmky39uvf",
+          "timestamp": "2026-01-24T20:13:37.600Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ka10p6kjzwmky39uvf",
+          "timestamp": "2026-01-24T20:13:46.588Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "bo7j5izsf5lmky39uvf",
+          "timestamp": "2026-01-24T20:13:53.226Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 2
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 4,
+        "userMessageCount": 2,
+        "llmMessageCount": 2,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 15626,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-mevus0pauh",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T19:56:17.693Z",
+      "endedAt": "2026-01-24T20:12:55.611Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "cro7uc8nw7smky39uvf",
+          "timestamp": "2026-01-24T19:56:17.693Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "e3ufx5tx096mky39uvf",
+          "timestamp": "2026-01-24T19:56:26.910Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "yxskqh51xhrmky39uvf",
+          "timestamp": "2026-01-24T19:58:16.964Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "6m1pftj7fmxmky39uvf",
+          "timestamp": "2026-01-24T20:02:58.330Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "fmvu8oz8zimky39uvf",
+          "timestamp": "2026-01-24T20:07:25.240Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "qqnkn3bhqtmky39uvf",
+          "timestamp": "2026-01-24T20:09:00.894Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "wqo9gz6q949mky39uvf",
+          "timestamp": "2026-01-24T20:09:32.749Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 18,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "c10a5f71-3966-4e94-b438-dccb7b68492b",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "lll4wceqx1mky39uvf",
+          "timestamp": "2026-01-24T20:10:00.884Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "pb4677hw8ubmky39uvf",
+          "timestamp": "2026-01-24T20:11:16.234Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 41,
+            "isCodeLike": true,
+            "messageId": "c10a5f71-3966-4e94-b438-dccb7b68492b",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "sxb69lfc1mky39uvf",
+          "timestamp": "2026-01-24T20:12:04.577Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 41,
+            "isCodeLike": true,
+            "messageId": "c10a5f71-3966-4e94-b438-dccb7b68492b",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "2yzme9ljlnemky39uvf",
+          "timestamp": "2026-01-24T20:12:18.245Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 15,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "c10a5f71-3966-4e94-b438-dccb7b68492b",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "g5girog9oyimky39uvf",
+          "timestamp": "2026-01-24T20:12:36.803Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 150,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "c10a5f71-3966-4e94-b438-dccb7b68492b",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "cva66wgvd4lmky39uvf",
+          "timestamp": "2026-01-24T20:12:55.611Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 18,
+            "isCodeLike": true,
+            "messageId": "c10a5f71-3966-4e94-b438-dccb7b68492b",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 25,
+        "userMessageCount": 6
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 31,
+        "userMessageCount": 6,
+        "llmMessageCount": 25,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 283,
+        "timeToFirstCopySec": 785,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 997918,
+        "copyEventsTotal": 6,
+        "copyEventsCode": 6,
+        "copyEventsNonCode": 0,
+        "copiedMessageIds": [
+          "c10a5f71-3966-4e94-b438-dccb7b68492b"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-536xvjnlfgc",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T19:43:34.592Z",
+      "endedAt": "2026-01-24T19:55:08.965Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "bgjxo05pg7vmky39uvf",
+          "timestamp": "2026-01-24T19:43:34.592Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "v7u2usa45enmky39uvf",
+          "timestamp": "2026-01-24T19:43:59.667Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ax7vq7y3gckmky39uvf",
+          "timestamp": "2026-01-24T19:44:15.987Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "jdgppm2viiomky39uvf",
+          "timestamp": "2026-01-24T19:44:32.703Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-4",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gphhk9iwjcamky39uvf",
+          "timestamp": "2026-01-24T19:45:42.431Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-26",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "s6boxprolu9mky39uvf",
+          "timestamp": "2026-01-24T19:48:04.267Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "9ejsagjbw4mky39uvf",
+          "timestamp": "2026-01-24T19:49:54.244Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-28",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "r9wtj8zcggmky39uvf",
+          "timestamp": "2026-01-24T19:53:58.334Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2710,
+            "isCodeLike": true,
+            "messageId": "36bb2331-fdc7-4d77-98d1-fc601129b321",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "uftpmrgxc4mky39uvf",
+          "timestamp": "2026-01-24T19:54:35.155Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 420,
+            "isCodeLike": true,
+            "messageId": "36bb2331-fdc7-4d77-98d1-fc601129b321",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "wf5phbrm65pmky39uvf",
+          "timestamp": "2026-01-24T19:54:45.609Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 361,
+            "isCodeLike": true,
+            "messageId": "36bb2331-fdc7-4d77-98d1-fc601129b321",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "0kuijgvbbjsdmky39uvf",
+          "timestamp": "2026-01-24T19:54:53.800Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 451,
+            "isCodeLike": true,
+            "messageId": "36bb2331-fdc7-4d77-98d1-fc601129b321",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "02deov2nhfljmky39uvf",
+          "timestamp": "2026-01-24T19:55:08.965Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 39,
+            "isCodeLike": true,
+            "messageId": "36bb2331-fdc7-4d77-98d1-fc601129b321",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 3
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 5,
+        "userMessageCount": 3,
+        "llmMessageCount": 2,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 3981,
+        "timeToFirstCopySec": 598,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 694373,
+        "copyEventsTotal": 5,
+        "copyEventsCode": 5,
+        "copyEventsNonCode": 0,
+        "copiedMessageIds": [
+          "36bb2331-fdc7-4d77-98d1-fc601129b321"
+        ],
+        "feedbackGoodCount": 3,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-4",
+          "conversation-turn-26",
+          "conversation-turn-28"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-6zajfk5zsm2",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T19:37:23.234Z",
+      "endedAt": "2026-01-24T19:42:37.506Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "rshvtgr4mppmky39uvf",
+          "timestamp": "2026-01-24T19:37:23.234Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "6lfl22drdqhmky39uvf",
+          "timestamp": "2026-01-24T19:37:47.720Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "cf0m07cfaasmky39uvf",
+          "timestamp": "2026-01-24T19:37:52.494Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3y3d9gf8askmky39uvf",
+          "timestamp": "2026-01-24T19:38:07.686Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "q45ju7q9d3bmky39uvf",
+          "timestamp": "2026-01-24T19:38:11.469Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-4",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "b0s2jkq9fmfmky39uvf",
+          "timestamp": "2026-01-24T19:42:08.085Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 24,
+            "isCodeLike": true,
+            "messageId": "efd49a66-d939-4c63-8035-7f2de4eedb7d",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "90bom9hp4gbmky39uvf",
+          "timestamp": "2026-01-24T19:42:37.506Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 282,
+            "isCodeLike": true,
+            "messageId": "efd49a66-d939-4c63-8035-7f2de4eedb7d",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 2
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 2,
+        "userMessageCount": 2,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 306,
+        "timeToFirstCopySec": 260,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 314272,
+        "copyEventsTotal": 2,
+        "copyEventsCode": 2,
+        "copyEventsNonCode": 0,
+        "copiedMessageIds": [
+          "efd49a66-d939-4c63-8035-7f2de4eedb7d"
+        ],
+        "feedbackGoodCount": 2,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-2",
+          "conversation-turn-4"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-ngtu5pjzcya",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T19:29:00.197Z",
+      "endedAt": "2026-01-24T19:30:51.691Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "9kkw22iw8lemky39uvf",
+          "timestamp": "2026-01-24T19:29:00.197Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "y6ipvbxn6jhmky39uvf",
+          "timestamp": "2026-01-24T19:29:27.100Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3r7kcfshvm2mky39uvf",
+          "timestamp": "2026-01-24T19:29:36.663Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "kb65adduccmky39uvf",
+          "timestamp": "2026-01-24T19:30:51.691Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 111494,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-2"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-zlkr9k6vtbm",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T19:28:26.152Z",
+      "endedAt": "2026-01-24T19:36:08.490Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "whjfvhzcp7dmky39uvf",
+          "timestamp": "2026-01-24T19:28:26.152Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "q3gihpueit9mky39uvf",
+          "timestamp": "2026-01-24T19:32:00.059Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "21jhr0z6oblgmky39uvf",
+          "timestamp": "2026-01-24T19:34:44.434Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 4543,
+            "isCodeLike": true,
+            "messageId": "6de6707d-9dcb-4a44-8496-c6268ae3e271",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "78nszmsfk3lmky39uvf",
+          "timestamp": "2026-01-24T19:35:26.212Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 361,
+            "isCodeLike": true,
+            "messageId": "6de6707d-9dcb-4a44-8496-c6268ae3e271",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "mur9qqx4uxkmky39uvf",
+          "timestamp": "2026-01-24T19:35:35.834Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1556,
+            "isCodeLike": true,
+            "messageId": "6de6707d-9dcb-4a44-8496-c6268ae3e271",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "bbu8bnv7djmky39uvf",
+          "timestamp": "2026-01-24T19:35:48.240Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 545,
+            "isCodeLike": true,
+            "messageId": "6de6707d-9dcb-4a44-8496-c6268ae3e271",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "3a5ojwt07fzmky39uvf",
+          "timestamp": "2026-01-24T19:36:01.545Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 74,
+            "isCodeLike": true,
+            "messageId": "6de6707d-9dcb-4a44-8496-c6268ae3e271",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "qkyg07tmxcbmky39uvf",
+          "timestamp": "2026-01-24T19:36:08.490Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 74,
+            "isCodeLike": true,
+            "messageId": "6de6707d-9dcb-4a44-8496-c6268ae3e271",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 1,
+        "userMessageCount": 1,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 7153,
+        "timeToFirstCopySec": 164,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 462338,
+        "copyEventsTotal": 6,
+        "copyEventsCode": 6,
+        "copyEventsNonCode": 0,
+        "copiedMessageIds": [
+          "6de6707d-9dcb-4a44-8496-c6268ae3e271"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-56edtnnjttd",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T19:28:07.630Z",
+      "endedAt": "2026-01-24T19:28:07.630Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "gcv3tc846hsmky39uvf",
+          "timestamp": "2026-01-24T19:28:07.630Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": true,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 0,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-iawoabici3k",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T16:33:29.246Z",
+      "endedAt": "2026-01-24T16:38:35.748Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "3csq8ezcs5smky39uvf",
+          "timestamp": "2026-01-24T16:33:29.246Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "nevm5hwj4gmmky39uvf",
+          "timestamp": "2026-01-24T16:34:19.030Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 17,
+            "isCodeLike": true,
+            "messageId": "51e4a05b-4424-456b-b509-9d43dee4ef33",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "t8klfbwgzghmky39uvf",
+          "timestamp": "2026-01-24T16:34:35.958Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 15,
+            "isCodeLike": true,
+            "messageId": "51e4a05b-4424-456b-b509-9d43dee4ef33",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "02swyczi7opbmky39uvf",
+          "timestamp": "2026-01-24T16:35:12.454Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 7,
+            "isCodeLike": true,
+            "languageHint": "json",
+            "messageId": "51e4a05b-4424-456b-b509-9d43dee4ef33",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ytsgcdth3nemky39uvf",
+          "timestamp": "2026-01-24T16:35:40.637Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 19,
+            "isCodeLike": true,
+            "messageId": "51e4a05b-4424-456b-b509-9d43dee4ef33",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "3kddv9dy80rmky39uvf",
+          "timestamp": "2026-01-24T16:36:47.653Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "kdjk6eu2pedmky39uvf",
+          "timestamp": "2026-01-24T16:37:32.957Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1686,
+            "isCodeLike": true,
+            "messageId": "1fd9426e-8980-4d66-9e67-a44ea5cd5139",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "6efcax0olpbmky39uvf",
+          "timestamp": "2026-01-24T16:38:35.748Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1686,
+            "isCodeLike": true,
+            "messageId": "1fd9426e-8980-4d66-9e67-a44ea5cd5139",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 3430,
+        "timeToFirstCopySec": 0,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 306502,
+        "copyEventsTotal": 6,
+        "copyEventsCode": 6,
+        "copyEventsNonCode": 0,
+        "copiedMessageIds": [
+          "51e4a05b-4424-456b-b509-9d43dee4ef33",
+          "1fd9426e-8980-4d66-9e67-a44ea5cd5139"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-vugt0ao5nel",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T16:32:40.363Z",
+      "endedAt": "2026-01-24T16:38:01.684Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "qax34o9o0imky39uve",
+          "timestamp": "2026-01-24T16:32:40.363Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ihh9waduqckmky39uve",
+          "timestamp": "2026-01-24T16:33:04.744Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "96i3m1zy487mky39uve",
+          "timestamp": "2026-01-24T16:37:52.830Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "wuzn6bzz11kmky39uve",
+          "timestamp": "2026-01-24T16:38:01.684Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 23,
+        "userMessageCount": 2
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 25,
+        "userMessageCount": 2,
+        "llmMessageCount": 23,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 321321,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-2"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-ycbpuqavdvn",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T16:23:29.019Z",
+      "endedAt": "2026-01-24T16:29:30.377Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "h6b6myze1v7mky39uve",
+          "timestamp": "2026-01-24T16:23:29.019Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "bm05oxpl5nmky39uve",
+          "timestamp": "2026-01-24T16:25:05.683Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 34,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "69pe2uf7k3umky39uve",
+          "timestamp": "2026-01-24T16:27:04.241Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 17,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "y444n0ff2emky39uve",
+          "timestamp": "2026-01-24T16:29:30.377Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2956,
+            "isCodeLike": false,
+            "messageId": "51e4a05b-4424-456b-b509-9d43dee4ef33",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 3007,
+        "timeToFirstCopySec": 96,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 361358,
+        "copyEventsTotal": 3,
+        "copyEventsCode": 2,
+        "copyEventsNonCode": 1,
+        "copiedMessageIds": [
+          "c0e89465-75cc-4f66-ba6a-f222719766dc",
+          "51e4a05b-4424-456b-b509-9d43dee4ef33"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-awvr9qe3ink",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T16:13:23.171Z",
+      "endedAt": "2026-01-24T16:29:03.314Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "r6nd81h8ismky39uve",
+          "timestamp": "2026-01-24T16:13:23.171Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "xo36g9j96irmky39uve",
+          "timestamp": "2026-01-24T16:20:55.414Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "tr3d48fj6ymky39uve",
+          "timestamp": "2026-01-24T16:22:56.254Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-52",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "lwtcyrtxahmky39uve",
+          "timestamp": "2026-01-24T16:29:03.314Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 2
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 2,
+        "userMessageCount": 2,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": false,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 0,
+        "timeToFirstCopySec": null,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 940143,
+        "copyEventsTotal": 0,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 0,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-52"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-50sl12fu5h9",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T16:04:30.647Z",
+      "endedAt": "2026-01-24T16:08:33.330Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "r9hyobiebbmky39uve",
+          "timestamp": "2026-01-24T16:04:30.647Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "emljn0x7wiwmky39uve",
+          "timestamp": "2026-01-24T16:04:58.804Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 245,
+            "isCodeLike": false,
+            "messageId": "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "66eblcvavijmky39uve",
+          "timestamp": "2026-01-24T16:07:02.379Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 15,
+            "isCodeLike": false,
+            "messageId": "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "y2uxhy2ths8mky39uve",
+          "timestamp": "2026-01-24T16:07:20.219Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 298,
+            "isCodeLike": false,
+            "messageId": "f45042b4-7b08-4d49-bff7-8257bee02037",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "8kycjdya5p2mky39uve",
+          "timestamp": "2026-01-24T16:08:33.330Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 48,
+            "isCodeLike": false,
+            "messageId": "f45042b4-7b08-4d49-bff7-8257bee02037",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 606,
+        "timeToFirstCopySec": 28,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 242683,
+        "copyEventsTotal": 4,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 4,
+        "copiedMessageIds": [
+          "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+          "f45042b4-7b08-4d49-bff7-8257bee02037"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-o6o83jcaj5i",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T14:59:16.726Z",
+      "endedAt": "2026-01-24T15:53:58.944Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "efdjbl7rs5wmky39uve",
+          "timestamp": "2026-01-24T14:59:16.726Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "1hn8v9vaooymky39uve",
+          "timestamp": "2026-01-24T15:17:54.871Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 78,
+            "isCodeLike": true,
+            "messageId": "13c5eba9-9ce5-4e23-aafb-edca2fc7962e",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "tkbx3jzsb2mky39uve",
+          "timestamp": "2026-01-24T15:49:22.851Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 24,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "85ff218f-bee5-4ac8-8659-e6c30d27d4ec",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "9jtev2x586mky39uve",
+          "timestamp": "2026-01-24T15:51:17.780Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "wn2lr8njionmky39uve",
+          "timestamp": "2026-01-24T15:52:13.684Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2572,
+            "isCodeLike": false,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "b96jbww12pgmky39uve",
+          "timestamp": "2026-01-24T15:52:42.353Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 125,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "6q7fa7adz9mky39uve",
+          "timestamp": "2026-01-24T15:53:08.874Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 361,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "j85b3lb31enmky39uve",
+          "timestamp": "2026-01-24T15:53:25.577Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 136,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "wdoo04zxmxmky39uve",
+          "timestamp": "2026-01-24T15:53:45.785Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 63,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "5em2iys2ms7mky39uve",
+          "timestamp": "2026-01-24T15:53:52.855Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 78,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "y9oj0svuwasmky39uve",
+          "timestamp": "2026-01-24T15:53:58.944Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 93,
+            "isCodeLike": true,
+            "messageId": "c0e89465-75cc-4f66-ba6a-f222719766dc",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 3,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 4,
+        "userMessageCount": 1,
+        "llmMessageCount": 3,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 3530,
+        "timeToFirstCopySec": 0,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 3282218,
+        "copyEventsTotal": 9,
+        "copyEventsCode": 8,
+        "copyEventsNonCode": 1,
+        "copiedMessageIds": [
+          "13c5eba9-9ce5-4e23-aafb-edca2fc7962e",
+          "85ff218f-bee5-4ac8-8659-e6c30d27d4ec",
+          "c0e89465-75cc-4f66-ba6a-f222719766dc"
+        ],
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-0xzmcftj16p",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T14:42:18.158Z",
+      "endedAt": "2026-01-24T15:43:33.006Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "0yl3lxxk2tukmky39uve",
+          "timestamp": "2026-01-24T14:42:18.158Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "i3tbqr99g5gmky39uve",
+          "timestamp": "2026-01-24T14:42:36.170Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-38",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "ye99as2w73mky39uve",
+          "timestamp": "2026-01-24T14:47:33.623Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 543,
+            "isCodeLike": false,
+            "messageId": "7f90b4fd-3a44-496f-a343-f02ad3588d3f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "s5ao3riezvcmky39uve",
+          "timestamp": "2026-01-24T14:47:37.009Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-40",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "8rzlywmf1fomky39uve",
+          "timestamp": "2026-01-24T15:04:15.816Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "8lcawhmvdr5mky39uve",
+          "timestamp": "2026-01-24T15:06:09.363Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-42",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "7zu66lr2yzumky39uve",
+          "timestamp": "2026-01-24T15:08:13.975Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "sd26jfkbtqdmky39uve",
+          "timestamp": "2026-01-24T15:09:17.069Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 254,
+            "isCodeLike": false,
+            "messageId": "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "sblniump3gmky39uve",
+          "timestamp": "2026-01-24T15:09:37.677Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 568,
+            "isCodeLike": false,
+            "messageId": "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "9tqfq2tynp9mky39uve",
+          "timestamp": "2026-01-24T15:09:40.295Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-44",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "0jnaivrtok3mky39uve",
+          "timestamp": "2026-01-24T15:10:05.326Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "h3sm9rx5lkjmky39uve",
+          "timestamp": "2026-01-24T15:10:13.762Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-46",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "bn5gb5hwghwmky39uve",
+          "timestamp": "2026-01-24T15:13:24.651Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "56dkcbjw55hmky39uve",
+          "timestamp": "2026-01-24T15:15:17.811Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 37,
+            "isCodeLike": false,
+            "messageId": "2568cc57-a3e1-4d71-9cc7-a8bfe2ae0448",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "3m0t440z1btmky39uve",
+          "timestamp": "2026-01-24T15:15:19.542Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-48",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "gm21ar7qi5mky39uve",
+          "timestamp": "2026-01-24T15:15:40.290Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3s5fgswmvp2mky39uve",
+          "timestamp": "2026-01-24T15:16:43.428Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-50",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "t809kta4bi9mky39uve",
+          "timestamp": "2026-01-24T15:16:50.378Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 299,
+            "isCodeLike": false,
+            "messageId": "f45042b4-7b08-4d49-bff7-8257bee02037",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "7ee61xh8o9tmky39uve",
+          "timestamp": "2026-01-24T15:16:52.220Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 299,
+            "isCodeLike": false,
+            "messageId": "f45042b4-7b08-4d49-bff7-8257bee02037",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "3e0d3yx4cdemky39uve",
+          "timestamp": "2026-01-24T15:43:33.006Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 567,
+            "isCodeLike": false,
+            "messageId": "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 2567,
+        "timeToFirstCopySec": 0,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 3674848,
+        "copyEventsTotal": 7,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 7,
+        "copiedMessageIds": [
+          "7f90b4fd-3a44-496f-a343-f02ad3588d3f",
+          "aa6f26b5-8681-4f9b-87b3-018b4301d9d2",
+          "2568cc57-a3e1-4d71-9cc7-a8bfe2ae0448",
+          "f45042b4-7b08-4d49-bff7-8257bee02037"
+        ],
+        "feedbackGoodCount": 7,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-38",
+          "conversation-turn-40",
+          "conversation-turn-42",
+          "conversation-turn-44",
+          "conversation-turn-46",
+          "conversation-turn-48",
+          "conversation-turn-50"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-tab-urwnl8d4r4",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T12:12:53.260Z",
+      "endedAt": "2026-01-24T14:39:21.442Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "7p5emtd0o0fmky39uve",
+          "timestamp": "2026-01-24T12:12:53.260Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "wthdxw2j0rgmky39uve",
+          "timestamp": "2026-01-24T12:16:52.599Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "jz0o6ax3bwjmky39uve",
+          "timestamp": "2026-01-24T12:19:55.618Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "bzr5uewda0jmky39uve",
+          "timestamp": "2026-01-24T12:21:18.165Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3hk985gbu9bmky39uve",
+          "timestamp": "2026-01-24T12:23:56.381Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 60,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "hx3qpgx2gmnmky39uve",
+          "timestamp": "2026-01-24T12:24:58.700Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 9242,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "99lfna8pdphmky39uve",
+          "timestamp": "2026-01-24T12:26:28.684Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 36,
+            "isCodeLike": false,
+            "messageId": "ebe32a6e-27d9-48ff-995a-809a9d7abe6a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "0doffzg70f0omky39uve",
+          "timestamp": "2026-01-24T12:29:00.587Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1669,
+            "isCodeLike": false,
+            "messageId": "ebe32a6e-27d9-48ff-995a-809a9d7abe6a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "s0g72xxh8r8mky39uve",
+          "timestamp": "2026-01-24T12:36:55.865Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3u3llwe4sh5mky39uve",
+          "timestamp": "2026-01-24T12:38:23.336Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 36,
+            "isCodeLike": false,
+            "messageId": "8175f417-9f5d-4e26-849e-5c767b8ae833",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "gcu4qtnrnswmky39uve",
+          "timestamp": "2026-01-24T13:06:25.500Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "dub7l6ts7skmky39uve",
+          "timestamp": "2026-01-24T13:07:03.732Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "qvv85529lmmky39uve",
+          "timestamp": "2026-01-24T13:09:43.537Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 148,
+            "isCodeLike": false,
+            "messageId": "2a547104-bf67-4af1-a500-b270a99810fd",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "qlpfqczdi4kmky39uve",
+          "timestamp": "2026-01-24T13:11:50.592Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "x0rcrdgdz0imky39uve",
+          "timestamp": "2026-01-24T13:12:35.111Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-6",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "arxgve2goxvmky39uve",
+          "timestamp": "2026-01-24T13:14:26.841Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "3suwe77afi5mky39uve",
+          "timestamp": "2026-01-24T13:16:01.948Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 70,
+            "isCodeLike": false,
+            "messageId": "2fd27889-90b4-41fa-9470-e87b260ffa17",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "cidt80dpprmky39uve",
+          "timestamp": "2026-01-24T13:16:46.590Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 55,
+            "isCodeLike": false,
+            "messageId": "2fd27889-90b4-41fa-9470-e87b260ffa17",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ajarm85s46pmky39uve",
+          "timestamp": "2026-01-24T13:18:05.383Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "4h8mbscllfpmky39uve",
+          "timestamp": "2026-01-24T13:19:18.331Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-10",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "b8xq0f0anmmky39uve",
+          "timestamp": "2026-01-24T13:19:29.734Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1526,
+            "isCodeLike": false,
+            "messageId": "d49b8680-2f20-492b-834a-c6096c11eaff",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "g6rbb2onx8lmky39uve",
+          "timestamp": "2026-01-24T13:22:06.420Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "82epw851ux6mky39uve",
+          "timestamp": "2026-01-24T13:26:41.686Z",
+          "kind": "feedback_bad",
+          "metadata": {
+            "messageId": "conversation-turn-12",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "b8v1w8hhqemky39uve",
+          "timestamp": "2026-01-24T13:32:52.455Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 171,
+            "isCodeLike": false,
+            "messageId": "3af0d23c-2701-45c0-94d6-e66d09c3ef8b",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "v1uorluroqmky39uve",
+          "timestamp": "2026-01-24T13:37:35.423Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "0919is3tum12mky39uve",
+          "timestamp": "2026-01-24T13:45:47.433Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "tlo86rq1ek8mky39uve",
+          "timestamp": "2026-01-24T13:50:13.096Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 3178,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-18",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "4nvqk636m0jmky39uve",
+          "timestamp": "2026-01-24T13:52:03.004Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-20",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "7ghxg0mox4dmky39uve",
+          "timestamp": "2026-01-24T13:52:04.285Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1643,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-20",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          }
+        },
+        {
+          "id": "wg92tyr2lcbmky39uve",
+          "timestamp": "2026-01-24T13:55:17.382Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "mafnayrew2mky39uve",
+          "timestamp": "2026-01-24T13:57:32.254Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "0cftf78wz0amky39uve",
+          "timestamp": "2026-01-24T14:00:37.363Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "lvdnoes3qlnmky39uve",
+          "timestamp": "2026-01-24T14:01:14.875Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 727,
+            "isCodeLike": false,
+            "messageId": "349e6d31-ec52-45fd-8756-ca42312e22a9",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "9jwaakr1rsmky39uve",
+          "timestamp": "2026-01-24T14:01:45.722Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-26",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "uxa9ymqvejqmky39uve",
+          "timestamp": "2026-01-24T14:02:16.978Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "p26lrz3sntgmky39uve",
+          "timestamp": "2026-01-24T14:06:44.802Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "9kal780q6qfmky39uve",
+          "timestamp": "2026-01-24T14:14:51.125Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "oh2756aggchmky39uve",
+          "timestamp": "2026-01-24T14:17:42.189Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "r08eeh1exzmky39uve",
+          "timestamp": "2026-01-24T14:35:37.612Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "y2hjm6mbbpimky39uve",
+          "timestamp": "2026-01-24T14:37:45.917Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1319,
+            "isCodeLike": false,
+            "messageId": "2adbbae7-36ef-44d4-b3df-96f5b5fe858e",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "pce0cz5quqmky39uve",
+          "timestamp": "2026-01-24T14:39:21.442Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-38",
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": false,
+        "copiedTextLength": 19880,
+        "timeToFirstCopySec": 423,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 8788182,
+        "copyEventsTotal": 14,
+        "copyEventsCode": 0,
+        "copyEventsNonCode": 14,
+        "copiedMessageIds": [
+          "conversation-turn-2",
+          "ebe32a6e-27d9-48ff-995a-809a9d7abe6a",
+          "8175f417-9f5d-4e26-849e-5c767b8ae833",
+          "2a547104-bf67-4af1-a500-b270a99810fd",
+          "2fd27889-90b4-41fa-9470-e87b260ffa17",
+          "d49b8680-2f20-492b-834a-c6096c11eaff",
+          "3af0d23c-2701-45c0-94d6-e66d09c3ef8b",
+          "conversation-turn-18",
+          "conversation-turn-20",
+          "349e6d31-ec52-45fd-8756-ca42312e22a9",
+          "2adbbae7-36ef-44d4-b3df-96f5b5fe858e"
+        ],
+        "feedbackGoodCount": 7,
+        "feedbackBadCount": 1,
+        "feedbackMessageIds": [
+          "conversation-turn-2",
+          "conversation-turn-6",
+          "conversation-turn-10",
+          "conversation-turn-12",
+          "conversation-turn-20",
+          "conversation-turn-26",
+          "conversation-turn-38"
+        ],
+        "retries": 0
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-6970fa4f-7a18-8329-8dd3-f278e88c22e3",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-24T12:11:49.939Z",
+      "endedAt": "2026-01-24T14:27:07.601Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "id": "bk5ha6t6k4mky39uve",
+          "timestamp": "2026-01-24T12:11:49.939Z",
+          "kind": "session_start",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "hth3kidd7clmky39uve",
+          "timestamp": "2026-01-24T12:12:16.722Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 2602,
+            "isCodeLike": false,
+            "messageId": "eb2d82e3-8190-44b7-b0f5-9b6e780e9de6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "zsdtpfpuxdlmky39uve",
+          "timestamp": "2026-01-24T12:13:37.401Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 340,
+            "isCodeLike": false,
+            "messageId": "eb2d82e3-8190-44b7-b0f5-9b6e780e9de6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "5ncgay7pvbmky39uve",
+          "timestamp": "2026-01-24T12:14:47.674Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 203,
+            "isCodeLike": false,
+            "messageId": "eb2d82e3-8190-44b7-b0f5-9b6e780e9de6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "pev0s752z7emky39uve",
+          "timestamp": "2026-01-24T12:22:03.422Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 552,
+            "isCodeLike": false,
+            "messageId": "eb2d82e3-8190-44b7-b0f5-9b6e780e9de6",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "5yi3pq9s6thmky39uve",
+          "timestamp": "2026-01-24T12:36:10.759Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 36,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "cn7vdl0rlqmky39uve",
+          "timestamp": "2026-01-24T12:40:29.757Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 1068,
+            "isCodeLike": false,
+            "messageId": "da59f148-4b83-4dfc-afa6-1aa5f2855ebc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "phzhce6t8nkmky39uve",
+          "timestamp": "2026-01-24T12:41:17.469Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 907,
+            "isCodeLike": false,
+            "messageId": "da59f148-4b83-4dfc-afa6-1aa5f2855ebc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "rpzwvezgi9mky39uve",
+          "timestamp": "2026-01-24T12:49:00.645Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 300,
+            "isCodeLike": false,
+            "messageId": "da59f148-4b83-4dfc-afa6-1aa5f2855ebc",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "ekh2gwvdsdemky39uve",
+          "timestamp": "2026-01-24T12:51:28.639Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-2",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "2pukl7nldnmky39uve",
+          "timestamp": "2026-01-24T13:00:35.613Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 3662,
+            "isCodeLike": false,
+            "messageId": "3f657538-15f4-417e-a94d-cb68cce8c895",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "pusf65pyrwbmky39uve",
+          "timestamp": "2026-01-24T13:01:45.419Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 92,
+            "isCodeLike": true,
+            "messageId": "3f657538-15f4-417e-a94d-cb68cce8c895",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "pineub0eanmky39uve",
+          "timestamp": "2026-01-24T13:02:22.605Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-4",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "rb2k8tml2lrmky39uve",
+          "timestamp": "2026-01-24T14:09:15.513Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "7vf22fdxarmky39uve",
+          "timestamp": "2026-01-24T14:18:07.820Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 17,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "oh9zfzmfz5rmky39uve",
+          "timestamp": "2026-01-24T14:18:53.939Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 626,
+            "isCodeLike": true,
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "q1mdlfz6s4nmky39uve",
+          "timestamp": "2026-01-24T14:19:32.155Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 21,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "fy4q8p050a8mky39uve",
+          "timestamp": "2026-01-24T14:19:42.210Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 426,
+            "isCodeLike": true,
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          }
+        },
+        {
+          "id": "pm28ehptzhmky39uve",
+          "timestamp": "2026-01-24T14:20:24.639Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 322,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "3oq7vouyee1mky39uve",
+          "timestamp": "2026-01-24T14:21:06.434Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 35,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "77du3up4yzrmky39uve",
+          "timestamp": "2026-01-24T14:23:35.049Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 22,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "cnsnyxudih5mky39uve",
+          "timestamp": "2026-01-24T14:23:54.682Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 253,
+            "isCodeLike": true,
+            "languageHint": "ts",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "3z9uvbi60ywmky39uve",
+          "timestamp": "2026-01-24T14:25:05.968Z",
+          "kind": "feedback_good",
+          "metadata": {
+            "messageId": "conversation-turn-8",
+            "site": "chatgpt"
+          }
+        },
+        {
+          "id": "h0vejp6b8zjmky39uve",
+          "timestamp": "2026-01-24T14:25:32.696Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 21,
+            "isCodeLike": true,
+            "languageHint": "bash",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "8qp7hebh94nmky39uve",
+          "timestamp": "2026-01-24T14:25:50.488Z",
+          "kind": "copy_output",
+          "metadata": {
+            "charCount": 13,
+            "isCodeLike": true,
+            "languageHint": "bash",
+            "messageId": "b7df21fd-dc75-496b-9f98-a7e74d32996f",
+            "site": "chatgpt",
+            "trigger": "selection"
+          }
+        },
+        {
+          "id": "z120kwnztjmmky39uve",
+          "timestamp": "2026-01-24T14:27:07.601Z",
+          "kind": "user_prompt",
+          "metadata": {
+            "site": "chatgpt"
+          }
+        }
+      ],
+      "metrics": {
+        "userMessageCount": 0,
+        "llmMessageCount": 0
+      },
+      "summary": {
+        "outcome": null,
+        "neededHumanOverride": null,
+        "messageCount": 0,
+        "userMessageCount": 0,
+        "llmMessageCount": 0,
+        "retryCount": 0,
+        "iterativeRefinement": false,
+        "copiedOutput": true,
+        "copiedCodeBlock": true,
+        "copiedTextLength": 11518,
+        "timeToFirstCopySec": 0,
+        "switchedToSearch": false,
+        "switchedToDocs": false,
+        "timeToVerificationSec": null,
+        "sessionEndedNaturally": true,
+        "tabClosedImmediately": false,
+        "idleTimeBeforeCloseSec": 0,
+        "returnedToSession": false,
+        "autoAbandonedCandidate": false,
+        "containsCodeBlocks": false,
+        "containsLongFormText": false,
+        "questionAnswerPattern": false,
+        "approxDurationMs": 8117662,
+        "copyEventsTotal": 20,
+        "copyEventsCode": 11,
+        "copyEventsNonCode": 9,
+        "copiedMessageIds": [
+          "eb2d82e3-8190-44b7-b0f5-9b6e780e9de6",
+          "da59f148-4b83-4dfc-afa6-1aa5f2855ebc",
+          "3f657538-15f4-417e-a94d-cb68cce8c895",
+          "b7df21fd-dc75-496b-9f98-a7e74d32996f"
+        ],
+        "feedbackGoodCount": 3,
+        "feedbackBadCount": 0,
+        "feedbackMessageIds": [
+          "conversation-turn-2",
+          "conversation-turn-4",
+          "conversation-turn-8"
+        ],
+        "retries": 0
+      }
+    }
+  ]
+}
