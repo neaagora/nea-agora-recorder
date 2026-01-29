@@ -7,8 +7,13 @@
     "default_title": "Nea Agora Recorder",
     "default_popup": "popup.html"
   },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
   "permissions": [
-    "storage"
+    "storage",
+    "sidePanel",
+    "tabs"
   ],
   "host_permissions": [
     "https://chatgpt.com/*"
