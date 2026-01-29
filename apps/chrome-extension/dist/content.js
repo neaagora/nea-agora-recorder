@@ -72,6 +72,31 @@
         }
         chrome.storage.local.set({ neaAgoraSessionMetrics: serialized });
     }
+    function updateSessionTitle(sessionId) {
+        let title = "";
+        const titleEl = document.querySelector('[data-testid="conversation-name"]');
+        if (titleEl && titleEl.textContent) {
+            title = titleEl.textContent.trim();
+        }
+        if (!title && document.title) {
+            title = document.title.trim();
+        }
+        if (!title) {
+            title = sessionId;
+        }
+        chrome.storage.local.get(["neaAgoraSessionFlags"], (data) => {
+            const flags = data.neaAgoraSessionFlags ?? {};
+            const current = flags[sessionId] ?? {};
+            if (current.title && current.title !== sessionId) {
+                return;
+            }
+            current.title = title;
+            flags[sessionId] = current;
+            chrome.storage.local.set({ neaAgoraSessionFlags: flags }, () => {
+                // no-op
+            });
+        });
+    }
     function incrementUserMessageCount(sessionId, messageText) {
         const normalized = messageText.trim();
         if (!normalized)
@@ -126,6 +151,7 @@
                 sessionId: sessionIdOverride ?? deriveSessionId(),
                 metadata,
             };
+            updateSessionTitle(newEvent.sessionId);
             // Safe debug log – this will not crash the script
             if (typeof console !== "undefined" && console && typeof console.log === "function") {
                 if (DEBUG_RECORDER) {

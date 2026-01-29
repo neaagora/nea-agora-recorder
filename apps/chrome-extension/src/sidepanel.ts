@@ -4,7 +4,10 @@
     | "user_prompt"
     | "copy_output"
     | "feedback_good"
-    | "feedback_bad";
+    | "feedback_bad"
+    | "feedback_partial";
+
+  type OutcomeValue = "success" | "abandoned" | "escalated_to_human" | null;
 
   type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
 
@@ -29,11 +32,17 @@
     timestamp: string;
     sessionId: string;
     metadata?: CopyEventMetadata | FeedbackEventMetadata;
+    scope?: string;
+    sentiment?: "good" | "bad";
+    note?: string;
+    partial?: boolean;
   };
 
   type SessionFlags = {
     [sessionId: string]: {
       humanOverrideRequired?: boolean;
+      outcome?: OutcomeValue;
+      title?: string;
     };
   };
 
@@ -52,6 +61,7 @@
     outcome: string | null;
     humanOverrideNeeded: boolean | null;
     isPartialHistory: boolean;
+    title?: string | null;
   }
 
   interface InteractionSession {
@@ -59,6 +69,8 @@
     sessionEvents: EventRecord[];
     summary: SessionSummary;
   }
+
+  let selectedSessionId: string | null = null;
 
   function extractConversationId(url: string | undefined): string | null {
     if (!url) return null;
@@ -154,6 +166,41 @@
     });
   }
 
+  function appendScopedFeedbackEvent(
+    sessionId: string,
+    sentiment: "good" | "bad",
+    scope: string,
+    note: string
+  ) {
+    chrome.storage.local.get(
+      ["neaAgoraRecorder"],
+      (data) => {
+        const events: EventRecord[] = Array.isArray(data.neaAgoraRecorder)
+          ? (data.neaAgoraRecorder as EventRecord[])
+          : [];
+        const now = new Date().toISOString();
+
+        const event: EventRecord = {
+          type: "feedback_partial",
+          site: "chatgpt",
+          url: "",
+          timestamp: now,
+          sessionId,
+          scope,
+          sentiment,
+          note: note || undefined,
+          partial: true,
+        };
+
+        events.push(event);
+
+        chrome.storage.local.set({ neaAgoraRecorder: events }, () => {
+          renderLiveView();
+        });
+      }
+    );
+  }
+
   async function handleExportClick() {
     const record = await buildServiceRecordJson();
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -194,6 +241,10 @@
     const sessions: InteractionSession[] = [];
 
     for (const [sessionId, sessionEvents] of byId.entries()) {
+      if (sessionId.startsWith("chatgpt-tab-")) {
+        continue;
+      }
+
       sessionEvents.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
 
       const first = sessionEvents[0];
@@ -225,7 +276,8 @@
 
       const f = flags[sessionId] ?? {};
       const humanOverrideNeeded = f.humanOverrideRequired ?? null;
-      const outcome = humanOverrideNeeded ? "escalated_to_human" : null;
+      const outcome = f.outcome ?? (humanOverrideNeeded ? "escalated_to_human" : null);
+      const title = (f.title as string | undefined) ?? null;
 
       const summary: SessionSummary = {
         userMessageCount: metricsForSession.userMessageCount,
@@ -237,6 +289,7 @@
         outcome,
         humanOverrideNeeded,
         isPartialHistory,
+        title,
       };
 
       sessions.push({ sessionId, sessionEvents, summary });
@@ -261,15 +314,21 @@
   function renderLiveView() {
     const statusEl = document.getElementById("status");
     const headerEl = document.getElementById("session-header");
-    const outcomeEl = document.getElementById(
-      "live-outcome"
-    ) as HTMLDivElement | null;
+    const outcomeSelect = document.getElementById(
+      "live-outcome-select"
+    ) as HTMLSelectElement | null;
     const overrideCheckbox = document.getElementById(
       "live-human-override"
     ) as HTMLInputElement | null;
     const listEl = document.getElementById("event-list");
+    const sessionListEl = document.getElementById("session-list");
+    const weeklyTitle = document.getElementById("weekly-title");
+    const weeklyMeta = document.getElementById("weekly-meta");
+    const weeklySuccess = document.getElementById("weekly-success");
+    const weeklyAbandoned = document.getElementById("weekly-abandoned");
+    const weeklyEscalated = document.getElementById("weekly-escalated");
 
-    if (!statusEl || !headerEl || !outcomeEl || !overrideCheckbox || !listEl) {
+    if (!statusEl || !headerEl || !overrideCheckbox || !listEl) {
       return;
     }
 
@@ -287,22 +346,93 @@
         if (events.length === 0) {
           statusEl.textContent = "No events yet.";
           headerEl.textContent = "";
-          outcomeEl.textContent = "Outcome: Unreviewed";
+          if (outcomeSelect) {
+            outcomeSelect.value = "";
+          }
           overrideCheckbox.checked = false;
           listEl.innerHTML = "";
+          if (
+            weeklyTitle &&
+            weeklyMeta &&
+            weeklySuccess &&
+            weeklyAbandoned &&
+            weeklyEscalated
+          ) {
+            weeklyTitle.textContent = "This week";
+            weeklySuccess.textContent = "✓ Success: 0%";
+            weeklyAbandoned.textContent = "⛔ Abandoned: 0%";
+            weeklyEscalated.textContent = "🧑‍💻 Escalated: 0%";
+            weeklyMeta.textContent = "Sessions recorded: 0 - Platforms: ChatGPT";
+          }
           return;
         }
 
         const sessions = buildSessions(events, flags, metrics);
 
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          let current: InteractionSession | null = null;
+        // Weekly outcome summary (last 7 days, ignore partial history)
+        const now = Date.now();
+        const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
 
+        const weeklySessions = sessions.filter((session) => {
+          if (session.summary.isPartialHistory) return false;
+          const first = session.sessionEvents[0];
+          if (!first) return false;
+          const startedAtMs = new Date(first.timestamp).getTime();
+          if (!Number.isFinite(startedAtMs)) return false;
+          return now - startedAtMs <= sevenDaysMs;
+        });
+
+        const totalWeekly = weeklySessions.length;
+
+        const countByOutcome = {
+          success: 0,
+          abandoned: 0,
+          escalated_to_human: 0,
+        } as Record<"success" | "abandoned" | "escalated_to_human", number>;
+
+        for (const session of weeklySessions) {
+          const outcome = (session.summary.outcome ?? null) as
+            | "success"
+            | "abandoned"
+            | "escalated_to_human"
+            | null;
+          if (!outcome) continue;
+          if (countByOutcome[outcome] !== undefined) {
+            countByOutcome[outcome] += 1;
+          }
+        }
+
+        if (
+          weeklyTitle &&
+          weeklyMeta &&
+          weeklySuccess &&
+          weeklyAbandoned &&
+          weeklyEscalated
+        ) {
+          const total = totalWeekly;
+          const pct = (n: number) =>
+            total === 0 ? 0 : Math.round((n / total) * 100);
+
+          weeklyTitle.textContent = "This week";
+          weeklySuccess.textContent = `✓ Success: ${pct(countByOutcome.success)}%`;
+          weeklyAbandoned.textContent = `⛔ Abandoned: ${pct(countByOutcome.abandoned)}%`;
+          weeklyEscalated.textContent = `🧑‍💻 Escalated: ${pct(countByOutcome.escalated_to_human)}%`;
+          weeklyMeta.textContent = `Sessions recorded: ${total} - Platforms: ChatGPT`;
+        }
+
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           const tab = tabs[0];
           const convId = extractConversationId(tab?.url);
-          if (convId) {
-            const sessionId = `chatgpt-c-${convId}`;
-            current = sessions.find((s) => s.sessionId === sessionId) ?? null;
+          const activeSessionId = convId ? `chatgpt-c-${convId}` : null;
+
+          let current: InteractionSession | null = null;
+
+          if (selectedSessionId) {
+            current = sessions.find((s) => s.sessionId === selectedSessionId) ?? null;
+          }
+
+          if (!current && activeSessionId) {
+            current = sessions.find((s) => s.sessionId === activeSessionId) ?? null;
           }
 
           if (!current) {
@@ -312,10 +442,66 @@
           if (!current) {
             statusEl.textContent = "No active session.";
             headerEl.textContent = "";
-            outcomeEl.textContent = "Outcome: Unreviewed";
+            if (outcomeSelect) {
+              outcomeSelect.value = "";
+            }
             overrideCheckbox.checked = false;
             listEl.innerHTML = "";
+            if (sessionListEl) {
+              sessionListEl.innerHTML = "";
+            }
             return;
+          }
+
+          if (!selectedSessionId) {
+            selectedSessionId = current.sessionId;
+          }
+
+          if (sessionListEl) {
+            sessionListEl.innerHTML = "";
+            const sessionsForList = sessions;
+            for (const sObj of sessionsForList) {
+              const s = sObj.summary;
+              const row = document.createElement("div");
+              row.className = "session-row";
+              if (sObj.sessionId === current.sessionId) {
+                row.classList.add("active");
+              }
+              row.dataset.sessionId = sObj.sessionId;
+
+              const titleSpan = document.createElement("div");
+              titleSpan.className = "session-row-title";
+              const title =
+                s.title && s.title.trim().length > 0 ? s.title : sObj.sessionId;
+              titleSpan.textContent = title;
+
+              const metaSpan = document.createElement("div");
+              metaSpan.className = "session-row-meta";
+
+              const outcomeLabel =
+                s.outcome === "success"
+                  ? "✓"
+                  : s.outcome === "abandoned"
+                  ? "⛔"
+                  : s.outcome === "escalated_to_human"
+                  ? "🧑‍💻"
+                  : "-";
+
+              metaSpan.textContent =
+                `${outcomeLabel} u:${s.userMessageCount} ` +
+                `llm:${s.llmMessageCount} ` +
+                `c:${s.copyEventsTotal}`;
+
+              row.appendChild(titleSpan);
+              row.appendChild(metaSpan);
+
+              row.addEventListener("click", () => {
+                selectedSessionId = sObj.sessionId;
+                renderLiveView();
+              });
+
+              sessionListEl.appendChild(row);
+            }
           }
 
           const s = current.summary;
@@ -325,21 +511,33 @@
           );
 
           statusEl.textContent = `Sessions: ${sessions.length} | Events: ${events.length}`;
+          const displayTitle =
+            s.title && s.title.trim().length > 0 ? s.title : current.sessionId;
           headerEl.textContent =
-            `Session ${current.sessionId} ` +
+            `${displayTitle} ` +
             `(u:${s.userMessageCount} llm:${s.llmMessageCount} copies:${s.copyEventsTotal} ~${durationSec}s)`;
 
           if (s.isPartialHistory) {
             headerEl.textContent += " [Partial history, joined late]";
           }
 
-          outcomeEl.textContent = `Outcome: ${s.outcome ?? "Unreviewed"}`;
+          if (outcomeSelect) {
+            outcomeSelect.value = s.outcome ?? "";
+          }
           overrideCheckbox.checked = Boolean(s.humanOverrideNeeded);
 
           listEl.innerHTML = "";
           for (const ev of current.sessionEvents.slice().reverse()) {
             const li = document.createElement("li");
-            li.textContent = `${ev.timestamp} -- ${ev.type}`;
+            let label = `${ev.timestamp}  ${ev.type}`;
+            if (ev.partial && ev.scope) {
+              label += ` [scoped:${ev.scope}`;
+              if (ev.sentiment) {
+                label += ` ${ev.sentiment}`;
+              }
+              label += "]";
+            }
+            li.textContent = label;
             listEl.appendChild(li);
           }
         });
@@ -380,12 +578,131 @@
     );
   }
 
+  function handleOutcomeChange(ev: Event) {
+    const select = ev.target as HTMLSelectElement;
+    const value = select.value as "" | "success" | "abandoned" | "escalated_to_human";
+    const newOutcome: OutcomeValue = value === "" ? null : value;
+
+    chrome.storage.local.get(
+      ["neaAgoraRecorder", "neaAgoraSessionFlags", "neaAgoraSessionMetrics"],
+      (data) => {
+        const events: EventRecord[] = Array.isArray(data.neaAgoraRecorder)
+          ? (data.neaAgoraRecorder as EventRecord[])
+          : [];
+        const flags: SessionFlags =
+          (data.neaAgoraSessionFlags as SessionFlags) ?? {};
+        const metrics: Record<string, SessionMetrics> =
+          (data.neaAgoraSessionMetrics as Record<string, SessionMetrics>) ?? {};
+
+        if (events.length === 0) return;
+
+        const sessions = buildSessions(events, flags, metrics);
+
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          let current: InteractionSession | null = null;
+
+          const tab = tabs[0];
+          const convId = extractConversationId(tab?.url);
+          if (convId) {
+            const sessionId = `chatgpt-c-${convId}`;
+            current = sessions.find((session) => session.sessionId === sessionId) ?? null;
+          }
+          if (!current) {
+            current = pickCurrentSession(sessions);
+          }
+          if (!current) return;
+
+          const sessionId = current.sessionId;
+          const currentFlags = flags[sessionId] ?? {};
+          currentFlags.outcome = newOutcome;
+          flags[sessionId] = currentFlags;
+
+          chrome.storage.local.set({ neaAgoraSessionFlags: flags }, () => {
+            renderLiveView();
+          });
+        });
+      }
+    );
+  }
+
+  function handleScopedAddClick() {
+    const scopeSelect = document.getElementById(
+      "scoped-scope"
+    ) as HTMLSelectElement | null;
+    const noteInput = document.getElementById(
+      "scoped-note"
+    ) as HTMLInputElement | null;
+    const sentimentInputs = Array.from(
+      document.querySelectorAll<HTMLInputElement>('input[name="scoped-sentiment"]')
+    );
+
+    if (!scopeSelect || !noteInput || sentimentInputs.length === 0) {
+      return;
+    }
+
+    const selectedSentiment = sentimentInputs.find((input) => input.checked)
+      ?.value as "good" | "bad" | undefined;
+    const scope = scopeSelect.value || "other";
+    const note = noteInput.value.trim();
+
+    if (!selectedSentiment) {
+      return;
+    }
+
+    chrome.storage.local.get(
+      ["neaAgoraRecorder", "neaAgoraSessionFlags", "neaAgoraSessionMetrics"],
+      (data) => {
+        const events: EventRecord[] = Array.isArray(data.neaAgoraRecorder)
+          ? (data.neaAgoraRecorder as EventRecord[])
+          : [];
+        const flags: SessionFlags =
+          (data.neaAgoraSessionFlags as SessionFlags) ?? {};
+        const metrics: Record<string, SessionMetrics> =
+          (data.neaAgoraSessionMetrics as Record<string, SessionMetrics>) ?? {};
+
+        if (events.length === 0) return;
+
+        const sessions = buildSessions(events, flags, metrics);
+
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          let current: InteractionSession | null = null;
+
+          const tab = tabs[0];
+          const convId = extractConversationId(tab?.url);
+          if (convId) {
+            const sessionId = `chatgpt-c-${convId}`;
+            current = sessions.find((session) => session.sessionId === sessionId) ?? null;
+          }
+          if (!current) {
+            current = pickCurrentSession(sessions);
+          }
+          if (!current) return;
+
+          appendScopedFeedbackEvent(
+            current.sessionId,
+            selectedSentiment,
+            scope,
+            note
+          );
+          noteInput.value = "";
+        });
+      }
+    );
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const overrideCheckbox = document.getElementById(
       "live-human-override"
     ) as HTMLInputElement | null;
     if (overrideCheckbox) {
       overrideCheckbox.addEventListener("change", handleOverrideChange);
+    }
+
+    const outcomeSelect = document.getElementById(
+      "live-outcome-select"
+    ) as HTMLSelectElement | null;
+    if (outcomeSelect) {
+      outcomeSelect.addEventListener("change", handleOutcomeChange);
     }
 
     const exportBtn = document.getElementById(
@@ -404,6 +721,13 @@
     ) as HTMLButtonElement | null;
     if (clearBtn) {
       clearBtn.addEventListener("click", handleClearClick);
+    }
+
+    const scopedAddBtn = document.getElementById(
+      "scoped-add"
+    ) as HTMLButtonElement | null;
+    if (scopedAddBtn) {
+      scopedAddBtn.addEventListener("click", handleScopedAddClick);
     }
 
     renderLiveView();

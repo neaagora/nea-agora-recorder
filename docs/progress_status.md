@@ -7,20 +7,79 @@ It is a living document.
 
 ---
 
-## v0.7 — Outcome-Anchored Evaluation (in progress)
+## v0.7 — Outcome Anchored Evaluation Layer
 
-planned work (v0.7)
+### Summary
 
-- Outcome selection per session (Success / Abandoned / Escalated).
-- Weekly outcome summary (“This week” block).
-- Scoped / partial feedback on model replies.
-- Chat titles and session list (accordion-style navigation).
+v0.7 adds the first real evaluation layer on top of the v0.6 recording baseline.
 
-v0.7 builds the **evaluation layer** on top of the stable v0.6 record layer.
+The recorder still focuses on factual "what happened", but the side panel now allows the human user to explicitly say "how it went" for each session and to attach scoped partial feedback to specific aspects of model responses.
+
+The key idea: evidence first, judgment second.
+
+### What’s implemented
+
+- Per session outcome selector in the side panel:
+  - Unreviewed
+  - Success
+  - Abandoned
+  - Escalated to human
+- Weekly outcome summary block:
+  - Shows percentages for each outcome over the last 7 days
+  - Shows total sessions recorded and platform label
+  - Ignores `isPartialHistory` sessions to avoid skew
+
+- Scoped partial feedback:
+  - New event type: `feedback_partial`
+  - Carries `scope` (reasoning, code, facts, style, other)
+  - Carries `sentiment` (good, bad) and optional note
+  - Marked with `partial: true`
+  - Does not inflate full thumbs up or down counters
+
+- Side panel UX:
+  - Human readable chat titles captured from ChatGPT and stored in flags
+  - Session header shows title and per session stats instead of a bare session ID
+  - Session list in the side panel with:
+    - Title
+    - Tiny stats (user, llm, copies)
+    - One character outcome marker (✓ / ⛔ / 🧑‍💻 / ·)
+  - Clicking a session row selects that session and updates the detail view
+
+- Noise control:
+  - `chatgpt-tab-*` sessions removed from UI and export
+  - Partial history detection from v0.6 kept:
+    - Long existing chats joined late are labeled `isPartialHistory`
+
+### What’s intentionally not done
+
+- No text span level partial feedback yet:
+  - Scoped partial feedback is attached at the session level using a form
+  - No DOM selection or offsets stored
+- No automatic outcome inference or scores
+- No charts, trust metrics, or trend graphs
+- No non Chrome surfaces yet (VS Code, etc.)
+
+These are reserved for v0.8 and later to avoid entangling capture, evaluation, and scoring too early.
+
+### Why v0.7 matters
+
+- Moves the project from "we recorded what the LLM did" to "we also recorded what the human thought about it".
+- Keeps full vs partial judgments separate, so later analysis can distinguish "whole reply was good" from "reasoning was bad but the code was useful".
+- Makes the side panel usable by real humans via titles and a simple session list, not just by someone who already knows all the session IDs by heart.
+
+Current state: v0.7 is feature complete enough to tag once basic testing is done. The next version should focus on span level feedback and cross session analysis, not more basic plumbing.
+
 
 ---
 
 ## v0.6 
+
+### Current snapshot (TL;DR)
+
+- Primary UI: Chrome side panel
+- Core capability: record + inspect agent service records
+- Next focus: outcome labeling and weekly summary (v0.7)
+
 
 v0.6 establishes a stable, inspectable foundation for **Agent Service Records**.
 
