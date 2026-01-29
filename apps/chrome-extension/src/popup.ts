@@ -23,7 +23,13 @@
   };
 
   type EventRecord = {
-    type: "page_visit" | "user_prompt" | "copy_output" | "feedback_good" | "feedback_bad";
+    type:
+      | "page_visit"
+      | "user_prompt"
+      | "copy_output"
+      | "feedback_good"
+      | "feedback_bad"
+      | "feedback_partial";
     site: "chatgpt";
     url: string;
     timestamp: string;
@@ -34,6 +40,7 @@
   type SessionFlags = {
     [sessionId: string]: {
       humanOverrideRequired?: boolean;
+      title?: string;
     };
   };
 
@@ -54,7 +61,8 @@
     | "session_start"
     | "copy_output"
     | "feedback_good"
-    | "feedback_bad";
+    | "feedback_bad"
+    | "feedback_partial";
 
   interface BaseInteractionEventMetadata {
     site: "chatgpt" | "other";
@@ -123,6 +131,7 @@
     feedbackBadCount: number;
     feedbackMessageIds?: string[];
     isPartialHistory: boolean;
+    title?: string | null;
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -478,6 +487,10 @@
     const sessions: InteractionSession[] = [];
 
     for (const [sessionId, sessionEvents] of bySession.entries()) {
+      if (sessionId.startsWith("chatgpt-tab-")) {
+        continue;
+      }
+
       const sorted = [...sessionEvents].sort(
         (a, b) =>
           new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
@@ -505,6 +518,8 @@
               ? "feedback_good"
               : ev.type === "feedback_bad"
               ? "feedback_bad"
+              : ev.type === "feedback_partial"
+              ? "feedback_partial"
               : "session_start",
           metadata,
         };
@@ -536,6 +551,10 @@
         endTs,
         Boolean(sessionFlags[sessionId]?.humanOverrideRequired)
       );
+      const title = (sessionFlags[sessionId]?.title as string | undefined) ?? null;
+      if (summary) {
+        summary.title = title;
+      }
       session.summary = summary;
 
       sessions.push(session);

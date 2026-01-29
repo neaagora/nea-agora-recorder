@@ -109,6 +109,42 @@
     chrome.storage.local.set({ neaAgoraSessionMetrics: serialized });
   }
 
+  function updateSessionTitle(sessionId: string) {
+    let title = "";
+
+    const titleEl = document.querySelector(
+      '[data-testid="conversation-name"]'
+    ) as HTMLElement | null;
+
+    if (titleEl && titleEl.textContent) {
+      title = titleEl.textContent.trim();
+    }
+
+    if (!title && document.title) {
+      title = document.title.trim();
+    }
+
+    if (!title) {
+      title = sessionId;
+    }
+
+    chrome.storage.local.get(["neaAgoraSessionFlags"], (data) => {
+      const flags: Record<string, any> = data.neaAgoraSessionFlags ?? {};
+      const current = flags[sessionId] ?? {};
+
+      if (current.title && current.title !== sessionId) {
+        return;
+      }
+
+      current.title = title;
+      flags[sessionId] = current;
+
+      chrome.storage.local.set({ neaAgoraSessionFlags: flags }, () => {
+        // no-op
+      });
+    });
+  }
+
   function incrementUserMessageCount(sessionId: string, messageText: string) {
     const normalized = messageText.trim();
     if (!normalized) return;
@@ -164,14 +200,15 @@
         }
         return;
       }
-      const newEvent: EventRecord = {
-        type,
-        site: "chatgpt",
-        url: window.location.href,
-        timestamp: new Date().toISOString(),
-        sessionId: sessionIdOverride ?? deriveSessionId(),
-        metadata,
-      };
+    const newEvent: EventRecord = {
+      type,
+      site: "chatgpt",
+      url: window.location.href,
+      timestamp: new Date().toISOString(),
+      sessionId: sessionIdOverride ?? deriveSessionId(),
+      metadata,
+    };
+    updateSessionTitle(newEvent.sessionId);
 
       // Safe debug log – this will not crash the script
       if (typeof console !== "undefined" && console && typeof console.log === "function") {
