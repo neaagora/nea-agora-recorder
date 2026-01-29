@@ -122,6 +122,7 @@
     feedbackGoodCount: number;
     feedbackBadCount: number;
     feedbackMessageIds?: string[];
+    isPartialHistory: boolean;
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -160,6 +161,8 @@
 
   const STALE_SESSION_THRESHOLD_MS = 10 * 60 * 1000; // 10 minutes
   const ABANDONED_MAX_DURATION_MS = 30 * 1000;
+  let activeOutcomeFilter: "success" | "abandoned" | "escalated_to_human" | null =
+    null;
 
   function renderEvents(
     events: EventRecord[],
@@ -168,6 +171,11 @@
   ) {
     const countEl = document.getElementById("event-count");
     const listEl = document.getElementById("event-list");
+    const overviewTitle = document.getElementById("overview-title");
+    const overviewMeta = document.getElementById("overview-meta");
+    const overviewChips = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".outcome-chip")
+    );
 
     const safeMetrics: Record<string, SessionMetrics> = sessionMetrics ?? {};
 
@@ -176,6 +184,24 @@
     if (!events.length) {
       countEl.textContent = "Sessions: 0 | Events: 0";
       listEl.innerHTML = "<li>No events recorded yet.</li>";
+      if (overviewTitle && overviewMeta && overviewChips.length === 3) {
+        overviewTitle.textContent = "This week";
+        for (const chip of overviewChips) {
+          const outcome = chip.dataset.outcome as
+            | "success"
+            | "abandoned"
+            | "escalated_to_human";
+          const label =
+            outcome === "success"
+              ? "✓ Success"
+              : outcome === "abandoned"
+              ? "⛔ Abandoned"
+              : "🧑‍💻 Escalated";
+          chip.textContent = `${label}: 0%`;
+          chip.classList.toggle("active", activeOutcomeFilter === outcome);
+        }
+        overviewMeta.textContent = "Sessions recorded: 0 - Platforms: ChatGPT";
+      }
       return;
     }
 
@@ -205,21 +231,144 @@
     sessionSummaries.sort((a, b) => b.latestTime - a.latestTime);
 
     const builtSessions = buildSessions(events, sessionFlags, sessionMetrics);
-    const outcomeBySessionId = new Map<string, OutcomeType | null>();
-    for (const s of builtSessions) {
-      outcomeBySessionId.set(s.sessionId, s.summary?.outcome ?? null);
+    const filteredSessions = builtSessions.filter((session) => {
+      const summary = session.summary;
+      if (!summary) return false;
+
+      const llmCount = summary.llmMessageCount ?? 0;
+      const copyTotal = summary.copyEventsTotal ?? 0;
+      const feedbackTotal =
+        (summary.feedbackGoodCount ?? 0) +
+        (summary.feedbackBadCount ?? 0);
+
+      // Keep only sessions where the agent actually responded
+      // or the user evaluated/copied something.
+      return llmCount > 0 || copyTotal > 0 || feedbackTotal > 0;
+    });
+
+    const now = Date.now();
+    const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+
+    // When adding weekly outcome stats later, ignore partial history sessions:
+    // const weeklySessions = filteredSessions.filter(s => !s.summary.isPartialHistory && ...);
+    const weeklySessions = filteredSessions.filter((session) => {
+      const startedAtMs = new Date(
+        session.startedAt ?? session.events[0]?.timestamp ?? 0
+      ).getTime();
+      return Number.isFinite(startedAtMs) && now - startedAtMs <= sevenDaysMs;
+    });
+
+    const totalWeekly = weeklySessions.length;
+
+    const countByOutcome = {
+      success: 0,
+      abandoned: 0,
+      escalated_to_human: 0,
+    } as Record<"success" | "abandoned" | "escalated_to_human", number>;
+
+    for (const session of weeklySessions) {
+      const outcome = (session.summary?.outcome ?? null) as
+        | "success"
+        | "abandoned"
+        | "escalated_to_human"
+        | null;
+      if (!outcome) continue;
+      if (countByOutcome[outcome] !== undefined) {
+        countByOutcome[outcome] += 1;
+      }
     }
 
-    countEl.textContent = `Sessions: ${sessionSummaries.length} | Events: ${events.length}`;
+    if (overviewTitle && overviewMeta && overviewChips.length === 3) {
+      overviewTitle.textContent = "This week";
+
+      const pct = (outcome: "success" | "abandoned" | "escalated_to_human") =>
+        totalWeekly === 0
+          ? 0
+          : Math.round((countByOutcome[outcome] / totalWeekly) * 100);
+
+      for (const chip of overviewChips) {
+        const outcome = chip.dataset.outcome as
+          | "success"
+          | "abandoned"
+          | "escalated_to_human";
+        const label =
+          outcome === "success"
+            ? "✓ Success"
+            : outcome === "abandoned"
+            ? "⛔ Abandoned"
+            : "🧑‍💻 Escalated";
+        chip.textContent = `${label}: ${pct(outcome)}%`;
+        chip.classList.toggle("active", activeOutcomeFilter === outcome);
+      }
+
+      const platformLabel = "ChatGPT";
+      overviewMeta.textContent =
+        `Sessions recorded: ${totalWeekly} - Platforms: ${platformLabel}`;
+    }
+
+    const outcomeBySessionId = new Map<string, OutcomeType | null>();
+    const summaryBySessionId = new Map<string, SessionSummary | undefined>();
+    for (const s of filteredSessions) {
+      outcomeBySessionId.set(s.sessionId, s.summary?.outcome ?? null);
+      summaryBySessionId.set(s.sessionId, s.summary);
+    }
+
+    const filteredSessionIds = new Set(
+      filteredSessions.map((session) => session.sessionId)
+    );
+    const filteredSessionSummaries = sessionSummaries.filter((session) =>
+      filteredSessionIds.has(session.sessionId)
+    );
+
+    if (filteredSessions.length === 0) {
+      countEl.textContent = "Sessions: 0 | Events: 0";
+      listEl.innerHTML = "";
+      const li = document.createElement("li");
+      li.textContent = "No sessions recorded yet.";
+      listEl.appendChild(li);
+      return;
+    }
+
+    const sessionsForList = activeOutcomeFilter
+      ? filteredSessions.filter(
+          (session) => session.summary?.outcome === activeOutcomeFilter
+        )
+      : filteredSessions;
+
+    const sessionsForListIds = new Set(
+      sessionsForList.map((session) => session.sessionId)
+    );
+    const sessionsForListSummaries = filteredSessionSummaries.filter((session) =>
+      sessionsForListIds.has(session.sessionId)
+    );
+
+    countEl.textContent = `Sessions: ${sessionsForList.length} | Events: ${events.length}`;
     listEl.innerHTML = "";
 
-    for (const session of sessionSummaries) {
+    if (sessionsForList.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "No sessions match this filter.";
+      listEl.appendChild(li);
+      return;
+    }
+
+    for (const session of sessionsForListSummaries) {
       const sessionId = session.sessionId;
       const liHeader = document.createElement("li");
 
       const headerText = document.createElement("span");
       const outcome = outcomeBySessionId.get(sessionId) ?? null;
-      headerText.textContent = `Session ${sessionId} (${session.sessionEvents.length} events)`;
+      const summary = summaryBySessionId.get(sessionId);
+      const durationMs = summary?.approxDurationMs ?? 0;
+      const durationSec = Math.round(durationMs / 1000);
+      const userCount = summary?.userMessageCount ?? 0;
+      const llmCount = summary?.llmMessageCount ?? 0;
+      const copyTotal = summary?.copyEventsTotal ?? 0;
+
+      headerText.textContent =
+        `Session ${sessionId} ` +
+        `(u:${userCount} llm:${llmCount} copies:${copyTotal} ~${durationSec}s, ` +
+        `${session.sessionEvents.length} events)`;
       headerText.style.wordBreak = "break-all";
       headerText.style.fontSize = "0.9em";
 
@@ -550,6 +699,11 @@
     const containsLongFormText = false;
     const questionAnswerPattern = false;
 
+    const isPartialHistory =
+      userMessageCount === 0 &&
+      llmMessageCount >= 5 &&
+      (copyEventsTotal > 0 || feedbackGoodCount + feedbackBadCount > 0);
+
     return {
       // Anchors
       outcome,
@@ -598,6 +752,7 @@
       feedbackGoodCount,
       feedbackBadCount,
       feedbackMessageIds,
+      isPartialHistory,
 
       // Existing field kept for now
       retries,
@@ -614,6 +769,9 @@
     sessionMetrics: Record<string, SessionMetrics>
   ): ServiceRecord {
     const sessions = buildSessions(events, sessionFlags, sessionMetrics);
+    const sessionsForExport = sessions.filter(
+      (session) => !isTrivialTabSession(session)
+    );
 
     return {
       recordType: "agent_service_record",
@@ -629,14 +787,45 @@
       },
       generatedAt: new Date().toISOString(),
       agentLabel: "chatgpt.com",
-      sessions,
+      sessions: sessionsForExport,
     };
+  }
+
+  function isTrivialTabSession(session: InteractionSession): boolean {
+    if (!session.sessionId.startsWith("chatgpt-tab-")) return false;
+    const s = session.summary;
+    const noUser = (s?.userMessageCount ?? 0) === 0;
+    const noLlm = (s?.llmMessageCount ?? 0) === 0;
+    const noCopies = (s?.copyEventsTotal ?? 0) === 0;
+    const noFeedback =
+      (s?.feedbackGoodCount ?? 0) === 0 &&
+      (s?.feedbackBadCount ?? 0) === 0;
+    return noUser && noLlm && noCopies && noFeedback;
   }
 
   function cryptoRandomId(): string {
     return (
       Math.random().toString(36).slice(2) +
       Date.now().toString(36)
+    );
+  }
+
+  function handleClearClick(onCleared: () => void) {
+    const confirmed = window.confirm(
+      "This will delete all recorded sessions and events. Are you sure?"
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    chrome.storage.local.remove(
+      ["neaAgoraRecorder", "neaAgoraSessionFlags", "neaAgoraSessionMetrics"],
+      () => {
+        if (chrome.runtime.lastError) {
+          console.error("Failed to clear records", chrome.runtime.lastError);
+        }
+        onCleared();
+      }
     );
   }
 
@@ -671,6 +860,35 @@
               .replace(/[:.]/g, "-")}.json`;
             a.click();
             URL.revokeObjectURL(url);
+          });
+        }
+
+        const clearBtn = document.getElementById("clear-service-records");
+        if (clearBtn) {
+          clearBtn.addEventListener("click", () => {
+            handleClearClick(() => {
+              renderEvents([], {}, {});
+            });
+          });
+        }
+
+        const overviewChips = Array.from(
+          document.querySelectorAll<HTMLButtonElement>(".outcome-chip")
+        );
+        for (const chip of overviewChips) {
+          chip.addEventListener("click", () => {
+            const outcome = chip.dataset.outcome as
+              | "success"
+              | "abandoned"
+              | "escalated_to_human";
+
+            if (activeOutcomeFilter === outcome) {
+              activeOutcomeFilter = null;
+            } else {
+              activeOutcomeFilter = outcome;
+            }
+
+            renderEvents(events, sessionFlags, sessionMetrics);
           });
         }
       }
