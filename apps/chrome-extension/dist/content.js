@@ -104,17 +104,36 @@
         }
         chrome.storage.local.set({ neaAgoraSessionMetrics: serialized });
     }
+    function getCurrentPageTitle() {
+        const titleEl = document.querySelector('[data-testid="conversation-name"]');
+        if (titleEl && titleEl.textContent) {
+            const text = titleEl.textContent.trim();
+            if (text)
+                return text;
+        }
+        if (document.title) {
+            return document.title.trim();
+        }
+        return "";
+    }
+    function isGenericTitle(title) {
+        const normalized = title.trim().toLowerCase();
+        if (!normalized)
+            return true;
+        if (normalized === "chatgpt")
+            return true;
+        if (normalized.startsWith("chatgpt"))
+            return true;
+        if (normalized === "moltbot")
+            return true;
+        if (normalized.startsWith("moltbot"))
+            return true;
+        return false;
+    }
     function updateSessionTitle(sessionId, platform) {
         if (platform !== "chatgpt")
             return;
-        let title = "";
-        const titleEl = document.querySelector('[data-testid="conversation-name"]');
-        if (titleEl && titleEl.textContent) {
-            title = titleEl.textContent.trim();
-        }
-        if (!title && document.title) {
-            title = document.title.trim();
-        }
+        let title = getCurrentPageTitle();
         if (!title) {
             title = sessionId;
         }
@@ -122,7 +141,13 @@
             const flags = data.neaAgoraSessionFlags ?? {};
             const current = flags[sessionId] ?? {};
             if (current.title && current.title !== sessionId) {
-                return;
+                const existing = String(current.title);
+                if (!isGenericTitle(existing) && isGenericTitle(title)) {
+                    return;
+                }
+                if (existing === title) {
+                    return;
+                }
             }
             current.title = title;
             flags[sessionId] = current;
@@ -217,6 +242,7 @@
                 url: window.location.href,
                 timestamp: new Date().toISOString(),
                 sessionId: sessionIdOverride ?? getOrCreateSessionId(platform),
+                pageTitle: type === "page_visit" ? getCurrentPageTitle() : undefined,
                 metadata,
             };
             updateSessionTitle(newEvent.sessionId, platform);

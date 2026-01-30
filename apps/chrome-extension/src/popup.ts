@@ -47,6 +47,7 @@
     url: string;
     timestamp: string;
     sessionId: string;
+    pageTitle?: string;
     metadata?: CopyEventMetadata | FeedbackEventMetadata | LlmResponseEventMetadata;
   };
 
@@ -531,6 +532,43 @@
     return { userMessageCount, llmMessageCount };
   }
 
+  function deriveSessionTitle(
+    session: Pick<InteractionSession, "sessionId" | "platform" | "toolLabel">,
+    events: EventRecord[],
+    storedTitle?: string | null
+  ): string {
+    if (storedTitle && storedTitle.trim().length > 0) {
+      return storedTitle.trim();
+    }
+    const lastPageVisit = [...events]
+      .reverse()
+      .find((e) => e.type === "page_visit");
+
+    if (lastPageVisit) {
+      const rawTitle =
+        (lastPageVisit as EventRecord).pageTitle ??
+        (lastPageVisit as any).title ??
+        (lastPageVisit as any).metadata?.pageTitle ??
+        (lastPageVisit as any).metadata?.title;
+      if (typeof rawTitle === "string" && rawTitle.trim().length > 0) {
+        return rawTitle.trim();
+      }
+    }
+
+    if (session.platform === "chatgpt") {
+      return "ChatGPT";
+    }
+    if (session.platform === "moltbot_webchat") {
+      return "MoltBot WebChat";
+    }
+
+    if (session.toolLabel && session.toolLabel.trim()) {
+      return session.toolLabel;
+    }
+
+    return session.sessionId;
+  }
+
   function buildSessions(
     events: EventRecord[],
     sessionFlags: SessionFlags,
@@ -612,9 +650,9 @@
         endTs,
         Boolean(sessionFlags[sessionId]?.humanOverrideRequired)
       );
-      const title = (sessionFlags[sessionId]?.title as string | undefined) ?? null;
       if (summary) {
-        summary.title = title;
+        const storedTitle = (sessionFlags[sessionId]?.title as string | undefined) ?? null;
+        summary.title = deriveSessionTitle(session, sorted, storedTitle);
       }
       session.summary = summary;
 
