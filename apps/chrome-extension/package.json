@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "npx tsc -p tsconfig.json"
+    "build": "npx tsc -p tsconfig.json && node -e \"require('fs').copyFileSync('src/manifest.json','dist/manifest.json')\""
   },
   "devDependencies": {
     "@types/chrome": "^0.1.33"
