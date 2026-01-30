@@ -1,4 +1,6 @@
 (() => {
+  type Platform = "chatgpt" | "moltbot_webchat";
+
   type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
 
   type CopyEventMetadata = {
@@ -17,24 +19,35 @@
     messageId?: string;
   };
 
+  type LlmResponseEventMetadata = {
+    charCount: number;
+    latencyMs?: number;
+    turnIndex: number;
+  };
+
   type SessionMetrics = {
     userMessageCount: number;
     llmMessageCount: number;
+    avgResponseTimeMs?: number;
+    p95ResponseTimeMs?: number;
+    maxResponseTimeMs?: number;
   };
 
   type EventRecord = {
     type:
       | "page_visit"
       | "user_prompt"
+      | "llm_response"
       | "copy_output"
       | "feedback_good"
       | "feedback_bad"
       | "feedback_partial";
-    site: "chatgpt";
+    platform: Platform;
+    site: "chatgpt" | "other";
     url: string;
     timestamp: string;
     sessionId: string;
-    metadata?: CopyEventMetadata | FeedbackEventMetadata;
+    metadata?: CopyEventMetadata | FeedbackEventMetadata | LlmResponseEventMetadata;
   };
 
   type SessionFlags = {
@@ -50,7 +63,7 @@
     | "escalated_to_human"
     | null;
 
-  type PlatformId = "chatgpt" | "claude" | "gemini" | "unknown";
+  type PlatformId = "chatgpt" | "moltbot_webchat" | "claude" | "gemini" | "unknown";
 
   type InteractionEventKind =
     | "user_prompt"
@@ -73,7 +86,8 @@
   type InteractionEventMetadata =
     | BaseInteractionEventMetadata
     | CopyEventMetadata
-    | FeedbackEventMetadata;
+    | FeedbackEventMetadata
+    | LlmResponseEventMetadata;
 
   interface InteractionEvent {
     id: string;
@@ -132,6 +146,11 @@
     feedbackMessageIds?: string[];
     isPartialHistory: boolean;
     title?: string | null;
+    responseMetrics?: {
+      avgResponseTimeMs?: number;
+      p95ResponseTimeMs?: number;
+      maxResponseTimeMs?: number;
+    };
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -478,6 +497,40 @@
     return bySession;
   }
 
+  function computeResponseMetrics(events: EventRecord[]) {
+    const latencies = events
+      .filter((e) => e.type === "llm_response")
+      .map((e) => (e.metadata as LlmResponseEventMetadata | undefined)?.latencyMs)
+      .filter((v): v is number => typeof v === "number");
+
+    let avgResponseTimeMs: number | undefined;
+    let p95ResponseTimeMs: number | undefined;
+    let maxResponseTimeMs: number | undefined;
+
+    if (latencies.length) {
+      const sorted = [...latencies].sort((a, b) => a - b);
+      const sum = latencies.reduce((a, b) => a + b, 0);
+      avgResponseTimeMs = sum / latencies.length;
+      maxResponseTimeMs = sorted[sorted.length - 1];
+      const p95Index = Math.floor(0.95 * (sorted.length - 1));
+      p95ResponseTimeMs = sorted[p95Index];
+    }
+
+    return { avgResponseTimeMs, p95ResponseTimeMs, maxResponseTimeMs };
+  }
+
+  function computeMessageCounts(events: EventRecord[]) {
+    let userMessageCount = 0;
+    let llmMessageCount = 0;
+
+    for (const ev of events) {
+      if (ev.type === "user_prompt") userMessageCount += 1;
+      if (ev.type === "llm_response") llmMessageCount += 1;
+    }
+
+    return { userMessageCount, llmMessageCount };
+  }
+
   function buildSessions(
     events: EventRecord[],
     sessionFlags: SessionFlags,
@@ -512,6 +565,8 @@
           kind:
             ev.type === "user_prompt"
               ? "user_prompt"
+              : ev.type === "llm_response"
+              ? "model_response"
               : ev.type === "copy_output"
               ? "copy_output"
               : ev.type === "feedback_good"
@@ -525,15 +580,20 @@
         };
       });
 
-      const firstEvent = interactionEvents[0];
-      let platform: PlatformId = "unknown";
-      if (firstEvent?.metadata?.site === "chatgpt") {
-        platform = "chatgpt";
-      }
+      const platformFromEvents = sorted.find((ev) => ev.platform)?.platform;
+      let platform: PlatformId =
+        platformFromEvents === "moltbot_webchat"
+          ? "moltbot_webchat"
+          : platformFromEvents === "chatgpt"
+          ? "chatgpt"
+          : "unknown";
 
-      const metrics = sessionMetrics[sessionId] ?? {
-        userMessageCount: 0,
-        llmMessageCount: 0,
+      const responseMetrics = computeResponseMetrics(sorted);
+      const messageCounts = computeMessageCounts(sorted);
+      const metrics = {
+        ...(sessionMetrics[sessionId] ?? {}),
+        ...messageCounts,
+        ...responseMetrics,
       };
 
       const session: InteractionSession = {
@@ -541,7 +601,8 @@
         platform,
         startedAt: startTs.toISOString(),
         endedAt: endTs.toISOString(),
-        toolLabel: "ChatGPT in Chrome",
+        toolLabel:
+          platform === "moltbot_webchat" ? "MoltBot (local)" : "ChatGPT in Chrome",
         events: interactionEvents,
         metrics,
       };
@@ -778,6 +839,12 @@
 
       // Optional human note
       note,
+
+      responseMetrics: {
+        avgResponseTimeMs: metrics.avgResponseTimeMs,
+        p95ResponseTimeMs: metrics.p95ResponseTimeMs,
+        maxResponseTimeMs: metrics.maxResponseTimeMs,
+      },
     };
   }
 
@@ -788,15 +855,26 @@
     sessionMetrics: Record<string, SessionMetrics>
   ): ServiceRecord {
     const sessions = buildSessions(events, sessionFlags, sessionMetrics);
-    const sessionsForExport = sessions.filter(
-      (session) => !isTrivialTabSession(session)
-    );
+    const shouldKeepSession = (session: InteractionSession): boolean => {
+      const m: SessionMetrics = session.metrics ?? {
+        userMessageCount: 0,
+        llmMessageCount: 0,
+      };
+      const hasMessages =
+        (m.userMessageCount ?? 0) > 0 || (m.llmMessageCount ?? 0) > 0;
+      if (hasMessages) return true;
+      return session.events.some((e) => e.kind !== "session_start");
+    };
+
+    const sessionsForExport = sessions
+      .filter((session) => !isTrivialTabSession(session))
+      .filter(shouldKeepSession);
 
     return {
       recordType: "agent_service_record",
       version: "0.1.0",
       subject: {
-        agent: "chatgpt.com",
+        agent: "multi",
         surface: "chat",
       },
       observer: {
@@ -805,7 +883,7 @@
         localOnly: true,
       },
       generatedAt: new Date().toISOString(),
-      agentLabel: "chatgpt.com",
+      agentLabel: "multi",
       sessions: sessionsForExport,
     };
   }

@@ -1,4 +1,6 @@
 (() => {
+  type Platform = "chatgpt" | "moltbot_webchat";
+
   type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
 
   type CopyEventMetadata = {
@@ -13,11 +15,28 @@
   const DEBUG_COUNTS = false;
   const DEBUG_RECORDER = false;
 
+  const host = location.host;
+
+  const isChatgpt =
+    host === "chatgpt.com" ||
+    host === "www.chatgpt.com" ||
+    host.endsWith(".chatgpt.com") ||
+    host === "chat.openai.com";
+
+  const isMoltbot =
+    host === "localhost:18789" || host === "127.0.0.1:18789";
+
   type FeedbackEventKind = "feedback_good" | "feedback_bad";
 
   type FeedbackEventMetadata = {
     site: "chatgpt" | "other";
     messageId?: string;
+  };
+
+  type LlmResponseEventMetadata = {
+    charCount: number;
+    latencyMs?: number;
+    turnIndex: number;
   };
 
   type SessionMetrics = {
@@ -26,12 +45,19 @@
   };
 
   type EventRecord = {
-    type: "page_visit" | "user_prompt" | "copy_output" | "feedback_good" | "feedback_bad";
-    site: "chatgpt";
+    type:
+      | "page_visit"
+      | "user_prompt"
+      | "llm_response"
+      | "copy_output"
+      | "feedback_good"
+      | "feedback_bad";
+    platform: Platform;
+    site: "chatgpt" | "other";
     url: string;
     timestamp: string;
     sessionId: string;
-    metadata?: CopyEventMetadata | FeedbackEventMetadata;
+    metadata?: CopyEventMetadata | FeedbackEventMetadata | LlmResponseEventMetadata;
   };
 
   if (DEBUG_RECORDER) {
@@ -40,6 +66,9 @@
 
   const tabSessionSuffix = Math.random().toString(36).slice(2);
   const sessionMetricsById = new Map<string, SessionMetrics>();
+  const lastUserPromptAtBySession = new Map<string, number>();
+  const turnIndexBySession = new Map<string, number>();
+  const recentUserTextBySession = new Map<string, { text: string; at: number }>();
   const countedAssistantMessageIds = new Set<string>();
   const countedAssistantMessageEls = new WeakSet<HTMLElement>();
   const pendingAssistantMessageEls = new WeakSet<HTMLElement>();
@@ -79,7 +108,17 @@
     }
   }
 
-  function deriveSessionId(): string {
+  function getMoltbotSessionIdFromUrl(url: string = location.href): string | null {
+    try {
+      const u = new URL(url);
+      const sessionParam = u.searchParams.get("session");
+      return sessionParam ? sessionParam.trim() : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function deriveChatGptSessionId(): string {
     // Prefer conversation scoped session ids when a conversation is active.
     const convId = getChatGptConversationIdFromUrl();
     if (convId) {
@@ -88,6 +127,21 @@
 
     // Fallback: tab scoped session id
     return `chatgpt-tab-${tabSessionSuffix}`;
+  }
+
+  function deriveMoltbotSessionId(): string {
+    const session = getMoltbotSessionIdFromUrl();
+    if (session) {
+      return `moltbot-s-${session}`;
+    }
+    return `moltbot-tab-${tabSessionSuffix}`;
+  }
+
+  function getOrCreateSessionId(platform: Platform): string {
+    if (platform === "moltbot_webchat") {
+      return deriveMoltbotSessionId();
+    }
+    return deriveChatGptSessionId();
   }
 
   function ensureSessionMetrics(sessionId: string) {
@@ -109,7 +163,8 @@
     chrome.storage.local.set({ neaAgoraSessionMetrics: serialized });
   }
 
-  function updateSessionTitle(sessionId: string) {
+  function updateSessionTitle(sessionId: string, platform: Platform) {
+    if (platform !== "chatgpt") return;
     let title = "";
 
     const titleEl = document.querySelector(
@@ -183,10 +238,55 @@
     }
   }
 
+  function recordUserPrompt(platform: Platform, messageText: string) {
+    const sessionId = getOrCreateSessionId(platform);
+    const trimmed = messageText.trim();
+    if (!trimmed) return;
+    const recent = recentUserTextBySession.get(sessionId);
+    const now = Date.now();
+    if (recent && recent.text === trimmed && now - recent.at < 2000) {
+      return;
+    }
+    recentUserTextBySession.set(sessionId, { text: trimmed, at: now });
+    recordEvent("user_prompt", undefined, sessionId, platform);
+    incrementUserMessageCount(sessionId, trimmed);
+    lastUserPromptAtBySession.set(sessionId, Date.now());
+    const nextTurn = (turnIndexBySession.get(sessionId) ?? 0) + 1;
+    turnIndexBySession.set(sessionId, nextTurn);
+  }
+
+  function recordAssistantResponse(
+    platform: Platform,
+    messageText: string,
+    sessionId: string,
+    messageId?: string
+  ) {
+    const text = messageText.trim();
+    if (!text) return;
+    const now = Date.now();
+    const lastPromptAt = lastUserPromptAtBySession.get(sessionId);
+    const latencyMs = lastPromptAt != null ? now - lastPromptAt : 0;
+    const turnIndex = turnIndexBySession.get(sessionId) ?? 0;
+
+    recordEvent(
+      "llm_response",
+      {
+        charCount: text.length,
+        latencyMs,
+        turnIndex,
+      },
+      sessionId,
+      platform
+    );
+
+    incrementAssistantMessageCount(sessionId, messageId);
+  }
+
   function recordEvent(
     type: EventRecord["type"],
     metadata?: EventRecord["metadata"],
-    sessionIdOverride?: string
+    sessionIdOverride?: string,
+    platformOverride?: Platform
   ) {
     try {
       // If the extension context is invalid, bail out early
@@ -200,15 +300,18 @@
         }
         return;
       }
+    const platform =
+      platformOverride ?? (isMoltbot ? "moltbot_webchat" : "chatgpt");
     const newEvent: EventRecord = {
       type,
-      site: "chatgpt",
+      platform,
+      site: platform === "chatgpt" ? "chatgpt" : "other",
       url: window.location.href,
       timestamp: new Date().toISOString(),
-      sessionId: sessionIdOverride ?? deriveSessionId(),
+      sessionId: sessionIdOverride ?? getOrCreateSessionId(platform),
       metadata,
     };
-    updateSessionTitle(newEvent.sessionId);
+    updateSessionTitle(newEvent.sessionId, platform);
 
       // Safe debug log – this will not crash the script
       if (typeof console !== "undefined" && console && typeof console.log === "function") {
@@ -244,14 +347,155 @@
   }
 
   function isChatGptHost() {
-    const host = window.location.hostname;
-    return host === "chatgpt.com" || host.endsWith(".chatgpt.com") || host === "chat.openai.com";
+    return isChatgpt;
   }
 
   function isChatGptConversationPage() {
     // For v0.3, treat any ChatGPT host as eligible.
-    // Session scoping is handled by deriveSessionId() per tab.
+    // Session scoping is handled by getOrCreateSessionId("chatgpt") per tab.
     return isChatGptHost();
+  }
+
+  const MOLTBOT_CHAT_CONTAINER_SELECTORS = [
+    ".chat-thread",
+    ".chat-messages",
+    ".chat-list",
+    ".chat-scroll",
+    "#chat-messages",
+    "main",
+  ];
+
+  const MOLTBOT_USER_GROUP_SELECTOR = ".chat-group.user";
+  const MOLTBOT_BOT_GROUP_SELECTOR = ".chat-group.assistant";
+  const MOLTBOT_BUBBLE_SELECTOR = ".chat-bubble";
+
+  function findFirstElement(
+    selectors: string[],
+    root: Document | HTMLElement = document
+  ): HTMLElement | null {
+    for (const selector of selectors) {
+      const found = root.querySelector(selector);
+      if (found instanceof HTMLElement) {
+        return found;
+      }
+    }
+    return null;
+  }
+
+  function findClosestMatch(node: Node, selector: string): HTMLElement | null {
+    if (node instanceof HTMLElement) {
+      if (node.matches(selector)) return node;
+      const closest = node.closest(selector);
+      if (closest instanceof HTMLElement) return closest;
+    }
+    const parent = node.parentElement;
+    if (!parent) return null;
+    const closest = parent.closest(selector);
+    return closest instanceof HTMLElement ? closest : null;
+  }
+
+  function extractMoltbotMessageText(bubbleEl: HTMLElement): string {
+    const textEl = bubbleEl.querySelector(".chat-text");
+    if (textEl instanceof HTMLElement) {
+      return textEl.innerText.trim();
+    }
+    return bubbleEl.innerText.trim();
+  }
+
+  function collectMoltbotBubbles(node: Node): HTMLElement[] {
+    const results: HTMLElement[] = [];
+    if (node instanceof HTMLElement) {
+      if (node.matches(MOLTBOT_BUBBLE_SELECTOR)) {
+        results.push(node);
+      }
+      node
+        .querySelectorAll(MOLTBOT_BUBBLE_SELECTOR)
+        .forEach((el) => {
+          if (el instanceof HTMLElement) results.push(el);
+        });
+    }
+    return results;
+  }
+
+  function findMoltbotContainer(): HTMLElement | null {
+    const direct = findFirstElement(MOLTBOT_CHAT_CONTAINER_SELECTORS);
+    if (direct) return direct;
+
+    const groups = Array.from(document.querySelectorAll(".chat-group")).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement
+    );
+    if (groups.length === 0) return null;
+
+    for (const group of groups) {
+      let current: HTMLElement | null = group.parentElement;
+      while (current && current !== document.body) {
+        const count = current.querySelectorAll(".chat-group").length;
+        if (count >= 2) {
+          return current;
+        }
+        current = current.parentElement;
+      }
+    }
+
+    return groups[0].parentElement ?? null;
+  }
+
+  function setupMoltbotObserver(attempt: number = 0) {
+    const container = findMoltbotContainer();
+    if (!container) {
+      if (attempt < 10) {
+        setTimeout(() => setupMoltbotObserver(attempt + 1), 1000);
+      } else {
+        console.warn("[neaagora] MoltBot chat container not found");
+      }
+      return;
+    }
+
+    const seenUserBubbles = new WeakSet<HTMLElement>();
+    const seenAssistantBubbles = new WeakSet<HTMLElement>();
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        const nodes: Node[] =
+          mutation.type === "childList"
+            ? Array.from(mutation.addedNodes)
+            : [mutation.target];
+
+        for (const node of nodes) {
+          const bubbles = collectMoltbotBubbles(node);
+          for (const bubble of bubbles) {
+            const userGroup = bubble.closest(MOLTBOT_USER_GROUP_SELECTOR);
+            const botGroup = bubble.closest(MOLTBOT_BOT_GROUP_SELECTOR);
+
+            if (userGroup && !seenUserBubbles.has(bubble)) {
+              const text = extractMoltbotMessageText(bubble);
+              if (text) {
+                seenUserBubbles.add(bubble);
+                recordUserPrompt("moltbot_webchat", text);
+              }
+              continue;
+            }
+
+            if (botGroup && !seenAssistantBubbles.has(bubble)) {
+              const text = extractMoltbotMessageText(bubble);
+              if (text) {
+                seenAssistantBubbles.add(bubble);
+                const sessionId = getOrCreateSessionId("moltbot_webchat");
+                recordAssistantResponse("moltbot_webchat", text, sessionId);
+              }
+            }
+          }
+        }
+      }
+    });
+
+    observer.observe(container, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    console.log("[neaagora] MoltBot observer attached");
   }
 
   function getSelectionContainer(selection: Selection): HTMLElement | null {
@@ -353,7 +597,7 @@
         countedAssistantMessageEls.add(messageEl);
       }
 
-      const sessionId = deriveSessionId();
+      const sessionId = getOrCreateSessionId("chatgpt");
       if (DEBUG_COUNTS) {
         console.debug(
           "[nea-agora] llmMessageCount++",
@@ -361,7 +605,12 @@
           sessionMetricsById.get(sessionId)?.llmMessageCount
         );
       }
-      incrementAssistantMessageCount(sessionId, messageId);
+      recordAssistantResponse(
+        "chatgpt",
+        messageEl.innerText ?? "",
+        sessionId,
+        messageId
+      );
     }, 700);
   }
 
@@ -432,8 +681,8 @@
   ) {
     if (!isChatGptConversationPage()) return;
 
-    // v0.2 already guarantees a stable per-tab sessionId via deriveSessionId.
-    const sessionId = deriveSessionId();
+    // v0.2 already guarantees a stable per-tab sessionId.
+    const sessionId = getOrCreateSessionId("chatgpt");
 
     recordEvent("copy_output", metadata, sessionId);
   }
@@ -490,7 +739,7 @@
     const charCount = text.length;
     if (!charCount) return;
 
-    const sessionId = deriveSessionId();
+    const sessionId = getOrCreateSessionId("chatgpt");
 
     const messageId = resolveMessageId(messageEl);
 
@@ -524,7 +773,7 @@
     const charCount = text.length;
     if (!charCount) return;
 
-    const sessionId = deriveSessionId();
+    const sessionId = getOrCreateSessionId("chatgpt");
 
     const messageEl = findAssistantMessageElement(codeContainer);
     const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
@@ -545,7 +794,7 @@
   function handleFeedbackClick(buttonEl: HTMLElement, kind: FeedbackEventKind) {
     if (!isChatGptHost()) return;
 
-    const sessionId = deriveSessionId();
+    const sessionId = getOrCreateSessionId("chatgpt");
 
     const messageEl = findAssistantMessageElement(buttonEl);
     const messageId = messageEl ? resolveMessageId(messageEl) : undefined;
@@ -557,56 +806,101 @@
 
     recordEvent(kind, metadata, sessionId);
   }
-  
-  recordEvent("page_visit");
-  bindGlobalPromptListeners();
-  document.addEventListener("copy", handleCopyEvent, true);
-  document.addEventListener(
-    "click",
-    (event) => {
-      const target = event.target as HTMLElement | null;
-      if (!target) return;
 
-      if (!isChatGptHost()) return;
+  function emitMoltbotCopyEvent(
+    trigger: CopyTrigger,
+    text: string
+  ) {
+    const normalized = text.trim();
+    if (!normalized) return;
 
-      const fullReplyButton = target.closest<HTMLElement>(
-        "button[data-testid='copy-turn-action-button'], button[aria-label='Copy response'], button[aria-label='Copy reply']"
-      );
+    const metadata: CopyEventMetadata = {
+      site: "other",
+      charCount: normalized.length,
+      isCodeLike: false,
+      trigger,
+    };
 
-      const copyCodeButton = !fullReplyButton && target.closest<HTMLElement>(
-        "button[aria-label='Copy'], button[aria-label='Copy code']"
-      );
+    recordEvent(
+      "copy_output",
+      metadata,
+      getOrCreateSessionId("moltbot_webchat"),
+      "moltbot_webchat"
+    );
+  }
 
-      
-      if (fullReplyButton) {
-        handleCopyFullReplyClick(fullReplyButton);
-        return;
-      }
-      if (copyCodeButton) {
-        handleCopyCodeClick(copyCodeButton);
-        return;
-      }
+  function handleMoltbotCopyButtonClick(buttonEl: HTMLElement) {
+    const bubble = buttonEl.closest<HTMLElement>(".chat-bubble");
+    if (!bubble) return;
+    const textEl = bubble.querySelector(".chat-text");
+    const text =
+      (textEl instanceof HTMLElement ? textEl.innerText : bubble.innerText) ?? "";
+    emitMoltbotCopyEvent("button_full_reply", text);
+  }
 
-      const thumbsUpButton = target.closest<HTMLElement>(
-        "button[data-testid='good-response-turn-action-button'], button[aria-label='Good response'], button[aria-label='Thumbs up']"
-      );
+  function handleMoltbotSelectionCopy() {
+    const selection = window.getSelection();
+    if (!selection) return;
+    const text = selection.toString();
+    if (!text || !text.trim()) return;
+    const container = getSelectionContainer(selection);
+    if (!container) return;
+    if (!container.closest(".chat-bubble")) return;
+    emitMoltbotCopyEvent("selection", text);
+  }
 
-      const thumbsDownButton = target.closest<HTMLElement>(
-        "button[data-testid='bad-response-turn-action-button'], button[aria-label='Bad response'], button[aria-label='Thumbs down']"
-      );
+  function setupChatgptObserver() {
+    recordEvent("page_visit", undefined, undefined, "chatgpt");
+    bindGlobalPromptListeners();
+    document.addEventListener("copy", handleCopyEvent, true);
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target as HTMLElement | null;
+        if (!target) return;
 
-      if (thumbsUpButton) {
-        handleFeedbackClick(thumbsUpButton, "feedback_good");
-        return;
-      }
-      
-      if (thumbsDownButton) {
-        handleFeedbackClick(thumbsDownButton, "feedback_bad");
-        return;
-      }
-    },
-    true
-  );
+        if (!isChatGptHost()) return;
+
+        const fullReplyButton = target.closest<HTMLElement>(
+          "button[data-testid='copy-turn-action-button'], button[aria-label='Copy response'], button[aria-label='Copy reply']"
+        );
+
+        const copyCodeButton = !fullReplyButton && target.closest<HTMLElement>(
+          "button[aria-label='Copy'], button[aria-label='Copy code']"
+        );
+
+        
+        if (fullReplyButton) {
+          handleCopyFullReplyClick(fullReplyButton);
+          return;
+        }
+        if (copyCodeButton) {
+          handleCopyCodeClick(copyCodeButton);
+          return;
+        }
+
+        const thumbsUpButton = target.closest<HTMLElement>(
+          "button[data-testid='good-response-turn-action-button'], button[aria-label='Good response'], button[aria-label='Thumbs up']"
+        );
+
+        const thumbsDownButton = target.closest<HTMLElement>(
+          "button[data-testid='bad-response-turn-action-button'], button[aria-label='Bad response'], button[aria-label='Thumbs down']"
+        );
+
+        if (thumbsUpButton) {
+          handleFeedbackClick(thumbsUpButton, "feedback_good");
+          return;
+        }
+        
+        if (thumbsDownButton) {
+          handleFeedbackClick(thumbsDownButton, "feedback_bad");
+          return;
+        }
+      },
+      true
+    );
+    startAssistantObserver();
+  }
 
   const boundForms = new WeakSet<HTMLFormElement>();
   const boundButtons = new WeakSet<HTMLButtonElement>();
@@ -625,9 +919,7 @@
           () => {
             const text = findChatInputText(form);
             if (!text.trim()) return;
-            const sessionId = deriveSessionId();
-            recordEvent("user_prompt");
-            incrementUserMessageCount(sessionId, text);
+            recordUserPrompt("chatgpt", text);
           },
           true
         );
@@ -646,9 +938,7 @@
         () => {
           const text = findChatInputText(root);
           if (!text.trim()) return;
-          const sessionId = deriveSessionId();
-          recordEvent("user_prompt");
-          incrementUserMessageCount(sessionId, text);
+          recordUserPrompt("chatgpt", text);
         },
         true
       );
@@ -682,9 +972,7 @@
         }
         const text = findChatInputText(form);
         if (!text.trim()) return;
-        const sessionId = deriveSessionId();
-        recordEvent("user_prompt");
-        incrementUserMessageCount(sessionId, text);
+        recordUserPrompt("chatgpt", text);
         if (DEBUG_RECORDER) {
           console.debug("[Nea Agora Recorder] user message detected (submit)");
         }
@@ -732,9 +1020,7 @@
         }
         const text = findChatInputText(active);
         if (!text.trim()) return;
-        const sessionId = deriveSessionId();
-        recordEvent("user_prompt");
-        incrementUserMessageCount(sessionId, text);
+        recordUserPrompt("chatgpt", text);
         // console.debug("[Nea Agora Recorder] user message detected (enter)");
       },
       true
@@ -791,7 +1077,26 @@
     }, 1000);
   }
 
-  startAssistantObserver();
+  if (isChatgpt) {
+    setupChatgptObserver();
+  }
+
+  if (isMoltbot) {
+    recordEvent("page_visit", undefined, undefined, "moltbot_webchat");
+    setupMoltbotObserver();
+    document.addEventListener("copy", handleMoltbotSelectionCopy, true);
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target as HTMLElement | null;
+        if (!target) return;
+        const copyButton = target.closest<HTMLElement>(".chat-copy-btn");
+        if (!copyButton) return;
+        handleMoltbotCopyButtonClick(copyButton);
+      },
+      true
+    );
+  }
 
 
   //const observer = new MutationObserver(() => {
@@ -800,3 +1105,4 @@
 
   // observer.observe(document.documentElement, { childList: true, subtree: true,  });
 })();
+

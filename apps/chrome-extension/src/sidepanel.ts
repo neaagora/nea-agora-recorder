@@ -1,7 +1,10 @@
 (() => {
+  type Platform = "chatgpt" | "moltbot_webchat";
+
   type EventKind =
     | "page_visit"
     | "user_prompt"
+    | "llm_response"
     | "copy_output"
     | "feedback_good"
     | "feedback_bad"
@@ -25,13 +28,20 @@
     messageId?: string;
   };
 
+  type LlmResponseEventMetadata = {
+    charCount: number;
+    latencyMs?: number;
+    turnIndex: number;
+  };
+
   type EventRecord = {
     type: EventKind;
-    site: "chatgpt";
+    platform: Platform;
+    site: "chatgpt" | "other";
     url: string;
     timestamp: string;
     sessionId: string;
-    metadata?: CopyEventMetadata | FeedbackEventMetadata;
+    metadata?: CopyEventMetadata | FeedbackEventMetadata | LlmResponseEventMetadata;
     scope?: string;
     sentiment?: "good" | "bad";
     note?: string;
@@ -49,6 +59,9 @@
   type SessionMetrics = {
     userMessageCount: number;
     llmMessageCount: number;
+    avgResponseTimeMs?: number;
+    p95ResponseTimeMs?: number;
+    maxResponseTimeMs?: number;
   };
 
   interface SessionSummary {
@@ -61,12 +74,19 @@
     outcome: string | null;
     humanOverrideNeeded: boolean | null;
     isPartialHistory: boolean;
+    responseMetrics?: {
+      avgResponseTimeMs?: number;
+      p95ResponseTimeMs?: number;
+      maxResponseTimeMs?: number;
+    };
     title?: string | null;
   }
 
   interface InteractionSession {
     sessionId: string;
     sessionEvents: EventRecord[];
+    platform: Platform;
+    metrics: SessionMetrics;
     summary: SessionSummary;
   }
 
@@ -83,6 +103,23 @@
         return match[1];
       }
       return null;
+    } catch {
+      return null;
+    }
+  }
+
+  function extractMoltbotSessionId(url: string | undefined): string | null {
+    if (!url) return null;
+    try {
+      const u = new URL(url);
+      if (
+        u.host !== "localhost:18789" &&
+        u.host !== "127.0.0.1:18789"
+      ) {
+        return null;
+      }
+      const sessionParam = u.searchParams.get("session");
+      return sessionParam ? sessionParam.trim() : null;
     } catch {
       return null;
     }
@@ -112,6 +149,56 @@
     URL.revokeObjectURL(url);
   }
 
+  function computeResponseMetrics(events: EventRecord[]) {
+    const latencies = events
+      .filter((e) => e.type === "llm_response")
+      .map((e) => (e.metadata as LlmResponseEventMetadata | undefined)?.latencyMs)
+      .filter((v): v is number => typeof v === "number");
+
+    let avgResponseTimeMs: number | undefined;
+    let p95ResponseTimeMs: number | undefined;
+    let maxResponseTimeMs: number | undefined;
+
+    if (latencies.length) {
+      const sorted = [...latencies].sort((a, b) => a - b);
+      const sum = latencies.reduce((a, b) => a + b, 0);
+      avgResponseTimeMs = sum / latencies.length;
+      maxResponseTimeMs = sorted[sorted.length - 1];
+      const p95Index = Math.floor(0.95 * (sorted.length - 1));
+      p95ResponseTimeMs = sorted[p95Index];
+    }
+
+    return { avgResponseTimeMs, p95ResponseTimeMs, maxResponseTimeMs };
+  }
+
+  function computeMessageCounts(events: EventRecord[]) {
+    let userMessageCount = 0;
+    let llmMessageCount = 0;
+
+    for (const ev of events) {
+      if (ev.type === "user_prompt") userMessageCount += 1;
+      if (ev.type === "llm_response") llmMessageCount += 1;
+    }
+
+    return { userMessageCount, llmMessageCount };
+  }
+
+  function formatMs(ms: number | undefined) {
+    if (ms == null || !Number.isFinite(ms)) return "";
+    if (ms >= 1000) {
+      return `${(ms / 1000).toFixed(1)} s`;
+    }
+    return `${Math.round(ms)} ms`;
+  }
+
+  function formatPlatform(platform: Platform) {
+    return platform === "moltbot_webchat" ? "MoltBot (local)" : "ChatGPT";
+  }
+
+  function formatPlatformShort(platform: Platform) {
+    return platform === "moltbot_webchat" ? "MoltBot" : "ChatGPT";
+  }
+
   async function buildServiceRecordJson(): Promise<unknown> {
     return new Promise((resolve) => {
       chrome.storage.local.get(
@@ -126,15 +213,23 @@
             (data.neaAgoraSessionMetrics as Record<string, SessionMetrics>) ?? {};
 
           const sessions = buildSessions(events, flags, metrics);
-          const sessionsForExport = sessions.filter(
-            (session) => !isTrivialTabSession(session)
-          );
+          const shouldKeepSession = (session: InteractionSession): boolean => {
+            const m = session.metrics ?? {};
+            const hasMessages =
+              (m.userMessageCount ?? 0) > 0 || (m.llmMessageCount ?? 0) > 0;
+            if (hasMessages) return true;
+            return session.sessionEvents.some((e) => e.type !== "page_visit");
+          };
+
+          const sessionsForExport = sessions
+            .filter((session) => !isTrivialTabSession(session))
+            .filter(shouldKeepSession);
 
           const record = {
             recordType: "agent_service_record",
             version: "0.1.0",
             subject: {
-              agent: "chatgpt.com",
+              agent: "multi",
               surface: "chat",
             },
             observer: {
@@ -143,19 +238,19 @@
               localOnly: true,
             },
             generatedAt: new Date().toISOString(),
-            agentLabel: "chatgpt.com",
+            agentLabel: "multi",
             sessions: sessionsForExport.map((session) => ({
               sessionId: session.sessionId,
-              platform: "chatgpt",
+              platform: session.platform,
               startedAt: session.sessionEvents[0]?.timestamp,
               endedAt:
                 session.sessionEvents[session.sessionEvents.length - 1]?.timestamp,
-              toolLabel: "ChatGPT in Chrome",
+              toolLabel:
+                session.platform === "moltbot_webchat"
+                  ? "MoltBot (local)"
+                  : "ChatGPT in Chrome",
               events: session.sessionEvents,
-              metrics: {
-                llmMessageCount: session.summary.llmMessageCount,
-                userMessageCount: session.summary.userMessageCount,
-              },
+              metrics: session.metrics,
               summary: session.summary,
             })),
           };
@@ -168,6 +263,8 @@
 
   function appendScopedFeedbackEvent(
     sessionId: string,
+    platform: Platform,
+    url: string,
     sentiment: "good" | "bad",
     scope: string,
     note: string
@@ -182,8 +279,9 @@
 
         const event: EventRecord = {
           type: "feedback_partial",
-          site: "chatgpt",
-          url: "",
+          platform,
+          site: platform === "chatgpt" ? "chatgpt" : "other",
+          url,
           timestamp: now,
           sessionId,
           scope,
@@ -250,10 +348,18 @@
       const first = sessionEvents[0];
       const last = sessionEvents[sessionEvents.length - 1];
 
-      const metricsForSession = metrics[sessionId] ?? {
-        userMessageCount: 0,
-        llmMessageCount: 0,
+      const messageCounts = computeMessageCounts(sessionEvents);
+      const metricsForSession = {
+        ...(metrics[sessionId] ?? {}),
+        ...messageCounts,
       };
+      const responseMetrics = computeResponseMetrics(sessionEvents);
+      const sessionMetrics: SessionMetrics = {
+        ...metricsForSession,
+        ...responseMetrics,
+      };
+      const platform =
+        sessionEvents.find((ev) => ev.platform)?.platform ?? "chatgpt";
 
       const copyEventsTotal = sessionEvents.filter(
         (e) => e.type === "copy_output"
@@ -280,8 +386,8 @@
       const title = (f.title as string | undefined) ?? null;
 
       const summary: SessionSummary = {
-        userMessageCount: metricsForSession.userMessageCount,
-        llmMessageCount: metricsForSession.llmMessageCount,
+        userMessageCount: messageCounts.userMessageCount,
+        llmMessageCount: messageCounts.llmMessageCount,
         copyEventsTotal,
         feedbackGoodCount,
         feedbackBadCount,
@@ -289,10 +395,11 @@
         outcome,
         humanOverrideNeeded,
         isPartialHistory,
+        responseMetrics,
         title,
       };
 
-      sessions.push({ sessionId, sessionEvents, summary });
+      sessions.push({ sessionId, sessionEvents, summary, platform, metrics: sessionMetrics });
     }
 
     sessions.sort((a, b) => {
@@ -362,7 +469,7 @@
             weeklySuccess.textContent = "✓ Success: 0%";
             weeklyAbandoned.textContent = "⛔ Abandoned: 0%";
             weeklyEscalated.textContent = "🧑‍💻 Escalated: 0%";
-            weeklyMeta.textContent = "Sessions recorded: 0 - Platforms: ChatGPT";
+            weeklyMeta.textContent = "Sessions recorded: 0 - Platforms: -";
           }
           return;
         }
@@ -412,18 +519,28 @@
           const total = totalWeekly;
           const pct = (n: number) =>
             total === 0 ? 0 : Math.round((n / total) * 100);
+          const platformLabels = Array.from(
+            new Set(weeklySessions.map((session) => formatPlatform(session.platform)))
+          );
+          const platformLabelText =
+            platformLabels.length > 0 ? platformLabels.join(", ") : "-";
 
           weeklyTitle.textContent = "This week";
           weeklySuccess.textContent = `✓ Success: ${pct(countByOutcome.success)}%`;
           weeklyAbandoned.textContent = `⛔ Abandoned: ${pct(countByOutcome.abandoned)}%`;
           weeklyEscalated.textContent = `🧑‍💻 Escalated: ${pct(countByOutcome.escalated_to_human)}%`;
-          weeklyMeta.textContent = `Sessions recorded: ${total} - Platforms: ChatGPT`;
+          weeklyMeta.textContent = `Sessions recorded: ${total} - Platforms: ${platformLabelText}`;
         }
 
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           const tab = tabs[0];
           const convId = extractConversationId(tab?.url);
-          const activeSessionId = convId ? `chatgpt-c-${convId}` : null;
+          const moltbotSession = extractMoltbotSessionId(tab?.url);
+          const activeSessionId = convId
+            ? `chatgpt-c-${convId}`
+            : moltbotSession
+            ? `moltbot-s-${moltbotSession}`
+            : null;
 
           let current: InteractionSession | null = null;
 
@@ -486,9 +603,10 @@
                   : s.outcome === "escalated_to_human"
                   ? "🧑‍💻"
                   : "-";
+              const platformLabel = formatPlatformShort(sObj.platform);
 
               metaSpan.textContent =
-                `${outcomeLabel} u:${s.userMessageCount} ` +
+                `${platformLabel} ${outcomeLabel} u:${s.userMessageCount} ` +
                 `llm:${s.llmMessageCount} ` +
                 `c:${s.copyEventsTotal}`;
 
@@ -509,13 +627,27 @@
             0,
             Math.round((s.approxDurationMs ?? 0) / 1000)
           );
+          const platformLabel = formatPlatform(current.platform);
+          const responseMetrics = s.responseMetrics;
+          let responseLabel = "";
+          if (responseMetrics?.avgResponseTimeMs != null) {
+            responseLabel = ` • Avg response ${formatMs(responseMetrics.avgResponseTimeMs)}`;
+            if (responseMetrics.p95ResponseTimeMs != null) {
+              responseLabel += ` - p95 ${formatMs(responseMetrics.p95ResponseTimeMs)}`;
+            }
+            if (responseMetrics.maxResponseTimeMs != null) {
+              responseLabel += ` - max ${formatMs(responseMetrics.maxResponseTimeMs)}`;
+            }
+          }
 
           statusEl.textContent = `Sessions: ${sessions.length} | Events: ${events.length}`;
           const displayTitle =
             s.title && s.title.trim().length > 0 ? s.title : current.sessionId;
           headerEl.textContent =
             `${displayTitle} ` +
-            `(u:${s.userMessageCount} llm:${s.llmMessageCount} copies:${s.copyEventsTotal} ~${durationSec}s)`;
+            `(u:${s.userMessageCount} llm:${s.llmMessageCount} copies:${s.copyEventsTotal} ~${durationSec}s)` +
+            ` • ${platformLabel}` +
+            responseLabel;
 
           if (s.isPartialHistory) {
             headerEl.textContent += " [Partial history, joined late]";
@@ -603,8 +735,12 @@
 
           const tab = tabs[0];
           const convId = extractConversationId(tab?.url);
+          const moltbotSession = extractMoltbotSessionId(tab?.url);
           if (convId) {
             const sessionId = `chatgpt-c-${convId}`;
+            current = sessions.find((session) => session.sessionId === sessionId) ?? null;
+          } else if (moltbotSession) {
+            const sessionId = `moltbot-s-${moltbotSession}`;
             current = sessions.find((session) => session.sessionId === sessionId) ?? null;
           }
           if (!current) {
@@ -669,8 +805,12 @@
 
           const tab = tabs[0];
           const convId = extractConversationId(tab?.url);
+          const moltbotSession = extractMoltbotSessionId(tab?.url);
           if (convId) {
             const sessionId = `chatgpt-c-${convId}`;
+            current = sessions.find((session) => session.sessionId === sessionId) ?? null;
+          } else if (moltbotSession) {
+            const sessionId = `moltbot-s-${moltbotSession}`;
             current = sessions.find((session) => session.sessionId === sessionId) ?? null;
           }
           if (!current) {
@@ -680,6 +820,8 @@
 
           appendScopedFeedbackEvent(
             current.sessionId,
+            current.platform,
+            tab?.url ?? "",
             selectedSentiment,
             scope,
             note

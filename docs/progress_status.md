@@ -6,6 +6,28 @@ design decisions, and what is intentionally deferred.
 It is a living document.
 
 ---
+## v0.8 - Multi-Platform Service Records + Latency Metrics (DONE)
+
+-   Chrome extension now records **multi-session, multi-platform** interactions.
+
+-   Supported platforms:
+    -   ChatGPT (chatgpt.com)
+    -   Clawdbot / MoltBot WebChat (localhost gateway)
+
+-   Each session captures:
+    -   User prompts and LLM responses
+    -   Page visits, copy events, and feedback (good / partial)
+    -   Accurate message counts derived from events
+    -   Response time metrics:
+        -   average
+        -   p95
+        -   max
+
+-   Long-running sessions supported (hundreds of turns).
+-   Noise sessions filtered on export.
+-   Records produced as structured JSON service records suitable for audit, analysis, and visualization.
+
+Status: **Code complete. Ready for demo and iteration.**
 
 ## v0.7 — Outcome Anchored Evaluation Layer
 
