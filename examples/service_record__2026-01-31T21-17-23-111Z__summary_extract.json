@@ -1,0 +1,153 @@
+{
+  "recordType": "agent_service_record",
+  "version": "0.1.0",
+  "subject": {
+    "agent": "multi",
+    "surface": "chat"
+  },
+  "observer": {
+    "tool": "nea-agora-recorder",
+    "environment": "chrome-extension",
+    "localOnly": true
+  },
+  "generatedAt": "2026-01-31T21:17:23.110Z",
+  "agentLabel": "multi",
+  "sessions": [
+    {
+      "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+      "platform": "claude_web",
+      "startedAt": "2026-01-31T21:16:52.135Z",
+      "endedAt": "2026-01-31T21:17:11.733Z",
+      "toolLabel": "Claude in Chrome",
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 1,
+        "avgResponseTimeMs": 1240,
+        "p95ResponseTimeMs": 0,
+        "maxResponseTimeMs": 2480
+      },
+      "summary": {
+        "userMessageCount": 1,
+        "llmMessageCount": 2,
+        "copyEventsTotal": 1,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 19598,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 1240,
+          "p95ResponseTimeMs": 0,
+          "maxResponseTimeMs": 2480
+        },
+        "title": "One word test",
+        "modelsUsed": [
+          "Haiku 4.5"
+        ]
+      }
+    },
+    {
+      "sessionId": "gemini-app-44892699e2ca6236",
+      "platform": "gemini_web",
+      "startedAt": "2026-01-31T21:04:04.630Z",
+      "endedAt": "2026-01-31T21:15:19.700Z",
+      "toolLabel": "Gemini in Chrome",
+      "metrics": {
+        "llmMessageCount": 5,
+        "userMessageCount": 2,
+        "avgResponseTimeMs": 1295,
+        "p95ResponseTimeMs": 2284,
+        "maxResponseTimeMs": 2298
+      },
+      "summary": {
+        "userMessageCount": 2,
+        "llmMessageCount": 5,
+        "copyEventsTotal": 1,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 675070,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 1295,
+          "p95ResponseTimeMs": 2284,
+          "maxResponseTimeMs": 2298
+        },
+        "title": "‎Google Gemini",
+        "modelsUsed": [
+          "Gemini 3 Fast"
+        ]
+      }
+    },
+    {
+      "sessionId": "gemini-app-a8f57fb05164305d",
+      "platform": "gemini_web",
+      "startedAt": "2026-01-31T21:03:44.642Z",
+      "endedAt": "2026-01-31T21:03:44.684Z",
+      "toolLabel": "Gemini in Chrome",
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 0,
+        "avgResponseTimeMs": 0,
+        "p95ResponseTimeMs": 0,
+        "maxResponseTimeMs": 0
+      },
+      "summary": {
+        "userMessageCount": 0,
+        "llmMessageCount": 2,
+        "copyEventsTotal": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 42,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 0,
+          "p95ResponseTimeMs": 0,
+          "maxResponseTimeMs": 0
+        },
+        "title": "Test Phase Inquiry",
+        "modelsUsed": [
+          "Gemini 3 Fast"
+        ]
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-31T11:13:30.336Z",
+      "endedAt": "2026-01-31T20:57:16.151Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "metrics": {
+        "llmMessageCount": 19,
+        "userMessageCount": 6,
+        "avgResponseTimeMs": 77462.73684210527,
+        "p95ResponseTimeMs": 128305,
+        "maxResponseTimeMs": 1201728
+      },
+      "summary": {
+        "userMessageCount": 6,
+        "llmMessageCount": 19,
+        "copyEventsTotal": 19,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 35025815,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 77462.73684210527,
+          "p95ResponseTimeMs": 128305,
+          "maxResponseTimeMs": 1201728
+        },
+        "title": "PPAs - v0.8.1 - Fast User Growth Strategy",
+        "modelsUsed": [
+          "ChatGPT 5.2"
+        ]
+      }
+    }
+  ]
+}

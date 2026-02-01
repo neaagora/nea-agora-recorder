@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces",
+    "summary": "node tools/print_summary.js",
+    "list": "node tools/print_summary.js --list"
   },
   "devDependencies": {
     "@types/chrome": "^0.1.33",

@@ -5,6 +5,12 @@ design decisions, and what is intentionally deferred.
 
 It is a living document.
 
+## v0.8.1 - Multi-Platform Service Record MVP
+
+v0.8.1 delivers a working, cross-platform AI Service Record recorder for real-world LLM usage.
+
+This release focuses on reliable data capture, session identity, and human-readable summaries across ChatGPT, Claude, Gemini, and local agents. It establishes a stable baseline for interpreting AI interactions before adding opinionated analysis or recommendations.
+
 ---
 ## v0.8 - Multi-Platform Service Records + Latency Metrics (DONE)
 

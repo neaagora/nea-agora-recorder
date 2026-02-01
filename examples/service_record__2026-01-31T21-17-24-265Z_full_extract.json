@@ -1,0 +1,1233 @@
+{
+  "recordType": "agent_service_record",
+  "version": "0.1.0",
+  "subject": {
+    "agent": "multi",
+    "surface": "chat"
+  },
+  "observer": {
+    "tool": "nea-agora-recorder",
+    "environment": "chrome-extension",
+    "localOnly": true
+  },
+  "generatedAt": "2026-01-31T21:17:24.265Z",
+  "agentLabel": "multi",
+  "sessions": [
+    {
+      "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+      "platform": "claude_web",
+      "startedAt": "2026-01-31T21:16:52.135Z",
+      "endedAt": "2026-01-31T21:17:11.733Z",
+      "toolLabel": "Claude in Chrome",
+      "events": [
+        {
+          "metadata": {
+            "charCount": 6,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Haiku 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+          "site": "other",
+          "timestamp": "2026-01-31T21:16:52.135Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/d1612e5c-f2f6-4705-98b5-c85db72815cf"
+        },
+        {
+          "model": "Haiku 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+          "site": "other",
+          "timestamp": "2026-01-31T21:17:07.295Z",
+          "type": "user_prompt",
+          "url": "https://claude.ai/chat/d1612e5c-f2f6-4705-98b5-c85db72815cf"
+        },
+        {
+          "metadata": {
+            "charCount": 5,
+            "latencyMs": 2480,
+            "turnIndex": 1
+          },
+          "model": "Haiku 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+          "site": "other",
+          "timestamp": "2026-01-31T21:17:09.775Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/d1612e5c-f2f6-4705-98b5-c85db72815cf"
+        },
+        {
+          "metadata": {
+            "charCount": 5,
+            "isCodeLike": false,
+            "site": "other"
+          },
+          "model": "Haiku 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+          "site": "other",
+          "timestamp": "2026-01-31T21:17:10.383Z",
+          "type": "copy_output",
+          "url": "https://claude.ai/chat/d1612e5c-f2f6-4705-98b5-c85db72815cf"
+        },
+        {
+          "model": "Haiku 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-d1612e5c-f2f6-4705-98b5-c85db72815cf",
+          "site": "other",
+          "timestamp": "2026-01-31T21:17:11.733Z",
+          "type": "thumbs_up",
+          "url": "https://claude.ai/chat/d1612e5c-f2f6-4705-98b5-c85db72815cf"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 1,
+        "avgResponseTimeMs": 1240,
+        "p95ResponseTimeMs": 0,
+        "maxResponseTimeMs": 2480
+      },
+      "summary": {
+        "userMessageCount": 1,
+        "llmMessageCount": 2,
+        "copyEventsTotal": 1,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 19598,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 1240,
+          "p95ResponseTimeMs": 0,
+          "maxResponseTimeMs": 2480
+        },
+        "title": "One word test",
+        "modelsUsed": [
+          "Haiku 4.5"
+        ]
+      }
+    },
+    {
+      "sessionId": "claude-chat-e392adce-bd6b-4b51-9477-a94c7e2f69b6",
+      "platform": "claude_web",
+      "startedAt": "2026-01-31T20:58:56.915Z",
+      "endedAt": "2026-01-31T21:16:09.071Z",
+      "toolLabel": "Claude in Chrome",
+      "events": [
+        {
+          "metadata": {
+            "charCount": 11,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-e392adce-bd6b-4b51-9477-a94c7e2f69b6",
+          "site": "other",
+          "timestamp": "2026-01-31T20:58:56.915Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/e392adce-bd6b-4b51-9477-a94c7e2f69b6"
+        },
+        {
+          "pageTitle": "Claude",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-e392adce-bd6b-4b51-9477-a94c7e2f69b6",
+          "site": "other",
+          "timestamp": "2026-01-31T20:59:02.453Z",
+          "type": "page_visit",
+          "url": "https://claude.ai/chat/e392adce-bd6b-4b51-9477-a94c7e2f69b6"
+        },
+        {
+          "metadata": {
+            "charCount": 11,
+            "isCodeLike": false,
+            "site": "other"
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-e392adce-bd6b-4b51-9477-a94c7e2f69b6",
+          "site": "other",
+          "timestamp": "2026-01-31T20:59:26.914Z",
+          "type": "copy_output",
+          "url": "https://claude.ai/chat/e392adce-bd6b-4b51-9477-a94c7e2f69b6"
+        },
+        {
+          "metadata": {
+            "charCount": 5,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-e392adce-bd6b-4b51-9477-a94c7e2f69b6",
+          "site": "other",
+          "timestamp": "2026-01-31T21:00:05.962Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/e392adce-bd6b-4b51-9477-a94c7e2f69b6"
+        },
+        {
+          "pageTitle": "Claude",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-e392adce-bd6b-4b51-9477-a94c7e2f69b6",
+          "site": "other",
+          "timestamp": "2026-01-31T21:16:09.071Z",
+          "type": "page_visit",
+          "url": "https://claude.ai/chat/e392adce-bd6b-4b51-9477-a94c7e2f69b6"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 0,
+        "avgResponseTimeMs": 0,
+        "p95ResponseTimeMs": 0,
+        "maxResponseTimeMs": 0
+      },
+      "summary": {
+        "userMessageCount": 0,
+        "llmMessageCount": 2,
+        "copyEventsTotal": 1,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 1032156,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 0,
+          "p95ResponseTimeMs": 0,
+          "maxResponseTimeMs": 0
+        },
+        "title": "Testing",
+        "modelsUsed": [
+          "Sonnet 4.5"
+        ]
+      }
+    },
+    {
+      "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+      "platform": "claude_web",
+      "startedAt": "2026-01-31T20:58:30.099Z",
+      "endedAt": "2026-01-31T21:15:59.404Z",
+      "toolLabel": "Claude in Chrome",
+      "events": [
+        {
+          "metadata": {
+            "charCount": 67,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+          "site": "other",
+          "timestamp": "2026-01-31T20:58:30.099Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/20387e32-bd1d-4fb0-b189-cdfccc7c9785"
+        },
+        {
+          "metadata": {
+            "charCount": 53,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+          "site": "other",
+          "timestamp": "2026-01-31T20:58:30.175Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/20387e32-bd1d-4fb0-b189-cdfccc7c9785"
+        },
+        {
+          "metadata": {
+            "charCount": 130,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+          "site": "other",
+          "timestamp": "2026-01-31T20:58:32.068Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/20387e32-bd1d-4fb0-b189-cdfccc7c9785"
+        },
+        {
+          "metadata": {
+            "charCount": 53,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Sonnet 4.5",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+          "site": "other",
+          "timestamp": "2026-01-31T20:58:32.111Z",
+          "type": "llm_response",
+          "url": "https://claude.ai/chat/20387e32-bd1d-4fb0-b189-cdfccc7c9785"
+        },
+        {
+          "pageTitle": "Claude",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+          "site": "other",
+          "timestamp": "2026-01-31T20:59:15.407Z",
+          "type": "page_visit",
+          "url": "https://claude.ai/chat/20387e32-bd1d-4fb0-b189-cdfccc7c9785"
+        },
+        {
+          "pageTitle": "Claude",
+          "platform": "claude_web",
+          "sessionId": "claude-chat-20387e32-bd1d-4fb0-b189-cdfccc7c9785",
+          "site": "other",
+          "timestamp": "2026-01-31T21:15:59.404Z",
+          "type": "page_visit",
+          "url": "https://claude.ai/chat/20387e32-bd1d-4fb0-b189-cdfccc7c9785"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 4,
+        "userMessageCount": 0,
+        "avgResponseTimeMs": 0,
+        "p95ResponseTimeMs": 0,
+        "maxResponseTimeMs": 0
+      },
+      "summary": {
+        "userMessageCount": 0,
+        "llmMessageCount": 4,
+        "copyEventsTotal": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 1049305,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 0,
+          "p95ResponseTimeMs": 0,
+          "maxResponseTimeMs": 0
+        },
+        "title": "Claude",
+        "modelsUsed": [
+          "Sonnet 4.5"
+        ]
+      }
+    },
+    {
+      "sessionId": "gemini-app-44892699e2ca6236",
+      "platform": "gemini_web",
+      "startedAt": "2026-01-31T21:04:04.630Z",
+      "endedAt": "2026-01-31T21:15:19.700Z",
+      "toolLabel": "Gemini in Chrome",
+      "events": [
+        {
+          "metadata": {
+            "charCount": 32,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:04.630Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "metadata": {
+            "charCount": 32,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:04.650Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:12.021Z",
+          "type": "user_prompt",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "metadata": {
+            "charCount": 102,
+            "latencyMs": 1893,
+            "turnIndex": 1
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:13.915Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:20.028Z",
+          "type": "thumbs_up",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "metadata": {
+            "charCount": 156,
+            "isCodeLike": false,
+            "site": "other"
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:21.123Z",
+          "type": "copy_output",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:05:06.165Z",
+          "type": "user_prompt",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "metadata": {
+            "charCount": 159,
+            "latencyMs": 2284,
+            "turnIndex": 2
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:05:08.450Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "metadata": {
+            "charCount": 159,
+            "latencyMs": 2298,
+            "turnIndex": 2
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:05:08.463Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        },
+        {
+          "pageTitle": "‎Google Gemini",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-44892699e2ca6236",
+          "site": "other",
+          "timestamp": "2026-01-31T21:15:19.700Z",
+          "type": "page_visit",
+          "url": "https://gemini.google.com/app/44892699e2ca6236"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 5,
+        "userMessageCount": 2,
+        "avgResponseTimeMs": 1295,
+        "p95ResponseTimeMs": 2284,
+        "maxResponseTimeMs": 2298
+      },
+      "summary": {
+        "userMessageCount": 2,
+        "llmMessageCount": 5,
+        "copyEventsTotal": 1,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 675070,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 1295,
+          "p95ResponseTimeMs": 2284,
+          "maxResponseTimeMs": 2298
+        },
+        "title": "‎Google Gemini",
+        "modelsUsed": [
+          "Gemini 3 Fast"
+        ]
+      }
+    },
+    {
+      "sessionId": "gemini-tab-53fsl16k7em",
+      "platform": "gemini_web",
+      "startedAt": "2026-01-31T21:03:37.330Z",
+      "endedAt": "2026-01-31T21:04:02.454Z",
+      "toolLabel": "Gemini in Chrome",
+      "events": [
+        {
+          "pageTitle": "‎Google Gemini",
+          "platform": "gemini_web",
+          "sessionId": "gemini-tab-53fsl16k7em",
+          "site": "other",
+          "timestamp": "2026-01-31T21:03:37.330Z",
+          "type": "page_visit",
+          "url": "https://gemini.google.com/app"
+        },
+        {
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-tab-53fsl16k7em",
+          "site": "other",
+          "timestamp": "2026-01-31T21:04:02.454Z",
+          "type": "user_prompt",
+          "url": "https://gemini.google.com/app"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 0,
+        "userMessageCount": 1
+      },
+      "summary": {
+        "userMessageCount": 1,
+        "llmMessageCount": 0,
+        "copyEventsTotal": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 25124,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {},
+        "title": "‎Google Gemini",
+        "modelsUsed": [
+          "Gemini 3 Fast"
+        ]
+      }
+    },
+    {
+      "sessionId": "gemini-app-a8f57fb05164305d",
+      "platform": "gemini_web",
+      "startedAt": "2026-01-31T21:03:44.642Z",
+      "endedAt": "2026-01-31T21:03:44.684Z",
+      "toolLabel": "Gemini in Chrome",
+      "events": [
+        {
+          "metadata": {
+            "charCount": 81,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-a8f57fb05164305d",
+          "site": "other",
+          "timestamp": "2026-01-31T21:03:44.642Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/a8f57fb05164305d"
+        },
+        {
+          "metadata": {
+            "charCount": 81,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "Gemini 3 Fast",
+          "platform": "gemini_web",
+          "sessionId": "gemini-app-a8f57fb05164305d",
+          "site": "other",
+          "timestamp": "2026-01-31T21:03:44.684Z",
+          "type": "llm_response",
+          "url": "https://gemini.google.com/app/a8f57fb05164305d"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 2,
+        "userMessageCount": 0,
+        "avgResponseTimeMs": 0,
+        "p95ResponseTimeMs": 0,
+        "maxResponseTimeMs": 0
+      },
+      "summary": {
+        "userMessageCount": 0,
+        "llmMessageCount": 2,
+        "copyEventsTotal": 0,
+        "feedbackGoodCount": 0,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 42,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 0,
+          "p95ResponseTimeMs": 0,
+          "maxResponseTimeMs": 0
+        },
+        "title": "Test Phase Inquiry",
+        "modelsUsed": [
+          "Gemini 3 Fast"
+        ]
+      }
+    },
+    {
+      "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+      "platform": "chatgpt",
+      "startedAt": "2026-01-31T11:13:30.336Z",
+      "endedAt": "2026-01-31T20:57:16.151Z",
+      "toolLabel": "ChatGPT in Chrome",
+      "events": [
+        {
+          "metadata": {
+            "charCount": 19,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:13:30.336Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:22:42.398Z",
+          "type": "user_prompt",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 49,
+            "latencyMs": 3847,
+            "turnIndex": 1
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:22:46.245Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "messageId": "conversation-turn-4",
+            "site": "chatgpt"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:23:48.535Z",
+          "type": "feedback_good",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:26:18.972Z",
+          "type": "user_prompt",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 100,
+            "latencyMs": 128305,
+            "turnIndex": 2
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:28:27.277Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:32:26.664Z",
+          "type": "user_prompt",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 14,
+            "isCodeLike": false,
+            "messageId": "a93f5ea1-6430-458e-842b-f8606ef0c136",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:33:24.144Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 75,
+            "isCodeLike": false,
+            "messageId": "a93f5ea1-6430-458e-842b-f8606ef0c136",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:33:44.816Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 131,
+            "latencyMs": 111297,
+            "turnIndex": 3
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:34:17.962Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 38,
+            "isCodeLike": false,
+            "messageId": "a93f5ea1-6430-458e-842b-f8606ef0c136",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:34:58.375Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 179,
+            "isCodeLike": false,
+            "messageId": "a93f5ea1-6430-458e-842b-f8606ef0c136",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:35:21.007Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 194,
+            "isCodeLike": false,
+            "messageId": "a93f5ea1-6430-458e-842b-f8606ef0c136",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:36:23.294Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 581,
+            "isCodeLike": false,
+            "messageId": "a93f5ea1-6430-458e-842b-f8606ef0c136",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:37:07.982Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 20,
+            "isCodeLike": true,
+            "messageId": "28dfffcc-bcb7-4c0a-8020-43293663a576",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:37:40.654Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 4191,
+            "isCodeLike": false,
+            "messageId": "28dfffcc-bcb7-4c0a-8020-43293663a576",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T11:39:55.909Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 507,
+            "isCodeLike": false,
+            "messageId": "28dfffcc-bcb7-4c0a-8020-43293663a576",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T12:01:17.012Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 624,
+            "isCodeLike": false,
+            "messageId": "28dfffcc-bcb7-4c0a-8020-43293663a576",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T12:01:37.259Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 5683,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T12:06:48.021Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 5683,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T12:55:45.676Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 189,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T12:59:39.322Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 7105,
+            "isCodeLike": true,
+            "messageId": "f2afcdf8-27d4-4889-8e97-ded80b47c6ad",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T13:00:34.052Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 8051,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T13:17:36.911Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 8051,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:38:15.623Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:49:33.642Z",
+          "type": "user_prompt",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 139,
+            "latencyMs": 10263,
+            "turnIndex": 1
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:49:43.906Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 1017,
+            "isCodeLike": false,
+            "messageId": "a08cc5b1-d91e-4bea-8ff6-de276b6ec917",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:50:27.873Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 5823,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:51:20.807Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:54:58.680Z",
+          "type": "user_prompt",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 141,
+            "latencyMs": 5730,
+            "turnIndex": 1
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:55:04.411Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 6627,
+            "isCodeLike": true,
+            "messageId": "b7b5100e-88d3-4d0b-af65-283bfa92abe1",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:56:00.287Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 98,
+            "isCodeLike": true,
+            "messageId": "b7b5100e-88d3-4d0b-af65-283bfa92abe1",
+            "site": "chatgpt",
+            "trigger": "button_code_block"
+          },
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T14:57:14.359Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 237,
+            "latencyMs": 1201728,
+            "turnIndex": 1
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T15:15:00.409Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 2599,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T15:58:39.907Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 2599,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:08:26.626Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 98,
+            "isCodeLike": false,
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:08:39.026Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 106,
+            "isCodeLike": false,
+            "messageId": "d374a1e9-b688-4de0-915f-aa1e8758a09a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:08:49.390Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 2599,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:10:51.857Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 53,
+            "isCodeLike": false,
+            "messageId": "d374a1e9-b688-4de0-915f-aa1e8758a09a",
+            "site": "chatgpt",
+            "trigger": "selection"
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:11:02.990Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:11:27.150Z",
+          "type": "user_prompt",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 131,
+            "latencyMs": 10622,
+            "turnIndex": 1
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:11:37.772Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 5728,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-18",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T16:18:00.838Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 5698,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T20:50:44.859Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 167,
+            "latencyMs": 0,
+            "turnIndex": 0
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T20:55:13.041Z",
+          "type": "llm_response",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        },
+        {
+          "metadata": {
+            "charCount": 8077,
+            "isCodeLike": false,
+            "messageId": "conversation-turn-20",
+            "site": "chatgpt",
+            "trigger": "button_full_reply"
+          },
+          "model": "ChatGPT 5.2",
+          "platform": "chatgpt",
+          "sessionId": "chatgpt-c-697de32c-b3dc-8325-a7a3-db6f2fcdddda",
+          "site": "chatgpt",
+          "timestamp": "2026-01-31T20:57:16.151Z",
+          "type": "copy_output",
+          "url": "https://chatgpt.com/g/g-p-68c559e727108191b0c9117426a68ec6-ppas/c/697de32c-b3dc-8325-a7a3-db6f2fcdddda"
+        }
+      ],
+      "metrics": {
+        "llmMessageCount": 19,
+        "userMessageCount": 6,
+        "avgResponseTimeMs": 77462.73684210527,
+        "p95ResponseTimeMs": 128305,
+        "maxResponseTimeMs": 1201728
+      },
+      "summary": {
+        "userMessageCount": 6,
+        "llmMessageCount": 19,
+        "copyEventsTotal": 19,
+        "feedbackGoodCount": 1,
+        "feedbackBadCount": 0,
+        "approxDurationMs": 35025815,
+        "outcome": null,
+        "humanOverrideNeeded": null,
+        "isPartialHistory": false,
+        "responseMetrics": {
+          "avgResponseTimeMs": 77462.73684210527,
+          "p95ResponseTimeMs": 128305,
+          "maxResponseTimeMs": 1201728
+        },
+        "title": "PPAs - v0.8.1 - Fast User Growth Strategy",
+        "modelsUsed": [
+          "ChatGPT 5.2"
+        ]
+      }
+    }
+    
+  ]
+}

@@ -1,5 +1,5 @@
 (() => {
-  type Platform = "chatgpt" | "moltbot_webchat";
+  type Platform = "chatgpt" | "moltbot_webchat" | "claude_web" | "gemini_web";
 
   type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
 
@@ -41,6 +41,9 @@
       | "copy_output"
       | "feedback_good"
       | "feedback_bad"
+      | "thumbs_up"
+      | "thumbs_down"
+      | "diagnostic"
       | "feedback_partial";
     platform: Platform;
     site: "chatgpt" | "other";
@@ -48,6 +51,7 @@
     timestamp: string;
     sessionId: string;
     pageTitle?: string;
+    model?: string;
     metadata?: CopyEventMetadata | FeedbackEventMetadata | LlmResponseEventMetadata;
   };
 
@@ -76,6 +80,9 @@
     | "copy_output"
     | "feedback_good"
     | "feedback_bad"
+    | "thumbs_up"
+    | "thumbs_down"
+    | "diagnostic"
     | "feedback_partial";
 
   interface BaseInteractionEventMetadata {
@@ -95,12 +102,14 @@
     timestamp: string; // ISO 8601
     kind: InteractionEventKind;
     metadata?: InteractionEventMetadata;
+    model?: string;
   }
 
   interface SessionSummary {
     // HUMAN-ANCHORED STATE (ground truth)
     outcome: "success" | "abandoned" | "escalated_to_human" | null;
     neededHumanOverride: boolean | null;
+    humanOverrideNeeded?: boolean;
 
     // CONVERSATION STRUCTURE (auto-tracked, v0.2+)
     messageCount: number;
@@ -152,6 +161,7 @@
       p95ResponseTimeMs?: number;
       maxResponseTimeMs?: number;
     };
+    modelsUsed?: string[];
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -170,6 +180,14 @@
     summary?: SessionSummary;
     metrics?: SessionMetrics;
   }
+
+  type SummarySession = Omit<InteractionSession, "events"> & {
+    events?: InteractionEvent[];
+  };
+
+  type SummaryServiceRecord = Omit<ServiceRecord, "sessions"> & {
+    sessions: SummarySession[];
+  };
 
   interface ServiceRecord {
     recordType: string;
@@ -229,7 +247,7 @@
           chip.textContent = `${label}: 0%`;
           chip.classList.toggle("active", activeOutcomeFilter === outcome);
         }
-        overviewMeta.textContent = "Sessions recorded: 0 - Platforms: ChatGPT";
+        overviewMeta.textContent = "Sessions recorded: 0 - Platforms: -";
       }
       return;
     }
@@ -330,7 +348,19 @@
         chip.classList.toggle("active", activeOutcomeFilter === outcome);
       }
 
-      const platformLabel = "ChatGPT";
+      const platformLabels = Array.from(
+        new Set(
+          weeklySessions.map((session) => {
+            if (session.platform === "moltbot_webchat") return "MoltBot (local)";
+            if (session.platform === "claude") return "Claude";
+            if (session.platform === "gemini") return "Gemini";
+            if (session.platform === "chatgpt") return "ChatGPT";
+            return "Unknown";
+          })
+        )
+      );
+      const platformLabel =
+        platformLabels.length > 0 ? platformLabels.join(", ") : "Unknown";
       overviewMeta.textContent =
         `Sessions recorded: ${totalWeekly} - Platforms: ${platformLabel}`;
     }
@@ -555,18 +585,11 @@
       }
     }
 
-    if (session.platform === "chatgpt") {
-      return "ChatGPT";
-    }
-    if (session.platform === "moltbot_webchat") {
-      return "MoltBot WebChat";
+    if (session.sessionId) {
+      return session.sessionId;
     }
 
-    if (session.toolLabel && session.toolLabel.trim()) {
-      return session.toolLabel;
-    }
-
-    return session.sessionId;
+    return session.platform || "(untitled)";
   }
 
   function buildSessions(
@@ -607,6 +630,12 @@
               ? "model_response"
               : ev.type === "copy_output"
               ? "copy_output"
+              : ev.type === "thumbs_up"
+              ? "thumbs_up"
+              : ev.type === "thumbs_down"
+              ? "thumbs_down"
+              : ev.type === "diagnostic"
+              ? "diagnostic"
               : ev.type === "feedback_good"
               ? "feedback_good"
               : ev.type === "feedback_bad"
@@ -615,6 +644,7 @@
               ? "feedback_partial"
               : "session_start",
           metadata,
+          model: ev.model,
         };
       });
 
@@ -624,6 +654,10 @@
           ? "moltbot_webchat"
           : platformFromEvents === "chatgpt"
           ? "chatgpt"
+          : platformFromEvents === "claude_web"
+          ? "claude"
+          : platformFromEvents === "gemini_web"
+          ? "gemini"
           : "unknown";
 
       const responseMetrics = computeResponseMetrics(sorted);
@@ -634,13 +668,23 @@
         ...responseMetrics,
       };
 
+      const toolLabel =
+        platform === "moltbot_webchat"
+          ? "MoltBot (local)"
+          : platform === "claude"
+          ? "Claude in Chrome"
+          : platform === "gemini"
+          ? "Gemini in Chrome"
+          : platform === "chatgpt"
+          ? "ChatGPT in Chrome"
+          : "Unknown";
+
       const session: InteractionSession = {
         sessionId,
         platform,
         startedAt: startTs.toISOString(),
         endedAt: endTs.toISOString(),
-        toolLabel:
-          platform === "moltbot_webchat" ? "MoltBot (local)" : "ChatGPT in Chrome",
+        toolLabel,
         events: interactionEvents,
         metrics,
       };
@@ -651,6 +695,16 @@
         Boolean(sessionFlags[sessionId]?.humanOverrideRequired)
       );
       if (summary) {
+        const modelsUsed = Array.from(
+          new Set(
+            sorted
+              .map((ev) => ev.model)
+              .filter((model): model is string => Boolean(model && model.trim()))
+          )
+        );
+        if (modelsUsed.length) {
+          summary.modelsUsed = modelsUsed;
+        }
         const storedTitle = (sessionFlags[sessionId]?.title as string | undefined) ?? null;
         summary.title = deriveSessionTitle(session, sorted, storedTitle);
       }
@@ -664,6 +718,15 @@
       const bTime = new Date(b.startedAt).getTime();
       return bTime - aTime;
     });
+  }
+
+  function isTrivialSession(summary: SessionSummary): boolean {
+    const user = summary.userMessageCount ?? 0;
+    const llm = summary.llmMessageCount ?? 0;
+    const copies = summary.copyEventsTotal ?? 0;
+    const good = summary.feedbackGoodCount ?? 0;
+    const bad = summary.feedbackBadCount ?? 0;
+    return user === 0 && llm === 0 && copies === 0 && good === 0 && bad === 0;
   }
 
   function summarizeSession(
@@ -756,8 +819,13 @@
         }
       }
 
-      if (ev.kind === "feedback_good" || ev.kind === "feedback_bad") {
-        if (ev.kind === "feedback_good") {
+      if (
+        ev.kind === "feedback_good" ||
+        ev.kind === "feedback_bad" ||
+        ev.kind === "thumbs_up" ||
+        ev.kind === "thumbs_down"
+      ) {
+        if (ev.kind === "feedback_good" || ev.kind === "thumbs_up") {
           feedbackGoodCount += 1;
         } else {
           feedbackBadCount += 1;
@@ -826,6 +894,7 @@
       // Anchors
       outcome,
       neededHumanOverride,
+      humanOverrideNeeded: neededHumanOverride,
 
       // Conversation structure
       messageCount,
@@ -906,7 +975,8 @@
 
     const sessionsForExport = sessions
       .filter((session) => !isTrivialTabSession(session))
-      .filter(shouldKeepSession);
+      .filter(shouldKeepSession)
+      .filter((session) => !isTrivialSession(session.summary ?? ({} as SessionSummary)));
 
     return {
       recordType: "agent_service_record",
@@ -923,6 +993,15 @@
       generatedAt: new Date().toISOString(),
       agentLabel: "multi",
       sessions: sessionsForExport,
+    };
+  }
+
+  function buildSummaryRecord(record: ServiceRecord): SummaryServiceRecord {
+    return {
+      ...record,
+      sessions: record.sessions.map(({ events: _events, ...rest }) => ({
+        ...rest,
+      })),
     };
   }
 
@@ -990,9 +1069,30 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `service_record__chatgpt_${new Date()
+            a.download = `service_record__${new Date()
               .toISOString()
               .replace(/[:.]/g, "-")}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+          });
+        }
+
+        const exportSummaryBtn = document.getElementById(
+          "export-service-record-summary"
+        );
+        if (exportSummaryBtn) {
+          exportSummaryBtn.addEventListener("click", () => {
+            const record = generateServiceRecord(events, sessionFlags, sessionMetrics);
+            const summaryRecord = buildSummaryRecord(record);
+            const blob = new Blob([JSON.stringify(summaryRecord, null, 2)], {
+              type: "application/json",
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `service_record__${new Date()
+              .toISOString()
+              .replace(/[:.]/g, "-")}__summary.json`;
             a.click();
             URL.revokeObjectURL(url);
           });
