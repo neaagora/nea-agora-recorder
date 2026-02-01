@@ -1,5 +1,5 @@
 (() => {
-  type Platform = "chatgpt" | "moltbot_webchat";
+  type Platform = "chatgpt" | "moltbot_webchat" | "claude_web" | "gemini_web";
 
   type EventKind =
     | "page_visit"
@@ -8,6 +8,9 @@
     | "copy_output"
     | "feedback_good"
     | "feedback_bad"
+    | "thumbs_up"
+    | "thumbs_down"
+    | "diagnostic"
     | "feedback_partial";
 
   type OutcomeValue = "success" | "abandoned" | "escalated_to_human" | null;
@@ -42,6 +45,7 @@
     timestamp: string;
     sessionId: string;
     pageTitle?: string;
+    model?: string;
     metadata?: CopyEventMetadata | FeedbackEventMetadata | LlmResponseEventMetadata;
     scope?: string;
     sentiment?: "good" | "bad";
@@ -81,6 +85,7 @@
       maxResponseTimeMs?: number;
     };
     title?: string | null;
+    modelsUsed?: string[];
   }
 
   interface InteractionSession {
@@ -91,7 +96,17 @@
     summary: SessionSummary;
   }
 
+  type DomDiagnosticReport = {
+    platform: string;
+    url: string;
+    observerAttached: boolean;
+    modelLabel: string | null;
+  };
+
+  let latestDomDiagnostic: DomDiagnosticReport | null = null;
+
   let selectedSessionId: string | null = null;
+  let lastActiveTabUrl: string | null = null;
 
   function extractConversationId(url: string | undefined): string | null {
     if (!url) return null;
@@ -107,6 +122,60 @@
     } catch {
       return null;
     }
+  }
+
+  function extractClaudeChatId(url: string | undefined): string | null {
+    if (!url) return null;
+    try {
+      const u = new URL(url);
+      if (!u.hostname.endsWith("claude.ai")) return null;
+      const parts = u.pathname.split("/");
+      const idx = parts.indexOf("chat");
+      if (idx >= 0 && parts.length > idx + 1) {
+        const chatId = parts[idx + 1].trim();
+        return chatId || null;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  function extractGeminiAppId(url: string | undefined): string | null {
+    if (!url) return null;
+    try {
+      const u = new URL(url);
+      if (!u.hostname.endsWith("gemini.google.com")) return null;
+      const parts = u.pathname.split("/");
+      const idx = parts.indexOf("app");
+      if (idx >= 0 && parts.length > idx + 1) {
+        const appId = parts[idx + 1].trim();
+        return appId || null;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  function buildSessionUrl(sessionId: string): string | null {
+    if (sessionId.startsWith("chatgpt-c-")) {
+      const id = sessionId.replace("chatgpt-c-", "");
+      return `https://chatgpt.com/c/${id}`;
+    }
+    if (sessionId.startsWith("claude-chat-")) {
+      const id = sessionId.replace("claude-chat-", "");
+      return `https://claude.ai/chat/${id}`;
+    }
+    if (sessionId.startsWith("gemini-app-")) {
+      const id = sessionId.replace("gemini-app-", "");
+      return `https://gemini.google.com/app/${id}`;
+    }
+    if (sessionId.startsWith("moltbot-s-")) {
+      const id = sessionId.replace("moltbot-s-", "");
+      return `http://localhost:18789/?session=${encodeURIComponent(id)}`;
+    }
+    return null;
   }
 
   function extractMoltbotSessionId(url: string | undefined): string | null {
@@ -148,6 +217,18 @@
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function buildSummaryRecord(record: any): any {
+    if (!record || !Array.isArray(record.sessions)) return record;
+    return {
+      ...record,
+      sessions: record.sessions.map((session: any) => {
+        if (!session || typeof session !== "object") return session;
+        const { events, ...rest } = session as Record<string, unknown>;
+        return { ...rest };
+      }),
+    };
   }
 
   function computeResponseMetrics(events: EventRecord[]) {
@@ -213,6 +294,12 @@
     if (session.platform === "moltbot_webchat") {
       return "MoltBot WebChat";
     }
+    if (session.platform === "claude_web") {
+      return "Claude";
+    }
+    if (session.platform === "gemini_web") {
+      return "Gemini";
+    }
 
     return session.sessionId;
   }
@@ -225,12 +312,26 @@
     return `${Math.round(ms)} ms`;
   }
 
+  function formatSessionTitle(session: InteractionSession): string {
+    const title = session.summary?.title || session.sessionId || "(untitled)";
+    if (!title) return "(untitled)";
+    return title.length > 60 ? `${title.slice(0, 57)}...` : title;
+  }
+
   function formatPlatform(platform: Platform) {
-    return platform === "moltbot_webchat" ? "MoltBot (local)" : "ChatGPT";
+    if (platform === "moltbot_webchat") return "MoltBot (local)";
+    if (platform === "claude_web") return "Claude";
+    if (platform === "gemini_web") return "Gemini";
+    if (platform === "chatgpt") return "ChatGPT";
+    return "Unknown";
   }
 
   function formatPlatformShort(platform: Platform) {
-    return platform === "moltbot_webchat" ? "MoltBot" : "ChatGPT";
+    if (platform === "moltbot_webchat") return "MoltBot";
+    if (platform === "claude_web") return "Claude";
+    if (platform === "gemini_web") return "Gemini";
+    if (platform === "chatgpt") return "ChatGPT";
+    return "Unknown";
   }
 
   async function buildServiceRecordJson(): Promise<unknown> {
@@ -246,7 +347,9 @@
           const metrics: Record<string, SessionMetrics> =
             (data.neaAgoraSessionMetrics as Record<string, SessionMetrics>) ?? {};
 
-          const sessions = buildSessions(events, flags, metrics);
+          const sessions = buildSessions(events, flags, metrics).filter(
+            (session) => !isTrivialSession(session.summary)
+          );
           const shouldKeepSession = (session: InteractionSession): boolean => {
             const m = session.metrics ?? {};
             const hasMessages =
@@ -257,7 +360,8 @@
 
           const sessionsForExport = sessions
             .filter((session) => !isTrivialTabSession(session))
-            .filter(shouldKeepSession);
+            .filter(shouldKeepSession)
+            .filter((session) => !isTrivialSession(session.summary));
 
           const record = {
             recordType: "agent_service_record",
@@ -282,6 +386,10 @@
               toolLabel:
                 session.platform === "moltbot_webchat"
                   ? "MoltBot (local)"
+                  : session.platform === "claude_web"
+                  ? "Claude in Chrome"
+                  : session.platform === "gemini_web"
+                  ? "Gemini in Chrome"
                   : "ChatGPT in Chrome",
               events: session.sessionEvents,
               metrics: session.metrics,
@@ -336,8 +444,23 @@
   async function handleExportClick() {
     const record = await buildServiceRecordJson();
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const filename = `service_record__chatgpt_${timestamp}.json`;
+    const filename = `service_record__${timestamp}.json`;
     downloadJsonFile(filename, record);
+  }
+
+  async function handleExportSummaryClick() {
+    const record = await buildServiceRecordJson();
+    const summaryRecord = buildSummaryRecord(record);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `service_record__${timestamp}__summary.json`;
+    downloadJsonFile(filename, summaryRecord);
+  }
+
+  function handleOpenSessionClick() {
+    if (!selectedSessionId) return;
+    const url = buildSessionUrl(selectedSessionId);
+    if (!url) return;
+    chrome.tabs.create({ url });
   }
 
   function handleClearClick() {
@@ -399,10 +522,10 @@
         (e) => e.type === "copy_output"
       ).length;
       const feedbackGoodCount = sessionEvents.filter(
-        (e) => e.type === "feedback_good"
+        (e) => e.type === "feedback_good" || e.type === "thumbs_up"
       ).length;
       const feedbackBadCount = sessionEvents.filter(
-        (e) => e.type === "feedback_bad"
+        (e) => e.type === "feedback_bad" || e.type === "thumbs_down"
       ).length;
       const isPartialHistory =
         metricsForSession.userMessageCount === 0 &&
@@ -437,6 +560,16 @@
         responseMetrics,
         title,
       };
+      const modelsUsed = Array.from(
+        new Set(
+          sessionEvents
+            .map((ev) => ev.model)
+            .filter((model): model is string => Boolean(model && model.trim()))
+        )
+      );
+      if (modelsUsed.length) {
+        summary.modelsUsed = modelsUsed;
+      }
 
       sessions.push({ sessionId, sessionEvents, summary, platform, metrics: sessionMetrics });
     }
@@ -448,6 +581,15 @@
     });
 
     return sessions;
+  }
+
+  function isTrivialSession(summary: SessionSummary): boolean {
+    const user = summary.userMessageCount ?? 0;
+    const llm = summary.llmMessageCount ?? 0;
+    const copies = summary.copyEventsTotal ?? 0;
+    const good = summary.feedbackGoodCount ?? 0;
+    const bad = summary.feedbackBadCount ?? 0;
+    return user === 0 && llm === 0 && copies === 0 && good === 0 && bad === 0;
   }
 
   function pickCurrentSession(
@@ -468,11 +610,16 @@
     ) as HTMLInputElement | null;
     const listEl = document.getElementById("event-list");
     const sessionListEl = document.getElementById("session-list");
+    const diagnosticEl = document.getElementById("dom-diagnostic");
     const weeklyTitle = document.getElementById("weekly-title");
     const weeklyMeta = document.getElementById("weekly-meta");
     const weeklySuccess = document.getElementById("weekly-success");
     const weeklyAbandoned = document.getElementById("weekly-abandoned");
     const weeklyEscalated = document.getElementById("weekly-escalated");
+    const eventsToggle = document.getElementById(
+      "show-events-toggle"
+    ) as HTMLInputElement | null;
+    const showEvents = Boolean(eventsToggle?.checked);
 
     if (!statusEl || !headerEl || !overrideCheckbox || !listEl) {
       return;
@@ -497,6 +644,7 @@
           }
           overrideCheckbox.checked = false;
           listEl.innerHTML = "";
+          listEl.style.display = showEvents ? "block" : "none";
           if (
             weeklyTitle &&
             weeklyMeta &&
@@ -510,10 +658,15 @@
             weeklyEscalated.textContent = "🧑‍💻 Escalated: 0%";
             weeklyMeta.textContent = "Sessions recorded: 0 - Platforms: -";
           }
+          if (diagnosticEl) {
+            renderDomDiagnostic(diagnosticEl);
+          }
           return;
         }
 
-        const sessions = buildSessions(events, flags, metrics);
+        const sessions = buildSessions(events, flags, metrics).filter(
+          (session) => !isTrivialSession(session.summary)
+        );
 
         // Weekly outcome summary (last 7 days, ignore partial history)
         const now = Date.now();
@@ -573,10 +726,24 @@
 
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           const tab = tabs[0];
+          lastActiveTabUrl = tab?.url ?? null;
+          if (
+            latestDomDiagnostic &&
+            lastActiveTabUrl &&
+            latestDomDiagnostic.url !== lastActiveTabUrl
+          ) {
+            latestDomDiagnostic = null;
+          }
           const convId = extractConversationId(tab?.url);
           const moltbotSession = extractMoltbotSessionId(tab?.url);
+          const claudeChatId = extractClaudeChatId(tab?.url);
+          const geminiAppId = extractGeminiAppId(tab?.url);
           const activeSessionId = convId
             ? `chatgpt-c-${convId}`
+            : claudeChatId
+            ? `claude-chat-${claudeChatId}`
+            : geminiAppId
+            ? `gemini-app-${geminiAppId}`
             : moltbotSession
             ? `moltbot-s-${moltbotSession}`
             : null;
@@ -603,8 +770,12 @@
             }
             overrideCheckbox.checked = false;
             listEl.innerHTML = "";
+            listEl.style.display = showEvents ? "block" : "none";
             if (sessionListEl) {
               sessionListEl.innerHTML = "";
+            }
+            if (diagnosticEl) {
+              renderDomDiagnostic(diagnosticEl);
             }
             return;
           }
@@ -612,7 +783,6 @@
           if (!selectedSessionId) {
             selectedSessionId = current.sessionId;
           }
-
           if (sessionListEl) {
             sessionListEl.innerHTML = "";
             const sessionsForList = sessions;
@@ -627,9 +797,7 @@
 
               const titleSpan = document.createElement("div");
               titleSpan.className = "session-row-title";
-              const title =
-                s.title && s.title.trim().length > 0 ? s.title : sObj.sessionId;
-              titleSpan.textContent = title;
+              titleSpan.textContent = formatSessionTitle(sObj);
 
               const metaSpan = document.createElement("div");
               metaSpan.className = "session-row-meta";
@@ -657,6 +825,7 @@
                 renderLiveView();
               });
 
+
               sessionListEl.appendChild(row);
             }
           }
@@ -668,52 +837,135 @@
           );
           const platformLabel = formatPlatform(current.platform);
           const responseMetrics = s.responseMetrics;
-          let responseLabel = "";
-          if (responseMetrics?.avgResponseTimeMs != null) {
-            responseLabel = ` • Avg response ${formatMs(responseMetrics.avgResponseTimeMs)}`;
-            if (responseMetrics.p95ResponseTimeMs != null) {
-              responseLabel += ` - p95 ${formatMs(responseMetrics.p95ResponseTimeMs)}`;
-            }
-            if (responseMetrics.maxResponseTimeMs != null) {
-              responseLabel += ` - max ${formatMs(responseMetrics.maxResponseTimeMs)}`;
-            }
-          }
 
           statusEl.textContent = `Sessions: ${sessions.length} | Events: ${events.length}`;
-          const displayTitle =
-            s.title && s.title.trim().length > 0 ? s.title : current.sessionId;
-          headerEl.textContent =
-            `${displayTitle} ` +
-            `(u:${s.userMessageCount} llm:${s.llmMessageCount} copies:${s.copyEventsTotal} ~${durationSec}s)` +
-            ` • ${platformLabel}` +
-            responseLabel;
+          headerEl.innerHTML = "";
+          const summaryCard = document.createElement("div");
+          summaryCard.className = "session-summary";
+
+          const titleRow = document.createElement("div");
+          titleRow.className = "session-summary-title-row";
+
+          const titleEl = document.createElement("div");
+          titleEl.className = "session-summary-title";
+          titleEl.textContent = s.title && s.title.trim().length > 0 ? s.title : "(untitled)";
+          titleRow.appendChild(titleEl);
+
+          const openBtn = document.createElement("button");
+          openBtn.type = "button";
+          openBtn.id = "open-session";
+          openBtn.className = "icon-button";
+          openBtn.setAttribute("aria-label", "Open selected session");
+          openBtn.setAttribute("title", "Open selected session");
+          const openImg = document.createElement("img");
+          openImg.src = "icons/open_session.svg";
+          openImg.alt = "";
+          openImg.className = "icon-button-img";
+          openBtn.appendChild(openImg);
+          openBtn.addEventListener("click", handleOpenSessionClick);
+          const sessionUrl = buildSessionUrl(current.sessionId);
+          openBtn.disabled = !sessionUrl;
+          titleRow.appendChild(openBtn);
+
+          summaryCard.appendChild(titleRow);
+
+          const rowPlatform = document.createElement("div");
+          rowPlatform.className = "session-summary-row";
+          const modelText =
+            s.modelsUsed && s.modelsUsed.length
+              ? ` • Models: ${s.modelsUsed.join(", ")}`
+              : "";
+          rowPlatform.textContent = `Platform: ${platformLabel}${modelText}`;
+          summaryCard.appendChild(rowPlatform);
+
+          const rowCounts = document.createElement("div");
+          rowCounts.className = "session-summary-row";
+          rowCounts.textContent =
+            `User msgs: ${s.userMessageCount ?? 0} • LLM msgs: ${s.llmMessageCount ?? 0}` +
+            ` • Copies: ${s.copyEventsTotal ?? 0} • 👍 ${s.feedbackGoodCount ?? 0}` +
+            ` • 👎 ${s.feedbackBadCount ?? 0}`;
+          summaryCard.appendChild(rowCounts);
+
+          if (responseMetrics?.avgResponseTimeMs != null) {
+            const rowLatency = document.createElement("div");
+            rowLatency.className = "session-summary-row";
+            const p95 = responseMetrics.p95ResponseTimeMs != null
+              ? formatMs(responseMetrics.p95ResponseTimeMs)
+              : "-";
+            const max = responseMetrics.maxResponseTimeMs != null
+              ? formatMs(responseMetrics.maxResponseTimeMs)
+              : "-";
+            rowLatency.textContent =
+              `Avg response: ${formatMs(responseMetrics.avgResponseTimeMs)} • ` +
+              `P95: ${p95} • Max: ${max}`;
+            summaryCard.appendChild(rowLatency);
+          }
+
+          if (Number.isFinite(durationSec)) {
+            const rowDuration = document.createElement("div");
+            rowDuration.className = "session-summary-row";
+            rowDuration.textContent = `Duration: ${Math.round(durationSec / 60)} min`;
+            summaryCard.appendChild(rowDuration);
+          }
 
           if (s.isPartialHistory) {
-            headerEl.textContent += " [Partial history, joined late]";
+            const rowPartial = document.createElement("div");
+            rowPartial.className = "session-summary-row";
+            rowPartial.textContent = "Partial history (joined late)";
+            summaryCard.appendChild(rowPartial);
           }
+
+          headerEl.appendChild(summaryCard);
 
           if (outcomeSelect) {
             outcomeSelect.value = s.outcome ?? "";
           }
           overrideCheckbox.checked = Boolean(s.humanOverrideNeeded);
 
-          listEl.innerHTML = "";
-          for (const ev of current.sessionEvents.slice().reverse()) {
-            const li = document.createElement("li");
-            let label = `${ev.timestamp}  ${ev.type}`;
-            if (ev.partial && ev.scope) {
-              label += ` [scoped:${ev.scope}`;
-              if (ev.sentiment) {
-                label += ` ${ev.sentiment}`;
+          listEl.style.display = showEvents ? "block" : "none";
+          if (showEvents) {
+            listEl.innerHTML = "";
+            for (const ev of current.sessionEvents.slice().reverse()) {
+              const li = document.createElement("li");
+              let label = `${ev.timestamp}  ${ev.type}`;
+              if (ev.partial && ev.scope) {
+                label += ` [scoped:${ev.scope}`;
+                if (ev.sentiment) {
+                  label += ` ${ev.sentiment}`;
+                }
+                label += "]";
               }
-              label += "]";
+              li.textContent = label;
+              listEl.appendChild(li);
             }
-            li.textContent = label;
-            listEl.appendChild(li);
+          }
+
+          if (diagnosticEl) {
+            renderDomDiagnostic(diagnosticEl);
           }
         });
       }
     );
+  }
+
+  function renderDomDiagnostic(target: HTMLElement) {
+    if (!latestDomDiagnostic) {
+      target.innerHTML = "";
+      return;
+    }
+    const report = latestDomDiagnostic;
+    const observerLabel = report.observerAttached ? "OK" : "NOT ATTACHED";
+    const modelLabel = report.modelLabel || "(not detected)";
+    target.innerHTML = `
+      <div class="dom-diagnostic-title">DOM diagnostics</div>
+      <div class="dom-diagnostic-row">Platform: ${report.platform}</div>
+      <div class="dom-diagnostic-row">Observer: ${observerLabel}</div>
+      <div class="dom-diagnostic-row">Model label: ${modelLabel}</div>
+      <div class="dom-diagnostic-row dom-diagnostic-url">URL: ${report.url}</div>
+      <div class="dom-diagnostic-hint">
+        To refresh, send a message that contains "DOM diagnostic" in ChatGPT, Claude or Gemini.
+      </div>
+    `;
   }
 
   function handleOverrideChange(ev: Event) {
@@ -733,8 +985,12 @@
 
         if (events.length === 0) return;
 
-        const sessions = buildSessions(events, flags, metrics);
-        const current = pickCurrentSession(sessions);
+        const sessions = buildSessions(events, flags, metrics).filter(
+          (session) => !isTrivialSession(session.summary)
+        );
+        const current = selectedSessionId
+          ? sessions.find((s) => s.sessionId === selectedSessionId) ?? null
+          : pickCurrentSession(sessions);
         if (!current) return;
 
         const sessionId = current.sessionId;
@@ -897,6 +1153,17 @@
       });
     }
 
+    const exportSummaryBtn = document.getElementById(
+      "export-service-record-summary"
+    ) as HTMLButtonElement | null;
+    if (exportSummaryBtn) {
+      exportSummaryBtn.addEventListener("click", () => {
+        handleExportSummaryClick().catch((err) =>
+          console.error("Summary export failed", err)
+        );
+      });
+    }
+
     const clearBtn = document.getElementById(
       "clear-service-records"
     ) as HTMLButtonElement | null;
@@ -911,7 +1178,24 @@
       scopedAddBtn.addEventListener("click", handleScopedAddClick);
     }
 
+
+    const showEventsToggle = document.getElementById(
+      "show-events-toggle"
+    ) as HTMLInputElement | null;
+    if (showEventsToggle) {
+      showEventsToggle.addEventListener("change", () => {
+        renderLiveView();
+      });
+    }
+
     renderLiveView();
+
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message?.type === "DOM_DIAGNOSTIC_REPORT" && message.payload) {
+        latestDomDiagnostic = message.payload as DomDiagnosticReport;
+        renderLiveView();
+      }
+    });
 
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area !== "local") return;
