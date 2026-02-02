@@ -1,6 +1,16 @@
 (() => {
   type Platform = "chatgpt" | "moltbot_webchat" | "claude_web" | "gemini_web";
 
+  type SessionIntent =
+    | "quick_lookup"
+    | "coding"
+    | "writing"
+    | "research"
+    | "creative"
+    | "other";
+
+  type IntentSource = "auto" | "user";
+
   type CopyTrigger = "selection" | "button_full_reply" | "button_code_block";
 
   type CopyEventMetadata = {
@@ -59,6 +69,8 @@
     [sessionId: string]: {
       humanOverrideRequired?: boolean;
       title?: string;
+      intent?: SessionIntent;
+      intentSource?: IntentSource;
     };
   };
 
@@ -162,6 +174,8 @@
       maxResponseTimeMs?: number;
     };
     modelsUsed?: string[];
+    intent?: SessionIntent;
+    intentSource?: IntentSource;
 
     // INTERNAL / EXISTING FIELDS
     retries: number; // kept for backward compatibility for now
@@ -707,6 +721,16 @@
         }
         const storedTitle = (sessionFlags[sessionId]?.title as string | undefined) ?? null;
         summary.title = deriveSessionTitle(session, sorted, storedTitle);
+        const storedIntent = sessionFlags[sessionId]?.intent;
+        const storedIntentSource = sessionFlags[sessionId]?.intentSource;
+        if (storedIntent) {
+          summary.intent = storedIntent;
+          summary.intentSource = storedIntentSource ?? "user";
+        }
+        if (!summary.intent) {
+          summary.intent = inferSessionIntent(summary, platform);
+          summary.intentSource = "auto";
+        }
       }
       session.summary = summary;
 
@@ -727,6 +751,41 @@
     const good = summary.feedbackGoodCount ?? 0;
     const bad = summary.feedbackBadCount ?? 0;
     return user === 0 && llm === 0 && copies === 0 && good === 0 && bad === 0;
+  }
+
+  function inferSessionIntent(
+    summary: SessionSummary,
+    platform: PlatformId
+  ): SessionIntent {
+    const user = summary.userMessageCount ?? 0;
+    const llm = summary.llmMessageCount ?? 0;
+    const copies = summary.copyEventsTotal ?? 0;
+    const durationSeconds = Math.max(
+      0,
+      Math.round((summary.approxDurationMs ?? 0) / 1000)
+    );
+
+    if (user <= 3 && durationSeconds <= 10 * 60 && copies >= 1) {
+      return "quick_lookup";
+    }
+
+    if ((user >= 5 && copies >= 3) || platform === "moltbot_webchat") {
+      return "coding";
+    }
+
+    if (user >= 5 && durationSeconds >= 20 * 60) {
+      return "research";
+    }
+
+    if (durationSeconds >= 10 * 60 && copies >= 2) {
+      return "writing";
+    }
+
+    if (user >= 8 && copies <= user) {
+      return "creative";
+    }
+
+    return "other";
   }
 
   function summarizeSession(
@@ -894,7 +953,7 @@
       // Anchors
       outcome,
       neededHumanOverride,
-      humanOverrideNeeded: neededHumanOverride,
+      humanOverrideNeeded: neededHumanOverride ?? undefined,
 
       // Conversation structure
       messageCount,

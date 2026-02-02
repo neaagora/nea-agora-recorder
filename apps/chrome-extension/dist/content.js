@@ -791,6 +791,11 @@
         "message-content",
         ".response-content",
     ];
+    const GEMINI_USER_MESSAGE_SELECTORS = [
+        ".user-query-bubble-with-background",
+        ".query-text",
+        ".query-text-line",
+    ];
     function collectElementsBySelectors(node, selectors) {
         if (!(node instanceof HTMLElement))
             return [];
@@ -815,6 +820,9 @@
     function collectGeminiAssistantMessageElements(node) {
         return collectElementsBySelectors(node, GEMINI_ASSISTANT_MESSAGE_SELECTORS);
     }
+    function collectGeminiUserMessageElements(node) {
+        return collectElementsBySelectors(node, GEMINI_USER_MESSAGE_SELECTORS);
+    }
     function extractAssistantMessageText(messageEl, platform) {
         if (platform === "chatgpt") {
             return messageEl.innerText ?? "";
@@ -832,6 +840,11 @@
     function extractUserMessageText(messageEl, platform) {
         if (platform === "claude_web") {
             const content = messageEl.querySelector(".whitespace-pre-wrap, .standard-markdown, .font-claude-user-body") ??
+                messageEl;
+            return content.innerText ?? "";
+        }
+        if (platform === "gemini_web") {
+            const content = messageEl.querySelector(".query-text, .query-text-line") ??
                 messageEl;
             return content.innerText ?? "";
         }
@@ -1202,8 +1215,10 @@
             return;
         for (const mutation of mutations) {
             for (const node of Array.from(mutation.addedNodes)) {
-                if (platform === "claude_web") {
-                    const userEls = collectClaudeUserMessageElements(node);
+                if (platform === "claude_web" || platform === "gemini_web") {
+                    const userEls = platform === "claude_web"
+                        ? collectClaudeUserMessageElements(node)
+                        : collectGeminiUserMessageElements(node);
                     for (const userEl of userEls) {
                         const text = extractUserMessageText(userEl, platform).trim();
                         if (text) {
