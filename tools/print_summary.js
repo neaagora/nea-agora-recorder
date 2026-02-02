@@ -43,6 +43,26 @@ try {
   process.exit(1);
 }
 
+function formatDuration(seconds) {
+  if (!seconds || seconds <= 0) return "—";
+
+  const totalMinutes = Math.floor(seconds / 60);
+  const minutes = totalMinutes % 60;
+  const totalHours = Math.floor(totalMinutes / 60);
+  const hours = totalHours % 24;
+  const days = Math.floor(totalHours / 24);
+
+  if (days > 0) {
+    return `${days} d ${hours} h ${minutes} min`;
+  }
+
+  if (totalHours > 0) {
+    return `${totalHours} h ${minutes} min`;
+  }
+
+  return `${totalMinutes} min`;
+}
+
 const sessions = Array.isArray(record.sessions) ? record.sessions : [];
 const uniquePlatforms = Array.from(
   new Set(sessions.map((s) => s.platform).filter(Boolean))
@@ -83,6 +103,11 @@ for (const session of sessions) {
 
   console.log(`[${session.platform ?? "unknown"}] ${s.title || "(untitled)"}`);
   console.log(`  Session: ${session.sessionId || "(unknown)"}`);
+  const intent = s.intent || "other";
+  const intentSource = s.intentSource || "auto";
+  console.log(
+    `  Type: ${intent} (${intentSource === "user" ? "set by you" : "auto"})`
+  );
   if (Array.isArray(s.modelsUsed) && s.modelsUsed.length) {
     console.log(`  Models: ${s.modelsUsed.join(", ")}`);
   }
@@ -92,6 +117,8 @@ for (const session of sessions) {
   console.log(
     `  Copies: ${s.copyEventsTotal || 0} | 👍 ${s.feedbackGoodCount || 0} | 👎 ${s.feedbackBadCount || 0}`
   );
+  const durationSeconds = Math.round((s.approxDurationMs || 0) / 1000);
+  console.log(`  Duration: ${formatDuration(durationSeconds)}`);
   if (typeof m.avgResponseTimeMs === "number") {
     const avg = (m.avgResponseTimeMs / 1000).toFixed(1);
     const p95 = typeof m.p95ResponseTimeMs === "number"

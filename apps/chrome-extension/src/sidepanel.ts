@@ -1,6 +1,16 @@
 (() => {
   type Platform = "chatgpt" | "moltbot_webchat" | "claude_web" | "gemini_web";
 
+  type SessionIntent =
+    | "quick_lookup"
+    | "coding"
+    | "writing"
+    | "research"
+    | "creative"
+    | "other";
+
+  type IntentSource = "auto" | "user";
+
   type EventKind =
     | "page_visit"
     | "user_prompt"
@@ -58,6 +68,8 @@
       humanOverrideRequired?: boolean;
       outcome?: OutcomeValue;
       title?: string;
+      intent?: SessionIntent;
+      intentSource?: IntentSource;
     };
   };
 
@@ -86,6 +98,8 @@
     };
     title?: string | null;
     modelsUsed?: string[];
+    intent?: SessionIntent;
+    intentSource?: IntentSource;
   }
 
   interface InteractionSession {
@@ -231,6 +245,154 @@
     };
   }
 
+  function inferSessionIntent(
+    summary: SessionSummary,
+    platform: Platform
+  ): SessionIntent {
+    const user = summary.userMessageCount ?? 0;
+    const llm = summary.llmMessageCount ?? 0;
+    const copies = summary.copyEventsTotal ?? 0;
+    const durationSeconds = Math.max(
+      0,
+      Math.round((summary.approxDurationMs ?? 0) / 1000)
+    );
+
+    if (user <= 3 && durationSeconds <= 10 * 60 && copies >= 1) {
+      return "quick_lookup";
+    }
+
+    if ((user >= 5 && copies >= 3) || platform === "moltbot_webchat") {
+      return "coding";
+    }
+
+    if (user >= 5 && durationSeconds >= 20 * 60) {
+      return "research";
+    }
+
+    if (durationSeconds >= 10 * 60 && copies >= 2) {
+      return "writing";
+    }
+
+    if (user >= 8 && copies <= user) {
+      return "creative";
+    }
+
+    return "other";
+  }
+
+  function getSessionInsights(summary: SessionSummary): string[] {
+    const intent = summary.intent ?? "other";
+    const user = summary.userMessageCount ?? 0;
+    const llm = summary.llmMessageCount ?? 0;
+    const copies = summary.copyEventsTotal ?? 0;
+    const durationSeconds = Math.max(
+      0,
+      Math.round((summary.approxDurationMs ?? 0) / 1000)
+    );
+    const escalated = summary.humanOverrideNeeded ?? false;
+
+    const insights: string[] = [];
+
+    const longSessionThresholdSeconds = 8 * 60 * 60;
+    const mediumSessionThresholdSeconds = 2 * 60 * 60;
+    if (durationSeconds > longSessionThresholdSeconds) {
+      insights.push(
+        "This was a very long-running session. Long sessions often benefit from explicit checkpoints or periodic resets to avoid drift."
+      );
+    } else if (
+      durationSeconds > mediumSessionThresholdSeconds &&
+      durationSeconds <= longSessionThresholdSeconds
+    ) {
+      insights.push(
+        "This session ran for quite a while. Next time, consider pausing to summarize what you have so far before continuing."
+      );
+    }
+
+    if (llm >= user * 10 && copies < user + 2) {
+      insights.push(
+        "The assistant produced a lot of output relative to what you reused. You may want to ask for shorter or more structured responses, or provide a concrete example of what you need."
+      );
+    }
+
+    if (intent === "quick_lookup") {
+      if (user <= 3 && durationSeconds <= 10 * 60) {
+        insights.push("Lookup session completed quickly. No changes suggested.");
+      } else {
+        insights.push(
+          "This lookup session took longer than typical. Next time, try a more direct question or switch models earlier if you are not satisfied after a few replies."
+        );
+      }
+    }
+
+    if (intent === "coding") {
+      if (user >= 15 || llm >= 30) {
+        insights.push(
+          "High iteration count for coding. You may benefit from breaking the task into smaller steps or asking for a step-by-step plan instead of a full solution at once."
+        );
+      }
+      if (copies === 0) {
+        insights.push(
+          "No outputs were copied from this coding session. That often means responses were not directly usable; consider trying a different model earlier when this happens."
+        );
+      }
+      if (escalated) {
+        insights.push(
+          "This coding session needed manual intervention. You might want to capture a reusable prompt or checklist for this type of task."
+        );
+      }
+      if (!insights.some((line) => line.includes("coding session"))) {
+        insights.push(
+          "Coding sessions often go better when constraints are clear. If you felt stuck, try asking the assistant to restate the requirements or outline a plan before writing code."
+        );
+      }
+    }
+
+    if (intent === "writing") {
+      if (durationSeconds >= 60 * 60 && copies < 2) {
+        insights.push(
+          "Long writing/editing session with few copied results. Next time, try asking for outlines or smaller sections instead of full drafts each time."
+        );
+      }
+      if (!insights.some((line) => line.includes("writing"))) {
+        insights.push(
+          "For writing and editing, it can help to ask for outlines or small sections instead of full drafts. That often leads to faster convergence."
+        );
+      }
+    }
+
+    if (intent === "research") {
+      if (durationSeconds >= 30 * 60 && copies === 0) {
+        insights.push(
+          "Extended research session without copying any results. Consider bookmarking or summarizing key findings as you go."
+        );
+      }
+      if (!insights.some((line) => line.includes("research"))) {
+        insights.push(
+          "For research sessions, it usually helps to periodically summarize what you have learned so far, or ask the assistant to create a short summary of key points."
+        );
+      }
+    }
+
+    if (intent === "creative") {
+      insights.push(
+        "High iteration is normal for creative work. No action suggested unless you felt stuck or frustrated."
+      );
+    }
+
+    if (insights.length === 0) {
+      insights.push(
+        "This session does not match a common efficiency pattern. Treat it as exploratory and rely on your own judgment."
+      );
+    }
+
+    const maxInsights = 3;
+    if (insights.length > maxInsights) {
+      return insights.slice(0, maxInsights);
+    }
+
+    return insights;
+  }
+
   function computeResponseMetrics(events: EventRecord[]) {
     const latencies = events
       .filter((e) => e.type === "llm_response")
@@ -310,6 +472,26 @@
       return `${(ms / 1000).toFixed(1)} s`;
     }
     return `${Math.round(ms)} ms`;
+  }
+
+  function formatDuration(seconds: number): string {
+    if (!seconds || seconds <= 0) return "—";
+
+    const totalMinutes = Math.floor(seconds / 60);
+    const minutes = totalMinutes % 60;
+    const totalHours = Math.floor(totalMinutes / 60);
+    const hours = totalHours % 24;
+    const days = Math.floor(totalHours / 24);
+
+    if (days > 0) {
+      return `${days} d ${hours} h ${minutes} min`;
+    }
+
+    if (totalHours > 0) {
+      return `${totalHours} h ${minutes} min`;
+    }
+
+    return `${totalMinutes} min`;
   }
 
   function formatSessionTitle(session: InteractionSession): string {
@@ -569,6 +751,14 @@
       );
       if (modelsUsed.length) {
         summary.modelsUsed = modelsUsed;
+      }
+      if (f.intent) {
+        summary.intent = f.intent;
+        summary.intentSource = f.intentSource ?? "user";
+      }
+      if (!summary.intent) {
+        summary.intent = inferSessionIntent(summary, platform);
+        summary.intentSource = "auto";
       }
 
       sessions.push({ sessionId, sessionEvents, summary, platform, metrics: sessionMetrics });
@@ -878,6 +1068,40 @@
           rowPlatform.textContent = `Platform: ${platformLabel}${modelText}`;
           summaryCard.appendChild(rowPlatform);
 
+          const currentIntent = (s.intent ?? "other") as SessionIntent;
+          const intentSource = (s.intentSource ?? "auto") as IntentSource;
+          const intentRow = document.createElement("div");
+          intentRow.className = "session-intent";
+          const intentLabel = document.createElement("label");
+          intentLabel.textContent = "Session type: ";
+          const intentSelect = document.createElement("select");
+          const intentOptions: Array<{ value: SessionIntent; label: string }> = [
+            { value: "quick_lookup", label: "Quick lookup" },
+            { value: "coding", label: "Coding / debugging" },
+            { value: "writing", label: "Writing / editing" },
+            { value: "research", label: "Research / analysis" },
+            { value: "creative", label: "Creative / brainstorming" },
+            { value: "other", label: "Other / mixed" },
+          ];
+          for (const opt of intentOptions) {
+            const optionEl = document.createElement("option");
+            optionEl.value = opt.value;
+            optionEl.textContent = opt.label;
+            intentSelect.appendChild(optionEl);
+          }
+          intentSelect.value = currentIntent;
+          intentSelect.addEventListener("change", () => {
+            handleIntentChange(current.sessionId, intentSelect.value as SessionIntent);
+          });
+          const intentSourceTag = document.createElement("span");
+          intentSourceTag.className = "intent-source-tag";
+          intentSourceTag.textContent =
+            intentSource === "auto" ? " (auto)" : " (set by you)";
+          intentLabel.appendChild(intentSelect);
+          intentLabel.appendChild(intentSourceTag);
+          intentRow.appendChild(intentLabel);
+          summaryCard.appendChild(intentRow);
+
           const rowCounts = document.createElement("div");
           rowCounts.className = "session-summary-row";
           rowCounts.textContent =
@@ -904,7 +1128,7 @@
           if (Number.isFinite(durationSec)) {
             const rowDuration = document.createElement("div");
             rowDuration.className = "session-summary-row";
-            rowDuration.textContent = `Duration: ${Math.round(durationSec / 60)} min`;
+            rowDuration.textContent = `Duration: ${formatDuration(durationSec)}`;
             summaryCard.appendChild(rowDuration);
           }
 
@@ -914,6 +1138,21 @@
             rowPartial.textContent = "Partial history (joined late)";
             summaryCard.appendChild(rowPartial);
           }
+
+          const insightsBlock = document.createElement("div");
+          insightsBlock.className = "session-insights";
+          const insightsTitle = document.createElement("div");
+          insightsTitle.className = "session-insights-title";
+          insightsTitle.textContent = "Session insights";
+          const insightsList = document.createElement("ul");
+          for (const line of getSessionInsights(s)) {
+            const li = document.createElement("li");
+            li.textContent = line;
+            insightsList.appendChild(li);
+          }
+          insightsBlock.appendChild(insightsTitle);
+          insightsBlock.appendChild(insightsList);
+          summaryCard.appendChild(insightsBlock);
 
           headerEl.appendChild(summaryCard);
 
@@ -1051,6 +1290,24 @@
           chrome.storage.local.set({ neaAgoraSessionFlags: flags }, () => {
             renderLiveView();
           });
+        });
+      }
+    );
+  }
+
+  function handleIntentChange(sessionId: string, intent: SessionIntent) {
+    chrome.storage.local.get(
+      ["neaAgoraSessionFlags"],
+      (data) => {
+        const flags: SessionFlags =
+          (data.neaAgoraSessionFlags as SessionFlags) ?? {};
+        const currentFlags = flags[sessionId] ?? {};
+        currentFlags.intent = intent;
+        currentFlags.intentSource = "user";
+        flags[sessionId] = currentFlags;
+
+        chrome.storage.local.set({ neaAgoraSessionFlags: flags }, () => {
+          renderLiveView();
         });
       }
     );

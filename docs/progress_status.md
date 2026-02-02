@@ -5,6 +5,28 @@ design decisions, and what is intentionally deferred.
 
 It is a living document.
 
+## v0.8.2 introduces session-level interpretation that makes Service Records meaningfully usable.
+
+This release adds:
+
+-   Automatic session intent inference (coding, writing, research, creative, lookup)
+
+-   User-overrideable intent classification
+
+-   Session-level insights derived from behavioral signals (duration, iteration, copies, escalation)
+
+-   Cross-intent cost detection for long-running sessions
+
+-   Detection of verbosity vs reuse mismatch
+
+-   Clearer, human-readable session summaries (including formatted duration)
+
+-   Intent and insight visibility in both the side panel UI and CLI exporter
+
+v0.8.2 shifts the product from passive recording to actionable interpretation, laying the groundwork for proactive, real-time intervention in future releases.
+
+No real-time interventions are triggered yet. All analysis is retrospective and transparent by design.
+
 ## v0.8.1 - Multi-Platform Service Record MVP
 
 v0.8.1 delivers a working, cross-platform AI Service Record recorder for real-world LLM usage.

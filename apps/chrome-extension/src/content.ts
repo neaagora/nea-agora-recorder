@@ -977,6 +977,12 @@
     ".response-content",
   ];
 
+  const GEMINI_USER_MESSAGE_SELECTORS = [
+    ".user-query-bubble-with-background",
+    ".query-text",
+    ".query-text-line",
+  ];
+
   function collectElementsBySelectors(node: Node, selectors: string[]): HTMLElement[] {
     if (!(node instanceof HTMLElement)) return [];
     const results: HTMLElement[] = [];
@@ -1001,6 +1007,10 @@
 
   function collectGeminiAssistantMessageElements(node: Node): HTMLElement[] {
     return collectElementsBySelectors(node, GEMINI_ASSISTANT_MESSAGE_SELECTORS);
+  }
+
+  function collectGeminiUserMessageElements(node: Node): HTMLElement[] {
+    return collectElementsBySelectors(node, GEMINI_USER_MESSAGE_SELECTORS);
   }
 
   function extractAssistantMessageText(messageEl: HTMLElement, platform: Platform): string {
@@ -1033,6 +1043,12 @@
         messageEl.querySelector<HTMLElement>(
           ".whitespace-pre-wrap, .standard-markdown, .font-claude-user-body"
         ) ??
+        messageEl;
+      return content.innerText ?? "";
+    }
+    if (platform === "gemini_web") {
+      const content =
+        messageEl.querySelector<HTMLElement>(".query-text, .query-text-line") ??
         messageEl;
       return content.innerText ?? "";
     }
@@ -1507,8 +1523,11 @@
     if (platform === "moltbot_webchat") return;
     for (const mutation of mutations) {
       for (const node of Array.from(mutation.addedNodes)) {
-        if (platform === "claude_web") {
-          const userEls = collectClaudeUserMessageElements(node);
+        if (platform === "claude_web" || platform === "gemini_web") {
+          const userEls =
+            platform === "claude_web"
+              ? collectClaudeUserMessageElements(node)
+              : collectGeminiUserMessageElements(node);
           for (const userEl of userEls) {
             const text = extractUserMessageText(userEl, platform).trim();
             if (text) {
