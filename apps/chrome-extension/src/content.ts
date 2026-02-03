@@ -39,6 +39,181 @@
   let chatgptModelDiagnosticSent = false;
   let claudeModelDiagnosticSent = false;
   let geminiModelDiagnosticSent = false;
+  let chatgptSignatureDiagnosticSent = false;
+  let claudeSignatureDiagnosticSent = false;
+  let geminiSignatureDiagnosticSent = false;
+
+  type DomLocatorResult = {
+    messagesContainer: Element | null;
+    messageNodes: Element[];
+    userInput: HTMLTextAreaElement | HTMLElement | null;
+    streamingIndicator: Element | null;
+    methodUsed?: string;
+  };
+
+  type DomSignature = {
+    platform: string;
+    selectorMethod?: string;
+    messageCount: number;
+    userInputFound: boolean;
+    streamingIndicatorFound: boolean;
+  };
+
+  type SelectorSpec = {
+    id: string;
+    path: string;
+  };
+
+  const CHATGPT_MESSAGE_SELECTORS: SelectorSpec[] = [
+    { id: "data-role", path: '[data-message-author-role="assistant"]' },
+    { id: "aria-log", path: '[role="log"] [data-message-author-role="assistant"]' },
+    { id: "main", path: 'main [data-message-author-role="assistant"]' },
+  ];
+
+  const CHATGPT_USER_MESSAGE_SELECTORS: SelectorSpec[] = [
+    { id: "data-role-user", path: '[data-message-author-role="user"]' },
+    { id: "aria-log-user", path: '[role="log"] [data-message-author-role="user"]' },
+    { id: "main-user", path: 'main [data-message-author-role="user"]' },
+  ];
+
+  const CHATGPT_CONTAINER_SELECTORS: SelectorSpec[] = [
+    { id: "main", path: "main" },
+    { id: "role-main", path: '[role="main"]' },
+  ];
+
+  const CHATGPT_INPUT_SELECTORS: SelectorSpec[] = [
+    { id: "textarea", path: "textarea" },
+    { id: "role-textbox", path: '[role="textbox"]' },
+    { id: "contenteditable", path: "[contenteditable='true']" },
+  ];
+
+  const CLAUDE_MESSAGE_SELECTORS: SelectorSpec[] = [
+    { id: "assistant-body", path: ".font-claude-response-body" },
+    { id: "standard-markdown", path: ".standard-markdown" },
+    { id: "data-role", path: '[data-message-author-role="assistant"]' },
+  ];
+
+  const CLAUDE_CONTAINER_SELECTORS: SelectorSpec[] = [
+    { id: "main", path: "main" },
+    { id: "role-main", path: '[role="main"]' },
+  ];
+
+  const CLAUDE_INPUT_SELECTORS: SelectorSpec[] = [
+    { id: "textarea", path: "textarea" },
+    { id: "role-textbox", path: '[role="textbox"]' },
+    { id: "contenteditable", path: "[contenteditable='true']" },
+  ];
+
+  const GEMINI_MESSAGE_SELECTORS: SelectorSpec[] = [
+    { id: "structured", path: "structured-content-container" },
+    { id: "message-content", path: "message-content" },
+    { id: "response-content", path: ".response-content" },
+  ];
+
+  const GEMINI_CONTAINER_SELECTORS: SelectorSpec[] = [
+    { id: "main", path: "main" },
+    { id: "role-main", path: '[role="main"]' },
+  ];
+
+  const GEMINI_INPUT_SELECTORS: SelectorSpec[] = [
+    { id: "rich-textarea", path: "rich-textarea" },
+    { id: "role-textbox", path: '[role="textbox"]' },
+    { id: "contenteditable", path: "[contenteditable='true']" },
+  ];
+
+  function findAssistantMessages(selectors: SelectorSpec[]): {
+    nodes: Element[];
+    method?: string;
+  } {
+    for (const spec of selectors) {
+      const nodes = Array.from(document.querySelectorAll(spec.path));
+      if (nodes.length > 0) {
+        return { nodes, method: spec.id };
+      }
+    }
+    return { nodes: [], method: undefined };
+  }
+
+  function findMainChatContainer(selectors: SelectorSpec[]): Element | null {
+    for (const spec of selectors) {
+      const el = document.querySelector(spec.path);
+      if (el) return el;
+    }
+    return document.body ?? null;
+  }
+
+  function findUserInputElement(
+    selectors: SelectorSpec[]
+  ): HTMLTextAreaElement | HTMLElement | null {
+    for (const spec of selectors) {
+      const el = document.querySelector(spec.path);
+      if (el instanceof HTMLTextAreaElement) return el;
+      if (el instanceof HTMLElement) return el;
+    }
+    return null;
+  }
+
+  function detectStreamingIndicator(): Element | null {
+    const buttons = Array.from(document.querySelectorAll("button"));
+    for (const btn of buttons) {
+      const text = btn.textContent?.toLowerCase() ?? "";
+      if (text.includes("stop")) {
+        return btn;
+      }
+    }
+    return null;
+  }
+
+  function locateChatgptDom(): DomLocatorResult {
+    const { nodes, method } = findAssistantMessages(CHATGPT_MESSAGE_SELECTORS);
+    return {
+      messagesContainer: findMainChatContainer(CHATGPT_CONTAINER_SELECTORS),
+      messageNodes: nodes,
+      userInput: findUserInputElement(CHATGPT_INPUT_SELECTORS),
+      streamingIndicator: detectStreamingIndicator(),
+      methodUsed: method,
+    };
+  }
+
+  function locateClaudeDom(): DomLocatorResult {
+    const { nodes, method } = findAssistantMessages(CLAUDE_MESSAGE_SELECTORS);
+    return {
+      messagesContainer: findMainChatContainer(CLAUDE_CONTAINER_SELECTORS),
+      messageNodes: nodes,
+      userInput: findUserInputElement(CLAUDE_INPUT_SELECTORS),
+      streamingIndicator: detectStreamingIndicator(),
+      methodUsed: method,
+    };
+  }
+
+  function locateGeminiDom(): DomLocatorResult {
+    const { nodes, method } = findAssistantMessages(GEMINI_MESSAGE_SELECTORS);
+    return {
+      messagesContainer: findMainChatContainer(GEMINI_CONTAINER_SELECTORS),
+      messageNodes: nodes,
+      userInput: findUserInputElement(GEMINI_INPUT_SELECTORS),
+      streamingIndicator: detectStreamingIndicator(),
+      methodUsed: method,
+    };
+  }
+
+  function buildDomSignature(result: DomLocatorResult, platform: string): DomSignature {
+    return {
+      platform,
+      selectorMethod: result.methodUsed,
+      messageCount: result.messageNodes.length,
+      userInputFound: !!result.userInput,
+      streamingIndicatorFound: !!result.streamingIndicator,
+    };
+  }
+
+  function isDomSignatureBroken(signature: DomSignature): boolean {
+    return (
+      signature.messageCount === 0 &&
+      !signature.userInputFound &&
+      !signature.streamingIndicatorFound
+    );
+  }
 
   function getActivePlatform(): Platform {
     if (isMoltbot) return "moltbot_webchat";
@@ -58,6 +233,50 @@
       undefined,
       platform
     );
+  }
+
+  function locateDomElementsForPlatform(platform: Platform) {
+    if (platform === "chatgpt") {
+      return {
+        result: locateChatgptDom(),
+        signatureBuilder: buildDomSignature,
+        isBroken: isDomSignatureBroken,
+      };
+    }
+    if (platform === "claude_web") {
+      return {
+        result: locateClaudeDom(),
+        signatureBuilder: buildDomSignature,
+        isBroken: isDomSignatureBroken,
+      };
+    }
+    if (platform === "gemini_web") {
+      return {
+        result: locateGeminiDom(),
+        signatureBuilder: buildDomSignature,
+        isBroken: isDomSignatureBroken,
+      };
+    }
+    return null;
+  }
+
+  function reportDomHealth(platform: Platform) {
+    const locator = locateDomElementsForPlatform(platform);
+    if (!locator) return;
+    const signature = locator.signatureBuilder(locator.result, platform);
+    const broken = locator.isBroken(signature);
+    if (!broken) return;
+    if (platform === "chatgpt" && chatgptSignatureDiagnosticSent) return;
+    if (platform === "claude_web" && claudeSignatureDiagnosticSent) return;
+    if (platform === "gemini_web" && geminiSignatureDiagnosticSent) return;
+
+    recordDiagnostic("DOM_SIGNATURE_BROKEN", {
+      platform,
+      signature,
+    });
+    if (platform === "chatgpt") chatgptSignatureDiagnosticSent = true;
+    if (platform === "claude_web") claudeSignatureDiagnosticSent = true;
+    if (platform === "gemini_web") geminiSignatureDiagnosticSent = true;
   }
 
   function detectCurrentModel(platform: Platform): string | undefined {
@@ -245,6 +464,7 @@
   const countedAssistantMessageIds = new Set<string>();
   const countedAssistantMessageElsByPlatform = new Map<Platform, WeakSet<HTMLElement>>();
   const pendingAssistantMessageElsByPlatform = new Map<Platform, WeakSet<HTMLElement>>();
+  const countedUserMessageElsByPlatform = new Map<Platform, WeakSet<HTMLElement>>();
   let observedMessageContainer: HTMLElement | null = null;
   const USER_PROMPT_DEDUP_MS = 500;
   let lastUserPromptAt = 0;
@@ -889,6 +1109,13 @@
     return created;
   }
 
+  function hasSeenUserMessageEl(platform: Platform, el: HTMLElement): boolean {
+    const set = getWeakSetForPlatform(countedUserMessageElsByPlatform, platform);
+    if (set.has(el)) return true;
+    set.add(el);
+    return false;
+  }
+
   function scheduleAssistantMessageCount(messageEl: HTMLElement, platform: Platform) {
     const pendingSet = getWeakSetForPlatform(pendingAssistantMessageElsByPlatform, platform);
     const countedSet = getWeakSetForPlatform(countedAssistantMessageElsByPlatform, platform);
@@ -953,6 +1180,10 @@
     });
 
     return results;
+  }
+
+  function collectChatgptUserMessageElements(node: Node): HTMLElement[] {
+    return collectElementsBySelectors(node, CHATGPT_USER_MESSAGE_SELECTORS.map((s) => s.path));
   }
 
   const CLAUDE_ASSISTANT_MESSAGE_SELECTORS = [
@@ -1045,6 +1276,9 @@
         ) ??
         messageEl;
       return content.innerText ?? "";
+    }
+    if (platform === "chatgpt") {
+      return messageEl.innerText ?? "";
     }
     if (platform === "gemini_web") {
       const content =
@@ -1388,7 +1622,7 @@
       },
       true
     );
-    startAssistantObserver();
+    // assistant observer attaches via body observer
   }
 
   const boundForms = new WeakSet<HTMLFormElement>();
@@ -1521,14 +1755,26 @@
     // console.debug("[nea-agora][llm] mutation observed", mutations);
     const platform = getActivePlatform();
     if (platform === "moltbot_webchat") return;
+    reportDomHealth(platform);
     for (const mutation of mutations) {
       for (const node of Array.from(mutation.addedNodes)) {
+        if (platform === "chatgpt") {
+          const userEls = collectChatgptUserMessageElements(node);
+          for (const userEl of userEls) {
+            if (hasSeenUserMessageEl(platform, userEl)) continue;
+            const text = extractUserMessageText(userEl, platform).trim();
+            if (text) {
+              recordUserPrompt(platform, text);
+            }
+          }
+        }
         if (platform === "claude_web" || platform === "gemini_web") {
           const userEls =
             platform === "claude_web"
               ? collectClaudeUserMessageElements(node)
               : collectGeminiUserMessageElements(node);
           for (const userEl of userEls) {
+            if (hasSeenUserMessageEl(platform, userEl)) continue;
             const text = extractUserMessageText(userEl, platform).trim();
             if (text) {
               recordUserPrompt(platform, text);
@@ -1546,6 +1792,34 @@
         for (const messageEl of assistantEls) {
           // console.debug("[nea-agora][llm] assistant node detected", messageEl);
           scheduleAssistantMessageCount(messageEl, platform);
+        }
+      }
+    }
+
+    // Fallback: rescan container in case mutations didn't include the message node.
+    if (observedMessageContainer) {
+      if (platform === "chatgpt") {
+        const allAssistant = collectAssistantMessageElements(observedMessageContainer);
+        for (const messageEl of allAssistant) {
+          scheduleAssistantMessageCount(messageEl, platform);
+        }
+        const allUsers = collectChatgptUserMessageElements(observedMessageContainer);
+        for (const userEl of allUsers) {
+          if (hasSeenUserMessageEl(platform, userEl)) continue;
+          const text = extractUserMessageText(userEl, platform).trim();
+          if (text) {
+            recordUserPrompt(platform, text);
+          }
+        }
+      }
+      if (platform === "gemini_web") {
+        const allUsers = collectGeminiUserMessageElements(observedMessageContainer);
+        for (const userEl of allUsers) {
+          if (hasSeenUserMessageEl(platform, userEl)) continue;
+          const text = extractUserMessageText(userEl, platform).trim();
+          if (text) {
+            recordUserPrompt(platform, text);
+          }
         }
       }
     }
@@ -1583,6 +1857,77 @@
     return null;
   }
 
+  const bodyObservers = new Map<Platform, MutationObserver>();
+
+  function startBodyObserver(platform: Platform) {
+    if (bodyObservers.has(platform)) return;
+
+    const observer = new MutationObserver(() => {
+      reportDomHealth(platform);
+      const locator = locateDomElementsForPlatform(platform);
+      if (!locator) return;
+      const container = locator.result.messagesContainer;
+      if (container instanceof HTMLElement) {
+        attachAssistantObserverTo(container);
+        if (platform === "chatgpt") chatgptObserverAttached = true;
+        if (platform === "claude_web") claudeObserverAttached = true;
+        if (platform === "gemini_web") geminiObserverAttached = true;
+      }
+    });
+
+    bodyObservers.set(platform, observer);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // immediate attempt
+    reportDomHealth(platform);
+    const locator = locateDomElementsForPlatform(platform);
+    if (locator && locator.result.messagesContainer instanceof HTMLElement) {
+      attachAssistantObserverTo(locator.result.messagesContainer);
+      if (platform === "chatgpt") chatgptObserverAttached = true;
+      if (platform === "claude_web") claudeObserverAttached = true;
+      if (platform === "gemini_web") geminiObserverAttached = true;
+
+      // Initial scan to catch existing messages before the first mutation.
+      if (platform === "chatgpt") {
+        const allUsers = collectChatgptUserMessageElements(locator.result.messagesContainer);
+        for (const userEl of allUsers) {
+          if (hasSeenUserMessageEl(platform, userEl)) continue;
+          const text = extractUserMessageText(userEl, platform).trim();
+          if (text) {
+            recordUserPrompt(platform, text);
+          }
+        }
+        const allAssistant = collectAssistantMessageElements(locator.result.messagesContainer);
+        for (const messageEl of allAssistant) {
+          scheduleAssistantMessageCount(messageEl, platform);
+        }
+      }
+      if (platform === "claude_web") {
+        const allUsers = collectClaudeUserMessageElements(locator.result.messagesContainer);
+        for (const userEl of allUsers) {
+          if (hasSeenUserMessageEl(platform, userEl)) continue;
+          const text = extractUserMessageText(userEl, platform).trim();
+          if (text) {
+            recordUserPrompt(platform, text);
+          }
+        }
+      }
+      if (platform === "gemini_web") {
+        const allUsers = collectGeminiUserMessageElements(locator.result.messagesContainer);
+        for (const userEl of allUsers) {
+          if (hasSeenUserMessageEl(platform, userEl)) continue;
+          const text = extractUserMessageText(userEl, platform).trim();
+          if (text) {
+            recordUserPrompt(platform, text);
+          }
+        }
+      }
+    }
+  }
+
   function startAssistantObserver() {
     let lastContainer: HTMLElement | null = null;
 
@@ -1610,10 +1955,12 @@
 
   if (isChatgpt) {
     setupChatgptObserver();
+    startBodyObserver("chatgpt");
   }
 
   if (isClaude || isGemini) {
-    startAssistantObserver();
+    if (isClaude) startBodyObserver("claude_web");
+    if (isGemini) startBodyObserver("gemini_web");
   }
 
   if (isChatgpt || isMoltbot || isClaude || isGemini) {

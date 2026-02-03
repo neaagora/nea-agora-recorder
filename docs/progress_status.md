@@ -5,6 +5,130 @@ design decisions, and what is intentionally deferred.
 
 It is a living document.
 
+## v0.8.3 status summary
+
+**High level**
+
+v0.8.3 now has a working **behavioral trust governor** for single LLM chat sessions in Chrome:
+
+-   It watches interaction patterns in real time
+
+-   It computes a session level trust risk assessment
+
+-   It surfaces a **single quiet warning** per session
+
+-   It can signal both in the side panel and via the extension badge
+
+No semantics. No second model. Pure behavior.
+
+**What is actually implemented**
+
+Rough checklist of what 0.8.3 does now:
+
+1.  **Session metrics and summaries**
+
+    -   Per session counts: user messages, LLM messages, copies, thumbs up, thumbs down
+
+    -   Approx duration and basic latency stats
+
+    -   Session intent field: coding, writing, research, other
+
+    -   Session outcome flags and human override marker
+
+2.  **Behavioral trust governor logic**
+
+    -   `computeTrustRiskAssessment(session)` evaluates:
+
+        -   Turn counts
+
+        -   Duration
+
+        -   Adoption ratio (copies per LLM reply)
+
+        -   Recent feedback (last few events)
+
+        -   Rough token estimate from `charCount`
+
+    -   Helper functions:
+
+        -   `computeAdoptionSignals`
+
+        -   `computeRecentFeedback`
+
+        -   `estimateTokensForSession`
+
+3.  **Trust risk flags** (names may differ slightly in code, but concept is there)
+
+    -   `non_convergence`
+
+        -   Many turns, enough time, low adoption, recent negative feedback or override
+
+    -   `verbosity_adoption_mismatch`
+
+        -   Lots of model output, very low adoption, no recent negative feedback, no outcome
+
+    -   `lookup_synthesis_mismatch`
+
+        -   Short lookup style sessions where the model keeps synthesizing long answers and gets negative feedback with almost no adoption
+
+    -   `ungrounded_confidence`
+
+        -   Longish session, little adoption, no negative signals, early apparent success
+
+4.  **Single warning per session**
+
+    -   In memory guard `trustWarningShownForSession` ensures:
+
+        -   At most one warning per session per side panel lifecycle
+
+    -   Warnings are **session level**, not per message
+
+5.  **UI integration in side panel**
+
+    -   Current session card shows:
+
+        -   Session header
+
+        -   Counts row
+
+        -   Trust warning row when a flag fires:
+
+            -   Text like
+
+                > "Trust warning: this answer is being refined a lot without settling. Treat it as unstable. (≈N tokens)"
+
+    -   Optional banner or highlight when a trust warning is active for the current session
+
+6.  **Background badge indicator**
+
+    -   Shared trust governor logic imported into `background.ts`
+
+    -   On storage change for the active tab:
+
+        -   If a new trust warning appears, badge text set to something like `"!"`
+
+        -   Badge cleared once session ends or side panel is opened and acknowledged
+
+7.  **Debug logging**
+
+    -   Console log in side panel DevTools shows the metrics used for each decision:
+
+        -   `userMsgs`, `llmMsgs`, `copies`, `adoptionRatio`, `recentGood`, `recentBad`, `durationSeconds`, `estimatedTokens`, `intent`
+
+**Known limitations for 0.8.3**
+
+-   Single session only, no cross session learning
+
+-   No presets UI yet for conservative vs aggressive sensitivity
+
+-   No semantics or content checks
+
+-   Heuristics tuned from a few real tests, not from a large dataset
+
+-   No real onboarding that explains what the warning means
+
+That is acceptable for 0.8.3. It is a working proof of "records → patterns → intervention" in the browser.
+
 ## v0.8.2 introduces session-level interpretation that makes Service Records meaningfully usable.
 
 This release adds:
