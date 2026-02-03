@@ -110,6 +110,25 @@
     summary: SessionSummary;
   }
 
+  type TrustRiskFlag =
+    | "non_convergence"
+    | "verbosity_adoption_mismatch"
+    | "lookup_synthesis_mismatch"
+    | "ungrounded_confidence";
+
+  type TrustRiskSeverity = "low" | "medium" | "high";
+
+  interface TrustRiskAssessment {
+    flag: TrustRiskFlag;
+    severity: TrustRiskSeverity;
+    message: string;
+    intent: SessionIntent | null;
+    estimatedTokens: number;
+  }
+
+  // In-memory only: avoid repeating trust warnings while sidepanel is open.
+  const trustWarningShownForSession = new Map<string, TrustRiskFlag>();
+
   type DomDiagnosticReport = {
     platform: string;
     url: string;
@@ -789,6 +808,257 @@
     return sessions[0];
   }
 
+  function estimateTokensForSession(sessionEvents: EventRecord[]): number {
+    let charTotal = 0;
+
+    for (const ev of sessionEvents) {
+      if (ev.type !== "llm_response") continue;
+      const meta = ev.metadata as LlmResponseEventMetadata | undefined;
+      if (!meta) continue;
+      const count = typeof meta.charCount === "number" ? meta.charCount : 0;
+      charTotal += count;
+    }
+
+    // Behavior-only estimate. No text parsing.
+    return Math.round(charTotal / 4); // rough 4 chars per token
+  }
+
+  function computeAdoptionSignals(
+    session: InteractionSession,
+    llmMsgs: number
+  ): {
+    adoptionRatio: number;
+    copiesRecent: boolean;
+    totalCopies: number;
+  } {
+    const s = session.summary;
+    const totalCopies = s.copyEventsTotal ?? 0;
+
+    // Simple adoption ratio: how many copies per LLM message
+    const adoptionRatio = llmMsgs > 0 ? totalCopies / llmMsgs : 0;
+
+    // Recency heuristic: did user copy something in the last few events
+    let lastCopyIndex = -1;
+    const events = session.sessionEvents ?? [];
+    for (let i = 0; i < events.length; i++) {
+      const ev = events[i];
+      if (!ev || typeof ev.type !== "string") continue;
+      if (ev.type === "copy_output") {
+        lastCopyIndex = i;
+      }
+    }
+
+    const copiesRecent = lastCopyIndex >= 0 && lastCopyIndex >= events.length - 3;
+
+    return {
+      adoptionRatio,
+      copiesRecent,
+      totalCopies,
+    };
+  }
+
+  type FeedbackPolarity = "good" | "bad";
+
+  function computeRecentFeedback(
+    session: InteractionSession
+  ): {
+    recentGood: number;
+    recentBad: number;
+    lastRating: FeedbackPolarity | null;
+  } {
+    const events = session.sessionEvents ?? [];
+    const windowSize = 6; // last few events
+    const startIdx = Math.max(0, events.length - windowSize);
+
+    let recentGood = 0;
+    let recentBad = 0;
+    let lastRating: FeedbackPolarity | null = null;
+
+    for (let i = startIdx; i < events.length; i++) {
+      const ev = events[i];
+      if (!ev || typeof ev.type !== "string") continue;
+
+      if (ev.type === "feedback_good" || ev.type === "thumbs_up") {
+        recentGood += 1;
+        lastRating = "good";
+      } else if (ev.type === "feedback_bad" || ev.type === "thumbs_down") {
+        recentBad += 1;
+        lastRating = "bad";
+      }
+    }
+
+    return { recentGood, recentBad, lastRating };
+  }
+
+  function computeTrustRiskAssessment(
+    session: InteractionSession
+  ): TrustRiskAssessment | null {
+    const summary = session.summary;
+    const metrics = session.metrics ?? ({} as SessionMetrics);
+
+    const userMsgs = summary.userMessageCount ?? metrics.userMessageCount ?? 0;
+    const llmMsgs = summary.llmMessageCount ?? metrics.llmMessageCount ?? 0;
+    const copies = summary.copyEventsTotal ?? 0;
+    const good = summary.feedbackGoodCount ?? 0;
+    const bad = summary.feedbackBadCount ?? 0;
+    const intent: SessionIntent | null = summary.intent ?? null;
+    const durationMs = summary.approxDurationMs ?? 0;
+    const durationSeconds = durationMs > 0 ? Math.round(durationMs / 1000) : 0;
+    const outcome = summary.outcome ?? null;
+    const humanOverride = summary.humanOverrideNeeded === true;
+
+    const estimatedTokens = estimateTokensForSession(session.sessionEvents);
+    const adoption = computeAdoptionSignals(session, llmMsgs);
+    const feedback = computeRecentFeedback(session);
+
+    // Ignore trivial sessions and very short interactions.
+    if (
+      (userMsgs + llmMsgs) <= 2 ||
+      estimatedTokens < 100 || // ~25 tokens
+      durationSeconds < 30
+    ) {
+      return null;
+    }
+
+    console.log("[TrustGovernor] session metrics", {
+      sessionId: session.sessionId,
+      userMsgs,
+      llmMsgs,
+      copies,
+      good,
+      bad,
+      durationSeconds,
+      estimatedTokens,
+      intent,
+      adoptionRatio: adoption.adoptionRatio,
+      copiesRecent: adoption.copiesRecent,
+      totalCopies: adoption.totalCopies,
+      recentGood: feedback.recentGood,
+      recentBad: feedback.recentBad,
+      lastRating: feedback.lastRating,
+    });
+
+    // If we already warned for this session, stay quiet.
+    if (trustWarningShownForSession.has(session.sessionId)) {
+      return null;
+    }
+
+    // Flag 1: non-convergence
+    const hasNonConvergencePattern =
+      userMsgs >= 3 &&
+      llmMsgs >= 3 &&
+      durationSeconds >= 5 * 60 &&
+      // recent struggle: at least one recent bad or explicit override
+      (feedback.recentBad >= 1 || humanOverride) &&
+      // low overall adoption relative to how much the model talked
+      adoption.adoptionRatio < 0.25 &&
+      // no reuse or likes in the last few events
+      !adoption.copiesRecent &&
+      feedback.lastRating !== "good" &&
+      // either long-ish session or multiple recent bads
+      (estimatedTokens >= 400 || feedback.recentBad >= 2);
+
+    if (hasNonConvergencePattern) {
+      const message =
+        "Trust warning: this answer is being refined a lot without settling. Treat it as unstable.";
+
+      trustWarningShownForSession.set(session.sessionId, "non_convergence");
+      return {
+        flag: "non_convergence",
+        severity: "high",
+        message,
+        intent,
+        estimatedTokens,
+      };
+    }
+
+    // Flag 2: verbosity–adoption mismatch
+    const hasVerbosityAdoptionMismatch =
+      estimatedTokens >= 2500 &&
+      llmMsgs >= 4 &&
+      adoption.adoptionRatio < 0.3 && // mostly unused
+      feedback.recentBad === 0 &&
+      !humanOverride &&
+      !outcome; // no explicit outcome yet
+
+    if (hasVerbosityAdoptionMismatch) {
+      const message =
+        "Trust warning: long, fluent answers with little reuse. Confidence may exceed reliability.";
+
+      trustWarningShownForSession.set(
+        session.sessionId,
+        "verbosity_adoption_mismatch"
+      );
+      return {
+        flag: "verbosity_adoption_mismatch",
+        severity: "medium",
+        message,
+        intent,
+        estimatedTokens,
+      };
+    }
+
+    // Flag 3: lookup–synthesis mismatch
+    const isLookupIntent =
+      intent === "quick_lookup" ||
+      (intent === "other" && durationSeconds < 5 * 60 && userMsgs <= 3);
+
+    const hasLookupSynthesisMismatch =
+      isLookupIntent &&
+      estimatedTokens >= 800 &&
+      llmMsgs >= 3 &&
+      feedback.recentBad >= 1 &&
+      adoption.adoptionRatio < 0.2; // almost no reuse
+
+    if (hasLookupSynthesisMismatch) {
+      const message =
+        "Trust warning: this behaves like a lookup but the model is synthesizing a lot. Verify facts with another source.";
+
+      trustWarningShownForSession.set(
+        session.sessionId,
+        "lookup_synthesis_mismatch"
+      );
+      return {
+        flag: "lookup_synthesis_mismatch",
+        severity: "medium",
+        message,
+        intent,
+        estimatedTokens,
+      };
+    }
+
+    // Flag 4: ungrounded confidence
+    const hasUngroundedConfidence =
+      // long session
+      estimatedTokens >= 1500 &&
+      // no externalization
+      adoption.adoptionRatio < 0.25 &&
+      // user seems satisfied or at least not pushing back
+      bad === 0 &&
+      !humanOverride &&
+      // an explicit "success" outcome or abrupt stop
+      (outcome === "success" || (durationSeconds < 10 * 60 && llmMsgs >= 3));
+
+    if (hasUngroundedConfidence) {
+      const message =
+        "Trust warning: no external grounding detected. High confidence here does not guarantee correctness.";
+
+      trustWarningShownForSession.set(
+        session.sessionId,
+        "ungrounded_confidence"
+      );
+      return {
+        flag: "ungrounded_confidence",
+        severity: "low",
+        message,
+        intent,
+        estimatedTokens,
+      };
+    }
+
+    return null;
+  }
+
   function renderLiveView() {
     const statusEl = document.getElementById("status");
     const headerEl = document.getElementById("session-header");
@@ -1109,6 +1379,21 @@
             ` • Copies: ${s.copyEventsTotal ?? 0} • 👍 ${s.feedbackGoodCount ?? 0}` +
             ` • 👎 ${s.feedbackBadCount ?? 0}`;
           summaryCard.appendChild(rowCounts);
+
+          // Trust governor: quiet, behavioral warning about possible miscalibrated trust.
+          const trustAssessment = computeTrustRiskAssessment(current);
+          if (trustAssessment) {
+            const rowTrust = document.createElement("div");
+            rowTrust.className = "session-summary-row session-summary-row-trust";
+
+            const tokensLabel =
+              trustAssessment.estimatedTokens > 0
+                ? ` (≈${trustAssessment.estimatedTokens} tokens)`
+                : "";
+
+            rowTrust.textContent = `${trustAssessment.message}${tokensLabel}`;
+            summaryCard.appendChild(rowTrust);
+          }
 
           if (responseMetrics?.avgResponseTimeMs != null) {
             const rowLatency = document.createElement("div");
